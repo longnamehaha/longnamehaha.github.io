@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>GBDT</title>
+    <url>/2025/12/01/GBDT/</url>
+    <content><![CDATA[<p>简单讲讲GBDT ʕ⸝⸝⸝˙Ⱉ˙ʔ<br><span id="more"></span><br>    前置知识：决策树，集成学习</p>
+<h1 id="GBDT与BDT"><a href="#GBDT与BDT" class="headerlink" title="GBDT与BDT"></a>GBDT与BDT</h1><h2 id="BDT"><a href="#BDT" class="headerlink" title="BDT"></a>BDT</h2><p>要学习GBDT，要先了解一下BDT（Boosting Decision Tree）提升树。<br>提升树的主要思想：<strong>使用残差拟合结果</strong>。  </p>
+<pre><code>残差=真实值-预测值
+</code></pre><p>举个简单例子，假设要预测某人年龄，其真实年龄为100岁  </p>
+<ul>
+<li>第一次预测80，残差为20</li>
+<li>第二次以第一次的残差为输入，也就是对20预测，假设预测为16，残差为4</li>
+<li>第三次以第二次的残差4为输入，假设预测为3.2</li>
+<li>可以像这样进行多测预测</li>
+<li>最后将每次预测加起来，最后预测结果=80+16+3.2=99.2<br>这样通过残差拟合将个弱学习器组合为强学习器，就是提升树最朴素的思想<h2 id="GBDT"><a href="#GBDT" class="headerlink" title="GBDT"></a>GBDT</h2>GBDT（Gradient Boosting Decision Tree）决策梯度提升树是集成学习Boosting（串行）算法的一种。<br>同样的Boosting算法可以看看前面的<a href="https://longnamehaha.github.io/2025/11/28/AdaBoost/" title="看看">AdaBoost</a>。   </li>
+</ul>
+<p>GBDT不再拟合残差，而是使用梯度下降的方法，将梯度下降的损失函数作为残差的近似值。<br>下面仅进行简单推导<br><del> 还有一些细节如用到的泰勒展开过程等此次暂时没有提到 </del><br>：<br>假设第i-1次强学习器：</p>
+<script type="math/tex; mode=display">f_{i-1}(x)</script><p>其损失函数为:</p>
+<script type="math/tex; mode=display">L(y,f_{i-1}(x))</script><p>第i次的弱学习器为：</p>
+<script type="math/tex; mode=display">h_i(x)</script><p>第i次强学习器：</p>
+<script type="math/tex; mode=display">f_i(x)=f_{i-1}(x)+h_i(x)</script><p>其损失函数为：</p>
+<script type="math/tex; mode=display">L(y,f_i(x))=L(y,f_{i-1}(x)+h_i(x))=(y-f_{i-1}(x)-h_i(x))^2</script><p>梯度为：</p>
+<script type="math/tex; mode=display">\dfrac{\partial L(y,f_i(x))}{\partial f_i(x)}=f_i(x)-y</script><p>负梯度为：</p>
+<script type="math/tex; mode=display">-\dfrac{\partial L(y,f_i(x))}{\partial f_i(x)}=y-f_i(x)</script><p>这里的y就是真实值， $f_i(x)$ 为预测值，等式右边就是真实值-预测值，即残差。  </p>
+<pre><code>负梯度=真实值-预测值=残差
+</code></pre><p>也就是说，如果采用平方损失，则GBDT拟合的负梯度就是残差，GBDT实际上是BDT的一种。  </p>
+<h1 id="GBDT具体过程细节"><a href="#GBDT具体过程细节" class="headerlink" title="GBDT具体过程细节"></a>GBDT具体过程细节</h1><p>此次以CART回归树为弱学习器，用平方损失作为损失函数。<br>先训练第一个弱学习器，最开始是选择同样的一个函数作为预测值，记都为 $f(x_i)$ 。<br>设所涉及的所有可能作为预测值的函数集合为 $\Gamma$ ,则我们需求的目标为：</p>
+<script type="math/tex; mode=display">argmin_{f(x_i) \in \Gamma}L(y,f(x))</script><p>设</p>
+<script type="math/tex; mode=display">Y=\frac{1}{2} L(y,f(x))</script><p>等价于求其最小值点，求偏导：</p>
+<script type="math/tex; mode=display">\dfrac{\partial Y}{\partial f(x)}=\sum_{i=1}^n(y_i-f(x_i))(y_i-f(x_i))^{'}=-\sum_{i=1}^n(y_i-f(x_i))</script><p>令上式=0，得：</p>
+<script type="math/tex; mode=display">nf(x_i)=\sum_{i=1}^ny_i</script><script type="math/tex; mode=display">f(x_i)=\frac{\sum_{i=1}^ny_i}{n}=\overline{y}</script><p>由公式可得，初始化输出值为目标均值时，平方损失最小。  </p>
+<p>将目标值均值作为所有的预测值，就是第一个弱学习器。然后求出残差，残差就作为下一轮学习的目标值。  </p>
+<p>对一组目标值，除了要得到下一组目标值，还需要得出这组目标值的弱学习器。  </p>
+<p>此处弱学习器的训练同前面CART树一样，找到使总平方损失最小的分割点，此条件即为树结点。  </p>
+<p>注意：上面以目标均值作为预测值，最开始是所有目标值的均值，接下来每次都是按照上一次决策树的结果分成两边，也就是左右子树分别计算均值做为预测值。</p>
+<p>最后的预测结果，和前面的BDT一样，就是将每次预测的结果相加。流程与上面预测年龄的过程类似。</p>
+<p>若为分类任务（如实战的存活预测），损失函数会改用对数损失 / 指数损失，此时负梯度不再是残差，但核心逻辑（拟合负梯度、加法集成）不变，最终通过 sigmoid/softmax 将累加结果转换为类别概率。</p>
+<h1 id="实战运用"><a href="#实战运用" class="headerlink" title="实战运用"></a>实战运用</h1><p>api<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> GradientBoostingClassifier</span><br></pre></td></tr></table></figure><br>参数：<br>learning_rate：学习率<br>参数几乎没有变化，具体参考随机森林</p>
+<p>以泰坦尼克号存活预测为例<br>完整代码<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> GradientBoostingClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">d1</span>():</span><br><span class="line">    df=pd.read_csv(<span class="string">&quot;titanic_train.csv&quot;</span>)</span><br><span class="line">    <span class="comment"># df.info()</span></span><br><span class="line">    x=df[[<span class="string">&quot;Pclass&quot;</span>,<span class="string">&quot;Age&quot;</span>,<span class="string">&quot;Sex&quot;</span>]].copy()</span><br><span class="line">    y=df[<span class="string">&quot;Survived&quot;</span>].copy()</span><br><span class="line">    x[<span class="string">&#x27;Age&#x27;</span>].fillna(value=df[<span class="string">&quot;Age&quot;</span>].mean(),inplace=<span class="literal">True</span>)</span><br><span class="line">    x=pd.get_dummies(x) <span class="comment">#处理非数值类型</span></span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">23</span>)</span><br><span class="line">    estimator=GradientBoostingClassifier()</span><br><span class="line">    estimator.fit(x_train,y_train)</span><br><span class="line">    y_pred=estimator.predict(x_test)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score: <span class="subst">&#123;accuracy_score(y_test,y_pred)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#交叉验证网格搜索</span></span><br><span class="line">    param=&#123;<span class="string">&quot;n_estimators&quot;</span>:[<span class="number">100</span>,<span class="number">150</span>,<span class="number">200</span>],<span class="string">&quot;max_depth&quot;</span>:[<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>],<span class="string">&quot;learning_rate&quot;</span>:[<span class="number">0.03</span>,<span class="number">0.04</span>,<span class="number">0.05</span>,<span class="number">0.06</span>,<span class="number">0.1</span>]&#125;</span><br><span class="line">    tep=GradientBoostingClassifier()</span><br><span class="line">    model=GridSearchCV(tep,param_grid=param,cv=<span class="number">5</span>)</span><br><span class="line">    model.fit(x_train,y_train)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score_2: <span class="subst">&#123;model.best_score_&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;model: <span class="subst">&#123;model.best_estimator_&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d1()</span><br></pre></td></tr></table></figure></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>BDT 是 “Boosting + 决策树” 的总称，GBDT 是其具体实现（用负梯度替代残差，更通用）；平方损失下，负梯度等价于残差，因此残差提升树是 GBDT 的特例。  </p>
+<p>GBDT 的核心逻辑：<br>初始化：以目标值均值作为初始强学习器（平方损失下损失最小）；<br>迭代训练：每轮用 CART 回归树拟合前一轮的负梯度（误差减少最快的方向），得到弱学习器；<br>加法集成：最终强学习器 = 初始值 + 学习率 × 所有弱学习器输出之和（慢步累加，避免过拟合）。</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>GBDT</tag>
+        <tag>Boosting</tag>
+        <tag>集成学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>AdaBoost</title>
     <url>/2025/11/28/AdaBoost/</url>
     <content><![CDATA[<p>简单看看AdaBoost(,,・ω・,,)<br><span id="more"></span><br>    前置知识：集成学习</p>
@@ -94,59 +144,9 @@
       </categories>
       <tags>
         <tag>机器学习</tag>
+        <tag>Boosting</tag>
+        <tag>集成学习</tag>
         <tag>AdaBoost</tag>
-        <tag>Boosting</tag>
-        <tag>集成学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GBDT</title>
-    <url>/2025/12/01/GBDT/</url>
-    <content><![CDATA[<p>简单讲讲GBDT ʕ⸝⸝⸝˙Ⱉ˙ʔ<br><span id="more"></span><br>    前置知识：决策树，集成学习</p>
-<h1 id="GBDT与BDT"><a href="#GBDT与BDT" class="headerlink" title="GBDT与BDT"></a>GBDT与BDT</h1><h2 id="BDT"><a href="#BDT" class="headerlink" title="BDT"></a>BDT</h2><p>要学习GBDT，要先了解一下BDT（Boosting Decision Tree）提升树。<br>提升树的主要思想：<strong>使用残差拟合结果</strong>。  </p>
-<pre><code>残差=真实值-预测值
-</code></pre><p>举个简单例子，假设要预测某人年龄，其真实年龄为100岁  </p>
-<ul>
-<li>第一次预测80，残差为20</li>
-<li>第二次以第一次的残差为输入，也就是对20预测，假设预测为16，残差为4</li>
-<li>第三次以第二次的残差4为输入，假设预测为3.2</li>
-<li>可以像这样进行多测预测</li>
-<li>最后将每次预测加起来，最后预测结果=80+16+3.2=99.2<br>这样通过残差拟合将个弱学习器组合为强学习器，就是提升树最朴素的思想<h2 id="GBDT"><a href="#GBDT" class="headerlink" title="GBDT"></a>GBDT</h2>GBDT（Gradient Boosting Decision Tree）决策梯度提升树是集成学习Boosting（串行）算法的一种。<br>同样的Boosting算法可以看看前面的<a href="https://longnamehaha.github.io/2025/11/28/AdaBoost/" title="看看">AdaBoost</a>。   </li>
-</ul>
-<p>GBDT不再拟合残差，而是使用梯度下降的方法，将梯度下降的损失函数作为残差的近似值。<br>下面仅进行简单推导<br><del> 还有一些细节如用到的泰勒展开过程等此次暂时没有提到 </del><br>：<br>假设第i-1次强学习器：</p>
-<script type="math/tex; mode=display">f_{i-1}(x)</script><p>其损失函数为:</p>
-<script type="math/tex; mode=display">L(y,f_{i-1}(x))</script><p>第i次的弱学习器为：</p>
-<script type="math/tex; mode=display">h_i(x)</script><p>第i次强学习器：</p>
-<script type="math/tex; mode=display">f_i(x)=f_{i-1}(x)+h_i(x)</script><p>其损失函数为：</p>
-<script type="math/tex; mode=display">L(y,f_i(x))=L(y,f_{i-1}(x)+h_i(x))=(y-f_{i-1}(x)-h_i(x))^2</script><p>梯度为：</p>
-<script type="math/tex; mode=display">\dfrac{\partial L(y,f_i(x))}{\partial f_i(x)}=f_i(x)-y</script><p>负梯度为：</p>
-<script type="math/tex; mode=display">-\dfrac{\partial L(y,f_i(x))}{\partial f_i(x)}=y-f_i(x)</script><p>这里的y就是真实值， $f_i(x)$ 为预测值，等式右边就是真实值-预测值，即残差。  </p>
-<pre><code>负梯度=真实值-预测值=残差
-</code></pre><p>也就是说，如果采用平方损失，则GBDT拟合的负梯度就是残差，GBDT实际上是BDT的一种。  </p>
-<h1 id="GBDT具体过程细节"><a href="#GBDT具体过程细节" class="headerlink" title="GBDT具体过程细节"></a>GBDT具体过程细节</h1><p>此次以CART回归树为弱学习器，用平方损失作为损失函数。<br>先训练第一个弱学习器，最开始是选择同样的一个函数作为预测值，记都为 $f(x_i)$ 。<br>设所涉及的所有可能作为预测值的函数集合为 $\Gamma$ ,则我们需求的目标为：</p>
-<script type="math/tex; mode=display">argmin_{f(x_i) \in \Gamma}L(y,f(x))</script><p>设</p>
-<script type="math/tex; mode=display">Y=\frac{1}{2} L(y,f(x))</script><p>等价于求其最小值点，求偏导：</p>
-<script type="math/tex; mode=display">\dfrac{\partial Y}{\partial f(x)}=\sum_{i=1}^n(y_i-f(x_i))(y_i-f(x_i))^{'}=-\sum_{i=1}^n(y_i-f(x_i))</script><p>令上式=0，得：</p>
-<script type="math/tex; mode=display">nf(x_i)=\sum_{i=1}^ny_i</script><script type="math/tex; mode=display">f(x_i)=\frac{\sum_{i=1}^ny_i}{n}=\overline{y}</script><p>由公式可得，初始化输出值为目标均值时，平方损失最小。  </p>
-<p>将目标值均值作为所有的预测值，就是第一个弱学习器。然后求出残差，残差就作为下一轮学习的目标值。  </p>
-<p>对一组目标值，除了要得到下一组目标值，还需要得出这组目标值的弱学习器。  </p>
-<p>此处弱学习器的训练同前面CART树一样，找到使总平方损失最小的分割点，此条件即为树结点。  </p>
-<p>注意：上面以目标均值作为预测值，最开始是所有目标值的均值，接下来每次都是按照上一次决策树的结果分成两边，也就是左右子树分别计算均值做为预测值。</p>
-<p>最后的预测结果，和前面的BDT一样，就是将每次预测的结果相加。流程与上面预测年龄的过程类似。</p>
-<p>若为分类任务（如实战的存活预测），损失函数会改用对数损失 / 指数损失，此时负梯度不再是残差，但核心逻辑（拟合负梯度、加法集成）不变，最终通过 sigmoid/softmax 将累加结果转换为类别概率。</p>
-<h1 id="实战运用"><a href="#实战运用" class="headerlink" title="实战运用"></a>实战运用</h1><p>api<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> GradientBoostingClassifier</span><br></pre></td></tr></table></figure><br>参数：<br>learning_rate：学习率<br>参数几乎没有变化，具体参考随机森林</p>
-<p>以泰坦尼克号存活预测为例<br>完整代码<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> GradientBoostingClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">d1</span>():</span><br><span class="line">    df=pd.read_csv(<span class="string">&quot;titanic_train.csv&quot;</span>)</span><br><span class="line">    <span class="comment"># df.info()</span></span><br><span class="line">    x=df[[<span class="string">&quot;Pclass&quot;</span>,<span class="string">&quot;Age&quot;</span>,<span class="string">&quot;Sex&quot;</span>]].copy()</span><br><span class="line">    y=df[<span class="string">&quot;Survived&quot;</span>].copy()</span><br><span class="line">    x[<span class="string">&#x27;Age&#x27;</span>].fillna(value=df[<span class="string">&quot;Age&quot;</span>].mean(),inplace=<span class="literal">True</span>)</span><br><span class="line">    x=pd.get_dummies(x) <span class="comment">#处理非数值类型</span></span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">23</span>)</span><br><span class="line">    estimator=GradientBoostingClassifier()</span><br><span class="line">    estimator.fit(x_train,y_train)</span><br><span class="line">    y_pred=estimator.predict(x_test)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score: <span class="subst">&#123;accuracy_score(y_test,y_pred)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#交叉验证网格搜索</span></span><br><span class="line">    param=&#123;<span class="string">&quot;n_estimators&quot;</span>:[<span class="number">100</span>,<span class="number">150</span>,<span class="number">200</span>],<span class="string">&quot;max_depth&quot;</span>:[<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>],<span class="string">&quot;learning_rate&quot;</span>:[<span class="number">0.03</span>,<span class="number">0.04</span>,<span class="number">0.05</span>,<span class="number">0.06</span>,<span class="number">0.1</span>]&#125;</span><br><span class="line">    tep=GradientBoostingClassifier()</span><br><span class="line">    model=GridSearchCV(tep,param_grid=param,cv=<span class="number">5</span>)</span><br><span class="line">    model.fit(x_train,y_train)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score_2: <span class="subst">&#123;model.best_score_&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;model: <span class="subst">&#123;model.best_estimator_&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d1()</span><br></pre></td></tr></table></figure></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>BDT 是 “Boosting + 决策树” 的总称，GBDT 是其具体实现（用负梯度替代残差，更通用）；平方损失下，负梯度等价于残差，因此残差提升树是 GBDT 的特例。  </p>
-<p>GBDT 的核心逻辑：<br>初始化：以目标值均值作为初始强学习器（平方损失下损失最小）；<br>迭代训练：每轮用 CART 回归树拟合前一轮的负梯度（误差减少最快的方向），得到弱学习器；<br>加法集成：最终强学习器 = 初始值 + 学习率 × 所有弱学习器输出之和（慢步累加，避免过拟合）。</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>Boosting</tag>
-        <tag>集成学习</tag>
-        <tag>GBDT</tag>
       </tags>
   </entry>
   <entry>
@@ -231,248 +231,6 @@
         <tag>数学建模</tag>
         <tag>评价类模型</tag>
         <tag>熵权法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>逻辑回归</title>
-    <url>/2025/11/25/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</url>
-    <content><![CDATA[<p>简单的逻辑回归和样例ヾ(<em>´∀ ˋ</em>)ﾉ<br><span id="more"></span>  <!-- 就加这行！前面的内容（标题+前置知识）首页不显示，只显文章标题 --><br><del>这篇文章是本蒟蒻第一个博客，各处表述难免欠妥，希望各位佬指出</del></p>
-<pre><code>前置知识：线性回归，简单概率论，一点点机器学习基础
-</code></pre><h1 id="什么是逻辑回归"><a href="#什么是逻辑回归" class="headerlink" title="什么是逻辑回归"></a>什么是逻辑回归</h1><p>逻辑回归 <code>logistic regression</code> 是一种经典分类算法，通常用于二分类。逻辑回归是一种对数线性模型(从下面的公式也可以看出来)  </p>
-<h1 id="逻辑回归基础"><a href="#逻辑回归基础" class="headerlink" title="逻辑回归基础"></a>逻辑回归基础</h1><p>先来了解一下逻辑斯谛分布, 设 <code>X</code> 为连续随机变量, 逻辑斯谛分布的累积分布函数为：</p>
-<script type="math/tex; mode=display">F(x) = P(X \leq x) = \frac{1}{1 + e^{-\frac{x - \mu}{\gamma}}}</script><p>对应的概率密度函数（CDF 的导数）为：</p>
-<script type="math/tex; mode=display">f(x) = F'(x) = \frac{e^{-\frac{x - \mu}{\gamma}}}{\gamma \cdot \left(1 + e^{-\frac{x - \mu}{\gamma}}\right)^2}</script><p>式中 $\mu$ 为位置参数,  $\gamma$ 为形状参数  </p>
-<p><del>好复杂看不懂</del><br>先看看简单的。<br>当逻辑斯谛分布的位置参数 $\mu$、形状参数 $\gamma$ 时，其累积分布函数（CDF）就是 sigmoid 函数（激活函数）：</p>
-<script type="math/tex; mode=display">sigmoid(x) = \frac{1}{1 + e^{-x}}</script><p>作用：将($-\infty, +\infty$) 映射到 (0, 1)</p>
-<p>再结合线性回归，就可以做到逻辑回归最简单的应用: 二分类  </p>
-<p>就是<strong>将线性回归的输出作为逻辑回归的输入</strong><br>具体一点，就是将线性回归的值，带入上面的激活函数，映射到 (0-1) 后，再根据阈值分类<br>选定阈值（0-1）后大于阈值为正样本， 小于为负样本</p>
-<script type="math/tex; mode=display">h(x)=sigmoid(w^T·x+b)</script><h2 id="下面介绍逻辑回归损失函数"><a href="#下面介绍逻辑回归损失函数" class="headerlink" title="下面介绍逻辑回归损失函数"></a>下面介绍逻辑回归损失函数</h2><script type="math/tex; mode=display">Loss(L) = -y_i \log p - (1 - y_i) \log(1 - p)</script><p>式中，$y_i$ 为逻辑回归的预估的类别，A类为1，B类为0，即正样本只看前半部分，负样本只看后半部分。<br> $p$ 为上面 h(x) 的返回值，即概率。<br>损失函数的工作原理：每个样本有A，B两个类别，<strong>真实类别对应的位置，概率值越大越好</strong>  </p>
-<p>下面具体讲讲概率分布  </p>
-<h3 id="对于一个样本"><a href="#对于一个样本" class="headerlink" title="对于一个样本"></a>对于一个样本</h3><p>假设有0，1两个类别，显然有：</p>
-<script type="math/tex; mode=display">
-L= 
-\begin{cases}
-p & y = 1 \quad (\text{样本为正类}) \\
-1-p & y = 0 \quad (\text{样本为负类})
-\end{cases}</script><p>等价于</p>
-<script type="math/tex; mode=display">L=p^y(1-p)^{1-y}</script><h3 id="推广到n个样本"><a href="#推广到n个样本" class="headerlink" title="推广到n个样本"></a>推广到n个样本</h3><script type="math/tex; mode=display">P=\displaystyle \prod_{i=1}^{n}{p^{y_i}(1-p)^{1-{y_i}}}</script><p>这个就是所有样本都预测正确的概率。</p>
-<p>问题转换为：当上述联合概率取最大时，估计 $w$ 和 $b$ ，就变成了极大似然估计。</p>
-<h3 id="极大似然函数转对数似然函数"><a href="#极大似然函数转对数似然函数" class="headerlink" title="极大似然函数转对数似然函数"></a>极大似然函数转对数似然函数</h3><p>对上述式子取对数，有:</p>
-<script type="math/tex; mode=display">H(L)=\sum_{i=1}^n y_i \log p + (1 - y_i) \log(1 - p)</script><p>因为是损失函数，所以应该取最小值，只需加个负号。</p>
-<script type="math/tex; mode=display">Loss(L)=-\sum_{i=1}^n y_i \log p + (1 - y_i) \log(1 - p)</script><p>也就得到了之前是式子。<br>通过这个转换，将最小化损失函数的任务交给了极大似然函数，所以逻辑回归本质上没有新的算法。  </p>
-<p>总结即是：逻辑回归损失函数= - 极大似然估计函数  </p>
-<h1 id="实战训练——癌症预测"><a href="#实战训练——癌症预测" class="headerlink" title="实战训练——癌症预测"></a>实战训练——癌症预测</h1><p>逻辑回归的包<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br></pre></td></tr></table></figure></p>
-<p>简单介绍一下api<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">LogisticRegression(solver=<span class="string">&#x27;liblinear&#x27;</span>,penalty=<span class="string">&#x27;l2&#x27;</span>,C=<span class="number">1.0</span>)</span><br></pre></td></tr></table></figure><br>其中 <code>liblinear</code> 在数据集较小是比较快，对大数据集也可以换成 <code>sag</code> or <code>saga</code><br> <code>penalty</code> 表示正则化种类，l1或者l2<br>C 表示正则化力度<br>默认将数量少的类别作为正例  </p>
-<p>下面是完整代码，只是换成了 <code>LogisticRegression</code> ,其他和别的方法一样</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">d1</span>():</span><br><span class="line">    df = pd.read_csv(<span class="string">&quot;breast-cancer-wisconsin.data&quot;</span>, sep=<span class="string">&quot;,&quot;</span>, header=<span class="literal">None</span>)</span><br><span class="line">    <span class="comment"># df.info()</span></span><br><span class="line">    df=df.replace(to_replace=<span class="string">&#x27;?&#x27;</span>,value=np.NaN)</span><br><span class="line">    df=df.dropna()</span><br><span class="line">    df.info()</span><br><span class="line">    x=df.iloc[:,<span class="number">1</span>:-<span class="number">1</span>]</span><br><span class="line">    y=df.iloc[:,-<span class="number">1</span>]</span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">22</span>)</span><br><span class="line">    transfer=StandardScaler()</span><br><span class="line">    x_train=transfer.fit_transform(x_train)</span><br><span class="line">    x_test=transfer.transform(x_test)</span><br><span class="line">    model=LogisticRegression()</span><br><span class="line">    model.fit(x_train,y_train)</span><br><span class="line">    y_pred=model.predict(x_test)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score: <span class="subst">&#123;model.score(x_test,y_test)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d1()</span><br></pre></td></tr></table></figure>
-<h1 id="模型的评估"><a href="#模型的评估" class="headerlink" title="模型的评估"></a>模型的评估</h1><p>像上面那样，仅使用 ‘准确率’ 进行估计，事实上是不精确，甚至是不可取的  </p>
-<p>比如：1000 人中仅 10 人患癌（正例占 1%，健康人占 99%，极度不平衡）若模型 “躺平” 全预测 “健康”，准确率 = 990/1000=99%（看似优秀），但漏诊了所有 10 名患者（相当于最坏情况下根本没测出来）。<br>而如果说继续提升这个准确率，确实可以提高测出来的比例，但是这在精度上的要求将是巨大的，现实情况样本容量巨大，实现是不可能的。  </p>
-<p>在正负样例容量差距较大时，需要进行进一步的评估，下面介绍一些方法  </p>
-<h2 id="混淆矩阵"><a href="#混淆矩阵" class="headerlink" title="混淆矩阵"></a>混淆矩阵</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">正例（预测）</th>
-<th style="text-align:center">反例（预测）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">正例（真实）</td>
-<td style="text-align:center">真正例（TP）</td>
-<td style="text-align:center">伪反例（FN）</td>
-</tr>
-<tr>
-<td style="text-align:center">反例（真实）</td>
-<td style="text-align:center">伪正例（FP）</td>
-<td style="text-align:center">真反例（TN）</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>其中，T/F表示真/假，P/N表示正/负（样例）<br>比如伪反例，就是本来应该是正例，被错误预测为反例，即假的反例 <code>False Negative</code>  </p>
-<p>下面的评估需要用到混淆矩阵  </p>
-<ul>
-<li>精确率 <code>precision</code> <script type="math/tex; mode=display">P= \frac{TP}{TP + FP}</script></li>
-<li>召回率（查全率） <code>recall</code><script type="math/tex; mode=display">P= \frac{TP}{TP + FN}</script></li>
-<li><code>F1 score</code> (用于综合上面两个)  <script type="math/tex; mode=display">P= \frac{2·precision·recall}{precision + recall}</script></li>
-</ul>
-<p>从各公式就可以明显看出来这三个值的含义了，再简单解释一下，精确率就是预测出来的正例确实是正例的概率，查全率就是有多少正例被预测出来了。这两个指标当然越大越好，F1值即综合上面两个指标，也就是可以用F1值作为模型好坏的评价，<strong>F1值越大模型越好</strong>。  </p>
-<p>代码也很简单，先加个包<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, f1_score,confusion_matrix</span><br></pre></td></tr></table></figure><br>其他的和上面的代码一样，得分改成F1值<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;F1 Score (pos_label=4): <span class="subst">&#123;f1_score(y_test, y_pred, pos_label=<span class="number">4</span>):<span class="number">.4</span>f&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure><br>当然这里也可以不加 <code>pos_label</code> ，默认样本少的为正例<br>也可以打印出混淆矩阵来看看<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cm = confusion_matrix(y_test, y_pred)</span><br><span class="line">cm_df = pd.DataFrame(</span><br><span class="line">    cm,</span><br><span class="line">    index=[<span class="string">&quot;真实_良性(2)&quot;</span>, <span class="string">&quot;真实_恶性(4)&quot;</span>],</span><br><span class="line">    columns=[<span class="string">&quot;预测_良性(2)&quot;</span>, <span class="string">&quot;预测_恶性(4)&quot;</span>]</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(cm_df)</span><br></pre></td></tr></table></figure><br>至此，就可以得到更加精准的模型评估  </p>
-<h2 id="ROC曲线和AUC指标"><a href="#ROC曲线和AUC指标" class="headerlink" title="ROC曲线和AUC指标"></a>ROC曲线和AUC指标</h2><p>这两个就是进一步拓展了，这里简单讲一点  </p>
-<p>ROC <code>Receiver Operating Characteristic Curve</code> 曲线可以就是上面混淆矩阵的可视化  </p>
-<ul>
-<li><p>横轴（FPR）：假阳性率 = 假阳性样本数/(假阳性+真阴性样本数) → 模型误将负样本判为正样本的比例（反映“误诊”风险）  </p>
-</li>
-<li><p>纵轴（TPR）：真阳性率 = 真阳性样本数/(真阳性+假阴性样本数) → 模型正确识别正样本的比例（即召回率，反映“漏诊”风险）  </p>
-</li>
-</ul>
-<p>同一数据集下，性能更优的模型ROC曲线会更靠近左上角（TPR高且FPR低） </p>
-<p>AUC <code>Area Under the ROC Curve</code> 是ROC曲线下方的面积，取值范围为0~1：</p>
-<p>核心意义：代表模型在随机抽取一个正样本和一个负样本时，正样本被预测为正类的概率大于负样本的概率（即模型区分正/负样本的能力, 也可以作为模型评分）<br>使用AUC可以直接比较多个模型的整体性能  </p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>逻辑回归看着带“回归”二字，其实是做分类的，尤其适合分二类（比如判断是不是癌症）。</p>
-<p>核心思路很简单：先拿线性回归算出一个结果，再用sigmoid函数把这个结果变成0到1之间的概率，定个阈值（比如0.5），概率超阈值就是正例，反之就是负例。</p>
-<p>实战里要注意：</p>
-<ul>
-<li>先给特征做标准化（不然模型不准）；</li>
-<li>遇到像癌症预测这种“少数人患病、多数人健康”的情况，别只看准确率（容易骗人），用混淆矩阵、F1分数或者AUC这些指标才靠谱，能避免漏诊、误诊。</li>
-</ul>
-<p>它的好处就是模型简单、训练快，还能看懂每个特征的影响（比如哪个指标对判断癌症更重要），是新手入门机器学习的好选择</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>逻辑回归</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>层次分析法</title>
-    <url>/2025/11/29/%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95/</url>
-    <content><![CDATA[<p>简单的层次分析法(ゝ∀･)<br><span id="more"></span><br>    前置知识：一点点矩阵基础</p>
-<h1 id="模型引出"><a href="#模型引出" class="headerlink" title="模型引出"></a>模型引出</h1><p>在决策问题中，需要面对多种策略，选择最优。但实际的方案通常涉及多个指标，各指标之间无法之间比较。比如评选最优明星，有粉丝量，颜值，作品质量，作品数量等。<br>按照普通的想法，可能想将各指标归一化后相加，这样可以消除量纲的影响。但是各个指标的<strong>重要性</strong>也是不同的，于是需要主观的对个指标赋予不同的<strong>权重</strong>。<br>简单来说，层次分析法（ <code>Analytic Hierarchy Process</code> ，简称 <code>AHP</code> ）也是这样的，本质上和上面的<strong>为各指派赋权重</strong>一样，只是加了一个判断机制，让权重偏差不会过大。  </p>
-<h1 id="模型原理"><a href="#模型原理" class="headerlink" title="模型原理"></a>模型原理</h1><h2 id="何为层次"><a href="#何为层次" class="headerlink" title="何为层次"></a>何为层次</h2><p>层次分析法，分为三层：  </p>
-<ul>
-<li>最高层，即最后得到的决策目标。</li>
-<li>中间层，即涉及到的各个原始指标，如粉丝量，颜值，作品质量，作品数量  </li>
-<li>最底层，即具体各种备选方案，如各明星  </li>
-</ul>
-<h2 id="基本求解步骤："><a href="#基本求解步骤：" class="headerlink" title="基本求解步骤："></a>基本求解步骤：</h2><ol>
-<li>构建阶梯结构模型（上面的那些）</li>
-<li>求出各层中所有<strong>判断矩阵</strong></li>
-<li>一致性检验</li>
-<li>求出权重后进行检验  </li>
-</ol>
-<p>层次分析法能够起到作用，就是依赖<strong>一致性检验</strong>。<br>构建判断矩阵过程：<br>对各指标两两进行重要性比较。  </p>
-<p>其中矩阵元素 $a<em>{ij}$ 表示第 i 个指标相对于第 j 个指标的重要程度。<br>当 $i \leq j$ 时，$a</em>{ij}$ 取整数 1~9 ，$a<em>{ij}$=1，表示第i个和第j个元素同样重要，$a</em>{ij}$=3，表示i稍微比j重要。以此类推，$a_{ij}$越大，说明第i个指标对比第j个指标重要性越大。  </p>
-<p>可得 $a<em>{ij} · a</em>{ji} = 1$ (称为正互反矩阵)   </p>
-<p>除了主对角线元素全为1，其他元素都是需要我们去填写的。<br>由上面的定义，我们可以知道，重要性是可以传递的，即 $a<em>{ij}=a</em>{ik}·a_{kj}$，所以，我们其实只填写任一行（或列）除了主对角线外的n-1个元素，就可以递推地求出整个矩阵（此时矩阵秩为1）。但是这样就和普通的去赋予权重一样了。<br>层次分析法中，要求我们为每个空缺元素都根据主观赋值，显然，此时再按照上面的递推式计算，最后构建的矩阵会产生矛盾。而一致性检验，就是我们对这个矛盾的<strong>容忍程度</strong>。  </p>
-<h2 id="具体讲讲一致性检验"><a href="#具体讲讲一致性检验" class="headerlink" title="具体讲讲一致性检验"></a>具体讲讲一致性检验</h2><h3 id="什么是一致性检验"><a href="#什么是一致性检验" class="headerlink" title="什么是一致性检验"></a>什么是一致性检验</h3><p>上面通过递推构建出来的秩1矩阵，记作<strong>一致矩阵</strong>。<br>一致性检验就是检验我们自己写的矩阵和一致矩阵的差别大不大。  </p>
-<pre><code>关于一致矩阵秩为什么为1：按照递推构成的矩阵，每行每列都是成比例的，由矩阵知识可以知道其秩为1。其一个特征值为n，其余特征值为0等矩阵相关性质。
-</code></pre><p>引理：n阶正互反矩阵为一致矩阵当且仅当其最大特征值 $\lambda<em>{max} = n$ ,且当矩阵非一致矩阵时，一定有 $\lambda</em>{max} \geq n$，判断矩阵越不一致，其最大特征值与n差距越大。  </p>
-<h3 id="一致性检验具体步骤"><a href="#一致性检验具体步骤" class="headerlink" title="一致性检验具体步骤"></a>一致性检验具体步骤</h3><ol>
-<li>计算一致性指标 $CI$ :<script type="math/tex; mode=display">CI=\frac{\lambda_{max}-n}{n-1}</script></li>
-<li>查找平均随机一致性指标 $RI$ ：</li>
-</ol>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>判断矩阵阶数（n）</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-<th>5</th>
-<th>6</th>
-<th>7</th>
-<th>8</th>
-<th>9</th>
-<th>10</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>平均随机一致性指标（RI）</td>
-<td>0.00</td>
-<td>0.00</td>
-<td>0.58</td>
-<td>0.90</td>
-<td>1.12</td>
-<td>1.24</td>
-<td>1.32</td>
-<td>1.41</td>
-<td>1.45</td>
-<td>1.49</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>只需要会查表即可。  </p>
-<ol>
-<li>计算一致性比例 $CR$ <script type="math/tex; mode=display">
-CR= \frac{CI}{RI} 
-\begin{cases}
-= 0 \quad \text{判断矩阵为一致性矩阵} \\
-< 0.1 \quad \text{判断矩阵一致} \\
-\geq 0.1 \quad \text{判断矩阵不一致}
-\end{cases}</script></li>
-</ol>
-<h2 id="求权重的方法"><a href="#求权重的方法" class="headerlink" title="求权重的方法"></a>求权重的方法</h2><ul>
-<li>算术平均值：  <ol>
-<li>每列（各个特征）归一化</li>
-<li>按行求和</li>
-<li>再次归一化</li>
-</ol>
-</li>
-<li><p>几何平均值：  </p>
-<ol>
-<li>按行求几何平均值</li>
-<li>归一化</li>
-</ol>
-</li>
-<li><p>特征值法：  </p>
-<p>  以最大特征值对应的特征向量作为权重</p>
-</li>
-</ul>
-<p>求出权重后，在带回原来各方案，求出各个得分。  </p>
-<h1 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h1><p>层次分析法是评价类的模型，依旧无法避免主观性的影响，但可以通过一致性检验来限制主观因素在一个较合理的范围。所以说，<strong>一致性检验</strong>才是层次分析法的灵魂所在。  </p>
-<p>当然也有很多其他评价类模型，实际情况往往需要综合考量。</p>
-]]></content>
-      <categories>
-        <category>数学建模</category>
-      </categories>
-      <tags>
-        <tag>数学建模</tag>
-        <tag>评价类模型</tag>
-        <tag>层次分析法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>随机森林</title>
-    <url>/2025/11/27/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/</url>
-    <content><![CDATA[<p>简单的随机森林(๑´ڡ`๑)<br><span id="more"></span><br>    前置知识：决策树</p>
-<h1 id="一点背景"><a href="#一点背景" class="headerlink" title="一点背景"></a>一点背景</h1><h2 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h2><h3 id="什么是集成学习"><a href="#什么是集成学习" class="headerlink" title="什么是集成学习"></a>什么是集成学习</h3><p>普通模型将数据训练，得到结果。集成学习是一种机器学习的思想，将多个模型组合成一个精度更高的模型（强学习器）。被组合的小模型成为弱学习器（基学习器）<br>通过多个模型集成来提升整体精度，而不是专门培养一个模型  </p>
-<ul>
-<li>一个单一强大模型：能力很强，但有过拟合风险，而且抗风险能力弱</li>
-<li>多个小模型组合：也可以有很强的整体能力，但是减少了过拟合风险，抗风险能力也提高了  <h3 id="集成学习的分类"><a href="#集成学习的分类" class="headerlink" title="集成学习的分类"></a>集成学习的分类</h3>Bagging（并行）和Boosting（串行）<br>Bagging是将原始数据进行多个流程训练综合得到结果，多个过程可以并行（比如在学校一学期同时学数学和英语）<br>Boosting是将原始数据经过第一个过程处理后，输入第二个过程继续…（比如数学先学习1+1，再学微积分）  </li>
-</ul>
-<p>本文探讨的随机森林就是Bagging中的一个<br>Boosting主要有：Adaboost，GBDT，XGBoost等  </p>
-<h2 id="决策树回顾"><a href="#决策树回顾" class="headerlink" title="决策树回顾"></a>决策树回顾</h2><p>决策树是一颗二叉树，是监督学习中经典的分类/回归模型，它通过模拟人类“分而治之”的决策过程，将复杂问题拆解为一系列简单判断。简单来说，各结点就是各判断条件，根据判断结果的真伪细分到下面的子树继续判断。  </p>
-<p>决策树有多种，ID3，C4.5，CART等，随机森林主要用到CART决策树  </p>
-<p>决策树有剪枝操作，比如限制最大深度，结点继续划分的条件等，这些在随机森林api中会再看到  </p>
-<p>从这两个的名字也可以猜出来，其实随机森林的 ‘森林’ 就是由一个个决策树构成的。  </p>
-<h1 id="Bagging思想"><a href="#Bagging思想" class="headerlink" title="Bagging思想"></a>Bagging思想</h1><p>随机森林是一种基于Bagging思想的集成学习方法，以决策树作为弱学习器。<br>具体过程：</p>
-<ul>
-<li>将训练集通过随机抽样（有放回）分为几个小训练集</li>
-<li>各个小训练集再各自随机挑选一些特征进行训练  </li>
-<li>构建出n个决策树，然后这些决策树进行平权投票，选出最终结果  </li>
-</ul>
-<p>这里注意是要有放回的随机抽样，而且抽样比例最好不要太少。如果不抽样，那同样的训练集训练出来的决策树都是一样的。有放回保证了各决策树有交叉相连的关系，因此每棵树不会有较大偏差，既有交集又有差异，更好发挥投票的效果。  </p>
-<h1 id="实战训练——泰坦尼克号生存预测"><a href="#实战训练——泰坦尼克号生存预测" class="headerlink" title="实战训练——泰坦尼克号生存预测"></a>实战训练——泰坦尼克号生存预测</h1><h2 id="api介绍"><a href="#api介绍" class="headerlink" title="api介绍"></a>api介绍</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line">model=RandomForestClassifier()</span><br></pre></td></tr></table></figure>
-<p>主要用到的参数：  </p>
-<ul>
-<li>n_estimators: 决策树数量</li>
-<li>max_features=”auto”: 决策树构建时使用的最大特征数量（列数），默认 <code>max_features</code> =sqrt（n_features），也可以自己调整，有线性，对数等</li>
-<li>bootstrap: 是否放回。一般都是使用默认True</li>
-<li>max_depth: 最大深度（同决策树）</li>
-<li>…其他参数（沿用决策树的参数，这里就不写完了）</li>
-</ul>
-<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">d1</span>():</span><br><span class="line">    df=pd.read_csv(<span class="string">&quot;titanic_train.csv&quot;</span>)</span><br><span class="line">    df.info()</span><br><span class="line">    x=df[[<span class="string">&quot;Pclass&quot;</span>,<span class="string">&quot;Age&quot;</span>,<span class="string">&quot;Sex&quot;</span>]].copy()</span><br><span class="line">    y=df[<span class="string">&quot;Survived&quot;</span>]</span><br><span class="line">    x[<span class="string">&#x27;Age&#x27;</span>].fillna(value=df[<span class="string">&quot;Age&quot;</span>].mean(),inplace=<span class="literal">True</span>)</span><br><span class="line">    x=pd.get_dummies(x) <span class="comment">#处理非数值类型</span></span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">23</span>)</span><br><span class="line">    rfc=RandomForestClassifier(max_depth=<span class="number">6</span>,random_state=<span class="number">10</span>)</span><br><span class="line">    rfc.fit(x_train,y_train)</span><br><span class="line">    y_pred=rfc.predict(x_test)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score: <span class="subst">&#123;rfc.score(x_test,y_test)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#交叉验证网格搜索</span></span><br><span class="line">    model=RandomForestClassifier()</span><br><span class="line">    param=&#123;<span class="string">&quot;n_estimators&quot;</span>:[<span class="number">40</span>,<span class="number">50</span>,<span class="number">60</span>,<span class="number">70</span>],<span class="string">&quot;max_depth&quot;</span>:[<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>],<span class="string">&quot;random_state&quot;</span>:[<span class="number">10</span>]&#125;</span><br><span class="line">    grid_search=GridSearchCV(model,param_grid=param,cv=<span class="number">2</span>)</span><br><span class="line">    grid_search.fit(x_train,y_train)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score_2: <span class="subst">&#123;grid_search.score(x_test,y_test)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d1()</span><br></pre></td></tr></table></figure>
-<p>流程都是一样的，只是换个模型  </p>
-<p>这里仅举分类的例子，同样的，随机森林也可以做回归，具体差异和决策树的分类与回归一样，这里就不赘述。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>随机森林是基于 Bagging 思想的集成学习方法，核心是通过 “样本随机 + 特征随机” 构建多棵独立的 CART 决策树，最终通过投票（分类）或平均（回归）得到结果，是机器学习中 “开箱即食” 的强学习器。  </p>
-<p>关键要理解其具体过程，即先对样本随机，然后再对特征随机。</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>集成学习</tag>
-        <tag>随机森林</tag>
       </tags>
   </entry>
   <entry>
@@ -600,6 +358,248 @@ x(0)=x_0
         <tag>数学建模</tag>
         <tag>微分方程</tag>
         <tag>机理分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>层次分析法</title>
+    <url>/2025/11/29/%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95/</url>
+    <content><![CDATA[<p>简单的层次分析法(ゝ∀･)<br><span id="more"></span><br>    前置知识：一点点矩阵基础</p>
+<h1 id="模型引出"><a href="#模型引出" class="headerlink" title="模型引出"></a>模型引出</h1><p>在决策问题中，需要面对多种策略，选择最优。但实际的方案通常涉及多个指标，各指标之间无法之间比较。比如评选最优明星，有粉丝量，颜值，作品质量，作品数量等。<br>按照普通的想法，可能想将各指标归一化后相加，这样可以消除量纲的影响。但是各个指标的<strong>重要性</strong>也是不同的，于是需要主观的对个指标赋予不同的<strong>权重</strong>。<br>简单来说，层次分析法（ <code>Analytic Hierarchy Process</code> ，简称 <code>AHP</code> ）也是这样的，本质上和上面的<strong>为各指派赋权重</strong>一样，只是加了一个判断机制，让权重偏差不会过大。  </p>
+<h1 id="模型原理"><a href="#模型原理" class="headerlink" title="模型原理"></a>模型原理</h1><h2 id="何为层次"><a href="#何为层次" class="headerlink" title="何为层次"></a>何为层次</h2><p>层次分析法，分为三层：  </p>
+<ul>
+<li>最高层，即最后得到的决策目标。</li>
+<li>中间层，即涉及到的各个原始指标，如粉丝量，颜值，作品质量，作品数量  </li>
+<li>最底层，即具体各种备选方案，如各明星  </li>
+</ul>
+<h2 id="基本求解步骤："><a href="#基本求解步骤：" class="headerlink" title="基本求解步骤："></a>基本求解步骤：</h2><ol>
+<li>构建阶梯结构模型（上面的那些）</li>
+<li>求出各层中所有<strong>判断矩阵</strong></li>
+<li>一致性检验</li>
+<li>求出权重后进行检验  </li>
+</ol>
+<p>层次分析法能够起到作用，就是依赖<strong>一致性检验</strong>。<br>构建判断矩阵过程：<br>对各指标两两进行重要性比较。  </p>
+<p>其中矩阵元素 $a<em>{ij}$ 表示第 i 个指标相对于第 j 个指标的重要程度。<br>当 $i \leq j$ 时，$a</em>{ij}$ 取整数 1~9 ，$a<em>{ij}$=1，表示第i个和第j个元素同样重要，$a</em>{ij}$=3，表示i稍微比j重要。以此类推，$a_{ij}$越大，说明第i个指标对比第j个指标重要性越大。  </p>
+<p>可得 $a<em>{ij} · a</em>{ji} = 1$ (称为正互反矩阵)   </p>
+<p>除了主对角线元素全为1，其他元素都是需要我们去填写的。<br>由上面的定义，我们可以知道，重要性是可以传递的，即 $a<em>{ij}=a</em>{ik}·a_{kj}$，所以，我们其实只填写任一行（或列）除了主对角线外的n-1个元素，就可以递推地求出整个矩阵（此时矩阵秩为1）。但是这样就和普通的去赋予权重一样了。<br>层次分析法中，要求我们为每个空缺元素都根据主观赋值，显然，此时再按照上面的递推式计算，最后构建的矩阵会产生矛盾。而一致性检验，就是我们对这个矛盾的<strong>容忍程度</strong>。  </p>
+<h2 id="具体讲讲一致性检验"><a href="#具体讲讲一致性检验" class="headerlink" title="具体讲讲一致性检验"></a>具体讲讲一致性检验</h2><h3 id="什么是一致性检验"><a href="#什么是一致性检验" class="headerlink" title="什么是一致性检验"></a>什么是一致性检验</h3><p>上面通过递推构建出来的秩1矩阵，记作<strong>一致矩阵</strong>。<br>一致性检验就是检验我们自己写的矩阵和一致矩阵的差别大不大。  </p>
+<pre><code>关于一致矩阵秩为什么为1：按照递推构成的矩阵，每行每列都是成比例的，由矩阵知识可以知道其秩为1。其一个特征值为n，其余特征值为0等矩阵相关性质。
+</code></pre><p>引理：n阶正互反矩阵为一致矩阵当且仅当其最大特征值 $\lambda<em>{max} = n$ ,且当矩阵非一致矩阵时，一定有 $\lambda</em>{max} \geq n$，判断矩阵越不一致，其最大特征值与n差距越大。  </p>
+<h3 id="一致性检验具体步骤"><a href="#一致性检验具体步骤" class="headerlink" title="一致性检验具体步骤"></a>一致性检验具体步骤</h3><ol>
+<li>计算一致性指标 $CI$ :<script type="math/tex; mode=display">CI=\frac{\lambda_{max}-n}{n-1}</script></li>
+<li>查找平均随机一致性指标 $RI$ ：</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>判断矩阵阶数（n）</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均随机一致性指标（RI）</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.58</td>
+<td>0.90</td>
+<td>1.12</td>
+<td>1.24</td>
+<td>1.32</td>
+<td>1.41</td>
+<td>1.45</td>
+<td>1.49</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>只需要会查表即可。  </p>
+<ol>
+<li>计算一致性比例 $CR$ <script type="math/tex; mode=display">
+CR= \frac{CI}{RI} 
+\begin{cases}
+= 0 \quad \text{判断矩阵为一致性矩阵} \\
+< 0.1 \quad \text{判断矩阵一致} \\
+\geq 0.1 \quad \text{判断矩阵不一致}
+\end{cases}</script></li>
+</ol>
+<h2 id="求权重的方法"><a href="#求权重的方法" class="headerlink" title="求权重的方法"></a>求权重的方法</h2><ul>
+<li>算术平均值：  <ol>
+<li>每列（各个特征）归一化</li>
+<li>按行求和</li>
+<li>再次归一化</li>
+</ol>
+</li>
+<li><p>几何平均值：  </p>
+<ol>
+<li>按行求几何平均值</li>
+<li>归一化</li>
+</ol>
+</li>
+<li><p>特征值法：  </p>
+<p>  以最大特征值对应的特征向量作为权重</p>
+</li>
+</ul>
+<p>求出权重后，在带回原来各方案，求出各个得分。  </p>
+<h1 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h1><p>层次分析法是评价类的模型，依旧无法避免主观性的影响，但可以通过一致性检验来限制主观因素在一个较合理的范围。所以说，<strong>一致性检验</strong>才是层次分析法的灵魂所在。  </p>
+<p>当然也有很多其他评价类模型，实际情况往往需要综合考量。</p>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+      </categories>
+      <tags>
+        <tag>数学建模</tag>
+        <tag>评价类模型</tag>
+        <tag>层次分析法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>逻辑回归</title>
+    <url>/2025/11/25/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</url>
+    <content><![CDATA[<p>简单的逻辑回归和样例ヾ(<em>´∀ ˋ</em>)ﾉ<br><span id="more"></span>  <!-- 就加这行！前面的内容（标题+前置知识）首页不显示，只显文章标题 --><br><del>这篇文章是本蒟蒻第一个博客，各处表述难免欠妥，希望各位佬指出</del></p>
+<pre><code>前置知识：线性回归，简单概率论，一点点机器学习基础
+</code></pre><h1 id="什么是逻辑回归"><a href="#什么是逻辑回归" class="headerlink" title="什么是逻辑回归"></a>什么是逻辑回归</h1><p>逻辑回归 <code>logistic regression</code> 是一种经典分类算法，通常用于二分类。逻辑回归是一种对数线性模型(从下面的公式也可以看出来)  </p>
+<h1 id="逻辑回归基础"><a href="#逻辑回归基础" class="headerlink" title="逻辑回归基础"></a>逻辑回归基础</h1><p>先来了解一下逻辑斯谛分布, 设 <code>X</code> 为连续随机变量, 逻辑斯谛分布的累积分布函数为：</p>
+<script type="math/tex; mode=display">F(x) = P(X \leq x) = \frac{1}{1 + e^{-\frac{x - \mu}{\gamma}}}</script><p>对应的概率密度函数（CDF 的导数）为：</p>
+<script type="math/tex; mode=display">f(x) = F'(x) = \frac{e^{-\frac{x - \mu}{\gamma}}}{\gamma \cdot \left(1 + e^{-\frac{x - \mu}{\gamma}}\right)^2}</script><p>式中 $\mu$ 为位置参数,  $\gamma$ 为形状参数  </p>
+<p><del>好复杂看不懂</del><br>先看看简单的。<br>当逻辑斯谛分布的位置参数 $\mu$、形状参数 $\gamma$ 时，其累积分布函数（CDF）就是 sigmoid 函数（激活函数）：</p>
+<script type="math/tex; mode=display">sigmoid(x) = \frac{1}{1 + e^{-x}}</script><p>作用：将($-\infty, +\infty$) 映射到 (0, 1)</p>
+<p>再结合线性回归，就可以做到逻辑回归最简单的应用: 二分类  </p>
+<p>就是<strong>将线性回归的输出作为逻辑回归的输入</strong><br>具体一点，就是将线性回归的值，带入上面的激活函数，映射到 (0-1) 后，再根据阈值分类<br>选定阈值（0-1）后大于阈值为正样本， 小于为负样本</p>
+<script type="math/tex; mode=display">h(x)=sigmoid(w^T·x+b)</script><h2 id="下面介绍逻辑回归损失函数"><a href="#下面介绍逻辑回归损失函数" class="headerlink" title="下面介绍逻辑回归损失函数"></a>下面介绍逻辑回归损失函数</h2><script type="math/tex; mode=display">Loss(L) = -y_i \log p - (1 - y_i) \log(1 - p)</script><p>式中，$y_i$ 为逻辑回归的预估的类别，A类为1，B类为0，即正样本只看前半部分，负样本只看后半部分。<br> $p$ 为上面 h(x) 的返回值，即概率。<br>损失函数的工作原理：每个样本有A，B两个类别，<strong>真实类别对应的位置，概率值越大越好</strong>  </p>
+<p>下面具体讲讲概率分布  </p>
+<h3 id="对于一个样本"><a href="#对于一个样本" class="headerlink" title="对于一个样本"></a>对于一个样本</h3><p>假设有0，1两个类别，显然有：</p>
+<script type="math/tex; mode=display">
+L= 
+\begin{cases}
+p & y = 1 \quad (\text{样本为正类}) \\
+1-p & y = 0 \quad (\text{样本为负类})
+\end{cases}</script><p>等价于</p>
+<script type="math/tex; mode=display">L=p^y(1-p)^{1-y}</script><h3 id="推广到n个样本"><a href="#推广到n个样本" class="headerlink" title="推广到n个样本"></a>推广到n个样本</h3><script type="math/tex; mode=display">P=\displaystyle \prod_{i=1}^{n}{p^{y_i}(1-p)^{1-{y_i}}}</script><p>这个就是所有样本都预测正确的概率。</p>
+<p>问题转换为：当上述联合概率取最大时，估计 $w$ 和 $b$ ，就变成了极大似然估计。</p>
+<h3 id="极大似然函数转对数似然函数"><a href="#极大似然函数转对数似然函数" class="headerlink" title="极大似然函数转对数似然函数"></a>极大似然函数转对数似然函数</h3><p>对上述式子取对数，有:</p>
+<script type="math/tex; mode=display">H(L)=\sum_{i=1}^n y_i \log p + (1 - y_i) \log(1 - p)</script><p>因为是损失函数，所以应该取最小值，只需加个负号。</p>
+<script type="math/tex; mode=display">Loss(L)=-\sum_{i=1}^n y_i \log p + (1 - y_i) \log(1 - p)</script><p>也就得到了之前是式子。<br>通过这个转换，将最小化损失函数的任务交给了极大似然函数，所以逻辑回归本质上没有新的算法。  </p>
+<p>总结即是：逻辑回归损失函数= - 极大似然估计函数  </p>
+<h1 id="实战训练——癌症预测"><a href="#实战训练——癌症预测" class="headerlink" title="实战训练——癌症预测"></a>实战训练——癌症预测</h1><p>逻辑回归的包<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br></pre></td></tr></table></figure></p>
+<p>简单介绍一下api<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">LogisticRegression(solver=<span class="string">&#x27;liblinear&#x27;</span>,penalty=<span class="string">&#x27;l2&#x27;</span>,C=<span class="number">1.0</span>)</span><br></pre></td></tr></table></figure><br>其中 <code>liblinear</code> 在数据集较小是比较快，对大数据集也可以换成 <code>sag</code> or <code>saga</code><br> <code>penalty</code> 表示正则化种类，l1或者l2<br>C 表示正则化力度<br>默认将数量少的类别作为正例  </p>
+<p>下面是完整代码，只是换成了 <code>LogisticRegression</code> ,其他和别的方法一样</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">d1</span>():</span><br><span class="line">    df = pd.read_csv(<span class="string">&quot;breast-cancer-wisconsin.data&quot;</span>, sep=<span class="string">&quot;,&quot;</span>, header=<span class="literal">None</span>)</span><br><span class="line">    <span class="comment"># df.info()</span></span><br><span class="line">    df=df.replace(to_replace=<span class="string">&#x27;?&#x27;</span>,value=np.NaN)</span><br><span class="line">    df=df.dropna()</span><br><span class="line">    df.info()</span><br><span class="line">    x=df.iloc[:,<span class="number">1</span>:-<span class="number">1</span>]</span><br><span class="line">    y=df.iloc[:,-<span class="number">1</span>]</span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">22</span>)</span><br><span class="line">    transfer=StandardScaler()</span><br><span class="line">    x_train=transfer.fit_transform(x_train)</span><br><span class="line">    x_test=transfer.transform(x_test)</span><br><span class="line">    model=LogisticRegression()</span><br><span class="line">    model.fit(x_train,y_train)</span><br><span class="line">    y_pred=model.predict(x_test)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score: <span class="subst">&#123;model.score(x_test,y_test)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d1()</span><br></pre></td></tr></table></figure>
+<h1 id="模型的评估"><a href="#模型的评估" class="headerlink" title="模型的评估"></a>模型的评估</h1><p>像上面那样，仅使用 ‘准确率’ 进行估计，事实上是不精确，甚至是不可取的  </p>
+<p>比如：1000 人中仅 10 人患癌（正例占 1%，健康人占 99%，极度不平衡）若模型 “躺平” 全预测 “健康”，准确率 = 990/1000=99%（看似优秀），但漏诊了所有 10 名患者（相当于最坏情况下根本没测出来）。<br>而如果说继续提升这个准确率，确实可以提高测出来的比例，但是这在精度上的要求将是巨大的，现实情况样本容量巨大，实现是不可能的。  </p>
+<p>在正负样例容量差距较大时，需要进行进一步的评估，下面介绍一些方法  </p>
+<h2 id="混淆矩阵"><a href="#混淆矩阵" class="headerlink" title="混淆矩阵"></a>混淆矩阵</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">正例（预测）</th>
+<th style="text-align:center">反例（预测）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">正例（真实）</td>
+<td style="text-align:center">真正例（TP）</td>
+<td style="text-align:center">伪反例（FN）</td>
+</tr>
+<tr>
+<td style="text-align:center">反例（真实）</td>
+<td style="text-align:center">伪正例（FP）</td>
+<td style="text-align:center">真反例（TN）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其中，T/F表示真/假，P/N表示正/负（样例）<br>比如伪反例，就是本来应该是正例，被错误预测为反例，即假的反例 <code>False Negative</code>  </p>
+<p>下面的评估需要用到混淆矩阵  </p>
+<ul>
+<li>精确率 <code>precision</code> <script type="math/tex; mode=display">P= \frac{TP}{TP + FP}</script></li>
+<li>召回率（查全率） <code>recall</code><script type="math/tex; mode=display">P= \frac{TP}{TP + FN}</script></li>
+<li><code>F1 score</code> (用于综合上面两个)  <script type="math/tex; mode=display">P= \frac{2·precision·recall}{precision + recall}</script></li>
+</ul>
+<p>从各公式就可以明显看出来这三个值的含义了，再简单解释一下，精确率就是预测出来的正例确实是正例的概率，查全率就是有多少正例被预测出来了。这两个指标当然越大越好，F1值即综合上面两个指标，也就是可以用F1值作为模型好坏的评价，<strong>F1值越大模型越好</strong>。  </p>
+<p>代码也很简单，先加个包<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, f1_score,confusion_matrix</span><br></pre></td></tr></table></figure><br>其他的和上面的代码一样，得分改成F1值<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;F1 Score (pos_label=4): <span class="subst">&#123;f1_score(y_test, y_pred, pos_label=<span class="number">4</span>):<span class="number">.4</span>f&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure><br>当然这里也可以不加 <code>pos_label</code> ，默认样本少的为正例<br>也可以打印出混淆矩阵来看看<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cm = confusion_matrix(y_test, y_pred)</span><br><span class="line">cm_df = pd.DataFrame(</span><br><span class="line">    cm,</span><br><span class="line">    index=[<span class="string">&quot;真实_良性(2)&quot;</span>, <span class="string">&quot;真实_恶性(4)&quot;</span>],</span><br><span class="line">    columns=[<span class="string">&quot;预测_良性(2)&quot;</span>, <span class="string">&quot;预测_恶性(4)&quot;</span>]</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(cm_df)</span><br></pre></td></tr></table></figure><br>至此，就可以得到更加精准的模型评估  </p>
+<h2 id="ROC曲线和AUC指标"><a href="#ROC曲线和AUC指标" class="headerlink" title="ROC曲线和AUC指标"></a>ROC曲线和AUC指标</h2><p>这两个就是进一步拓展了，这里简单讲一点  </p>
+<p>ROC <code>Receiver Operating Characteristic Curve</code> 曲线可以就是上面混淆矩阵的可视化  </p>
+<ul>
+<li><p>横轴（FPR）：假阳性率 = 假阳性样本数/(假阳性+真阴性样本数) → 模型误将负样本判为正样本的比例（反映“误诊”风险）  </p>
+</li>
+<li><p>纵轴（TPR）：真阳性率 = 真阳性样本数/(真阳性+假阴性样本数) → 模型正确识别正样本的比例（即召回率，反映“漏诊”风险）  </p>
+</li>
+</ul>
+<p>同一数据集下，性能更优的模型ROC曲线会更靠近左上角（TPR高且FPR低） </p>
+<p>AUC <code>Area Under the ROC Curve</code> 是ROC曲线下方的面积，取值范围为0~1：</p>
+<p>核心意义：代表模型在随机抽取一个正样本和一个负样本时，正样本被预测为正类的概率大于负样本的概率（即模型区分正/负样本的能力, 也可以作为模型评分）<br>使用AUC可以直接比较多个模型的整体性能  </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>逻辑回归看着带“回归”二字，其实是做分类的，尤其适合分二类（比如判断是不是癌症）。</p>
+<p>核心思路很简单：先拿线性回归算出一个结果，再用sigmoid函数把这个结果变成0到1之间的概率，定个阈值（比如0.5），概率超阈值就是正例，反之就是负例。</p>
+<p>实战里要注意：</p>
+<ul>
+<li>先给特征做标准化（不然模型不准）；</li>
+<li>遇到像癌症预测这种“少数人患病、多数人健康”的情况，别只看准确率（容易骗人），用混淆矩阵、F1分数或者AUC这些指标才靠谱，能避免漏诊、误诊。</li>
+</ul>
+<p>它的好处就是模型简单、训练快，还能看懂每个特征的影响（比如哪个指标对判断癌症更重要），是新手入门机器学习的好选择</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>逻辑回归</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>随机森林</title>
+    <url>/2025/11/27/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/</url>
+    <content><![CDATA[<p>简单的随机森林(๑´ڡ`๑)<br><span id="more"></span><br>    前置知识：决策树</p>
+<h1 id="一点背景"><a href="#一点背景" class="headerlink" title="一点背景"></a>一点背景</h1><h2 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h2><h3 id="什么是集成学习"><a href="#什么是集成学习" class="headerlink" title="什么是集成学习"></a>什么是集成学习</h3><p>普通模型将数据训练，得到结果。集成学习是一种机器学习的思想，将多个模型组合成一个精度更高的模型（强学习器）。被组合的小模型成为弱学习器（基学习器）<br>通过多个模型集成来提升整体精度，而不是专门培养一个模型  </p>
+<ul>
+<li>一个单一强大模型：能力很强，但有过拟合风险，而且抗风险能力弱</li>
+<li>多个小模型组合：也可以有很强的整体能力，但是减少了过拟合风险，抗风险能力也提高了  <h3 id="集成学习的分类"><a href="#集成学习的分类" class="headerlink" title="集成学习的分类"></a>集成学习的分类</h3>Bagging（并行）和Boosting（串行）<br>Bagging是将原始数据进行多个流程训练综合得到结果，多个过程可以并行（比如在学校一学期同时学数学和英语）<br>Boosting是将原始数据经过第一个过程处理后，输入第二个过程继续…（比如数学先学习1+1，再学微积分）  </li>
+</ul>
+<p>本文探讨的随机森林就是Bagging中的一个<br>Boosting主要有：Adaboost，GBDT，XGBoost等  </p>
+<h2 id="决策树回顾"><a href="#决策树回顾" class="headerlink" title="决策树回顾"></a>决策树回顾</h2><p>决策树是一颗二叉树，是监督学习中经典的分类/回归模型，它通过模拟人类“分而治之”的决策过程，将复杂问题拆解为一系列简单判断。简单来说，各结点就是各判断条件，根据判断结果的真伪细分到下面的子树继续判断。  </p>
+<p>决策树有多种，ID3，C4.5，CART等，随机森林主要用到CART决策树  </p>
+<p>决策树有剪枝操作，比如限制最大深度，结点继续划分的条件等，这些在随机森林api中会再看到  </p>
+<p>从这两个的名字也可以猜出来，其实随机森林的 ‘森林’ 就是由一个个决策树构成的。  </p>
+<h1 id="Bagging思想"><a href="#Bagging思想" class="headerlink" title="Bagging思想"></a>Bagging思想</h1><p>随机森林是一种基于Bagging思想的集成学习方法，以决策树作为弱学习器。<br>具体过程：</p>
+<ul>
+<li>将训练集通过随机抽样（有放回）分为几个小训练集</li>
+<li>各个小训练集再各自随机挑选一些特征进行训练  </li>
+<li>构建出n个决策树，然后这些决策树进行平权投票，选出最终结果  </li>
+</ul>
+<p>这里注意是要有放回的随机抽样，而且抽样比例最好不要太少。如果不抽样，那同样的训练集训练出来的决策树都是一样的。有放回保证了各决策树有交叉相连的关系，因此每棵树不会有较大偏差，既有交集又有差异，更好发挥投票的效果。  </p>
+<h1 id="实战训练——泰坦尼克号生存预测"><a href="#实战训练——泰坦尼克号生存预测" class="headerlink" title="实战训练——泰坦尼克号生存预测"></a>实战训练——泰坦尼克号生存预测</h1><h2 id="api介绍"><a href="#api介绍" class="headerlink" title="api介绍"></a>api介绍</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line">model=RandomForestClassifier()</span><br></pre></td></tr></table></figure>
+<p>主要用到的参数：  </p>
+<ul>
+<li>n_estimators: 决策树数量</li>
+<li>max_features=”auto”: 决策树构建时使用的最大特征数量（列数），默认 <code>max_features</code> =sqrt（n_features），也可以自己调整，有线性，对数等</li>
+<li>bootstrap: 是否放回。一般都是使用默认True</li>
+<li>max_depth: 最大深度（同决策树）</li>
+<li>…其他参数（沿用决策树的参数，这里就不写完了）</li>
+</ul>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">d1</span>():</span><br><span class="line">    df=pd.read_csv(<span class="string">&quot;titanic_train.csv&quot;</span>)</span><br><span class="line">    df.info()</span><br><span class="line">    x=df[[<span class="string">&quot;Pclass&quot;</span>,<span class="string">&quot;Age&quot;</span>,<span class="string">&quot;Sex&quot;</span>]].copy()</span><br><span class="line">    y=df[<span class="string">&quot;Survived&quot;</span>]</span><br><span class="line">    x[<span class="string">&#x27;Age&#x27;</span>].fillna(value=df[<span class="string">&quot;Age&quot;</span>].mean(),inplace=<span class="literal">True</span>)</span><br><span class="line">    x=pd.get_dummies(x) <span class="comment">#处理非数值类型</span></span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">23</span>)</span><br><span class="line">    rfc=RandomForestClassifier(max_depth=<span class="number">6</span>,random_state=<span class="number">10</span>)</span><br><span class="line">    rfc.fit(x_train,y_train)</span><br><span class="line">    y_pred=rfc.predict(x_test)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score: <span class="subst">&#123;rfc.score(x_test,y_test)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#交叉验证网格搜索</span></span><br><span class="line">    model=RandomForestClassifier()</span><br><span class="line">    param=&#123;<span class="string">&quot;n_estimators&quot;</span>:[<span class="number">40</span>,<span class="number">50</span>,<span class="number">60</span>,<span class="number">70</span>],<span class="string">&quot;max_depth&quot;</span>:[<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>],<span class="string">&quot;random_state&quot;</span>:[<span class="number">10</span>]&#125;</span><br><span class="line">    grid_search=GridSearchCV(model,param_grid=param,cv=<span class="number">2</span>)</span><br><span class="line">    grid_search.fit(x_train,y_train)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score_2: <span class="subst">&#123;grid_search.score(x_test,y_test)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d1()</span><br></pre></td></tr></table></figure>
+<p>流程都是一样的，只是换个模型  </p>
+<p>这里仅举分类的例子，同样的，随机森林也可以做回归，具体差异和决策树的分类与回归一样，这里就不赘述。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>随机森林是基于 Bagging 思想的集成学习方法，核心是通过 “样本随机 + 特征随机” 构建多棵独立的 CART 决策树，最终通过投票（分类）或平均（回归）得到结果，是机器学习中 “开箱即食” 的强学习器。  </p>
+<p>关键要理解其具体过程，即先对样本随机，然后再对特征随机。</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>集成学习</tag>
+        <tag>随机森林</tag>
       </tags>
   </entry>
 </search>
