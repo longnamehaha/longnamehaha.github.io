@@ -1,55 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>TOPSIS法</title>
-    <url>/2025/11/30/TOPSIS%E6%B3%95/</url>
-    <content><![CDATA[<p>简单的TOPSIS法｡ﾟ(ﾟ´ω`ﾟ)ﾟ｡<br><span id="more"></span><br>    前置知识：最好会层次分析法</p>
-<h1 id="模型引出"><a href="#模型引出" class="headerlink" title="模型引出"></a>模型引出</h1><p>本节的TOPSIS法，同前面的一样，都是是评价类模型。<br>TOPSIS法（Technique for Order Preference by Similarity to Ideal Solution）可翻译为逼近理想解排序法，或简称为优劣解距离法。<br>首先需要引入两个概念：</p>
-<ul>
-<li>理想解：各维度都达到所有备选方案最优秀的解</li>
-<li>反理想解：各维度都达到所有备选方案最差的解  </li>
-</ul>
-<p>比如工厂生产，第一维表示产量，第二维表示耗资。三个工厂（备选方案）为：（100，100），（150，110），（200，300）则理想解为（200，100），反理想解为（100，300）.  </p>
-<p>方案排序的规则就是根据与最优解的距离来，同时要尽量远离反理性解。</p>
-<h1 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h1><h2 id="1-原始矩阵正向化"><a href="#1-原始矩阵正向化" class="headerlink" title="1.原始矩阵正向化"></a>1.原始矩阵正向化</h2><p>正向化，即将各指标转化为“越大越好”<br>首先将指标分为4种：极大型，极小型，中间型，区间型<br>设 $\widetilde{x_i}$ 为转换后的第i个指标</p>
-<ul>
-<li>极大型：指标数值越大越好，不用转换</li>
-<li>极小型：指标数值越小越好，转换方法：<script type="math/tex; mode=display">\widetilde{x_i}= max(x) - x_i</script></li>
-<li>中间型：即数值越接近中间一个最优值 $x_{best}$ 越好：<br>要先计算M：<script type="math/tex; mode=display">M=max(|x_i-x_{best}|)</script><script type="math/tex; mode=display">\widetilde{x_i}= 1 - \frac{|x_i-x_{best}|}{M}</script></li>
-<li>区间型:数值处于某个区间 [a,b] 内最好，此时分区间讨论：<script type="math/tex; mode=display">M=max(max(x_i)-b,a-min(x_i))</script><script type="math/tex; mode=display">
-\widetilde{x_i}= 
-\begin{cases}
-1-\frac{a-x_i}{M} \quad \text{ $x_i$ <a} \\
-1\quad \text{$ a \leq x_i \leq b $} \\
-1-\frac{x_i-b}{M} \quad \text{ $x_i$ >b}
-\end{cases}</script><h2 id="2-正向化矩阵标准化"><a href="#2-正向化矩阵标准化" class="headerlink" title="2.正向化矩阵标准化"></a>2.正向化矩阵标准化</h2></li>
-</ul>
-<p>有<strong>n个待评价对象，m个指标</strong>，矩阵元素 $x_{ij}$ 表示第i个对象第j个指标的得分。则：  </p>
-<script type="math/tex; mode=display">\widetilde{x_{ij}}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{n}{x_{ij}^2}}}</script><p>标准化后，默认各指标权重相同，也可以使用层次分析法，熵权法等赋予权重。  </p>
-<h2 id="3-计算得分"><a href="#3-计算得分" class="headerlink" title="3.计算得分"></a>3.计算得分</h2><ul>
-<li><p>定义正理想解向量 <script type="math/tex">Z^+=(Z_1^+, Z_2^+, ...,Z_m^+)</script><br>其中 $Z_i^+$ 为第i列元素最大值。  </p>
-</li>
-<li><p>负理想解向量 <script type="math/tex">Z^-=(Z_1^-, Z_2^-, ...,Z_m^-)</script><br>其中 $Z_i^-$ 为第i列元素最小值。  </p>
-</li>
-<li><p>记权重向量 $w$，$w_j$表示第j个指标的权重。  </p>
-</li>
-<li><p>第i个对象与正理想解距离：</p>
-<script type="math/tex; mode=display">D_{i}^+=\sqrt{\sum_{j=1}^{m}{w_j(Z_i^+-\widetilde{x_{ij}})^2}}</script></li>
-<li>第i个对象与负理想解距离：<script type="math/tex; mode=display">D_{i}^-=\sqrt{\sum_{j=1}^{m}{w_j(Z_i^--\widetilde{x_{ij}})^2}}</script>计算原始得分：<script type="math/tex; mode=display">S_i=\frac{D_{i}^-}{D_{i}^++D_{i}^-}</script>显然 $S_i\in [0,1]$ ,且 $S_i$ 越大，越接近正理想解。  </li>
-</ul>
-<p>为便于比较，再将个对象的得分归一化后*100转化为百分制。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TOPSIS 法是基于 “距离排序” 的客观评价模型，核心逻辑是通过计算各方案与 “正理想解（最优值组合）”“负理想解（最劣值组合）” 的加权距离，量化方案的优劣程度。<br>该模型的优势是兼顾客观数据规律与指标重要性差异，可灵活结合 AHP（主观赋权）或熵权法（客观赋权），适用于多指标、多方案的排序决策（如产品评选、绩效评价、资源分配等）。</p>
-]]></content>
-      <categories>
-        <category>数学建模</category>
-      </categories>
-      <tags>
-        <tag>数学建模</tag>
-        <tag>TOPSIS法</tag>
-        <tag>评价类模型</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>AdaBoost</title>
     <url>/2025/11/28/AdaBoost/</url>
     <content><![CDATA[<p>简单看看AdaBoost(,,・ω・,,)<br><span id="more"></span><br>    前置知识：集成学习</p>
@@ -199,6 +150,185 @@
       </tags>
   </entry>
   <entry>
+    <title>TOPSIS法</title>
+    <url>/2025/11/30/TOPSIS%E6%B3%95/</url>
+    <content><![CDATA[<p>简单的TOPSIS法｡ﾟ(ﾟ´ω`ﾟ)ﾟ｡<br><span id="more"></span><br>    前置知识：最好会层次分析法</p>
+<h1 id="模型引出"><a href="#模型引出" class="headerlink" title="模型引出"></a>模型引出</h1><p>本节的TOPSIS法，同前面的一样，都是是评价类模型。<br>TOPSIS法（Technique for Order Preference by Similarity to Ideal Solution）可翻译为逼近理想解排序法，或简称为优劣解距离法。<br>首先需要引入两个概念：</p>
+<ul>
+<li>理想解：各维度都达到所有备选方案最优秀的解</li>
+<li>反理想解：各维度都达到所有备选方案最差的解  </li>
+</ul>
+<p>比如工厂生产，第一维表示产量，第二维表示耗资。三个工厂（备选方案）为：（100，100），（150，110），（200，300）则理想解为（200，100），反理想解为（100，300）.  </p>
+<p>方案排序的规则就是根据与最优解的距离来，同时要尽量远离反理性解。</p>
+<h1 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h1><h2 id="1-原始矩阵正向化"><a href="#1-原始矩阵正向化" class="headerlink" title="1.原始矩阵正向化"></a>1.原始矩阵正向化</h2><p>正向化，即将各指标转化为“越大越好”<br>首先将指标分为4种：极大型，极小型，中间型，区间型<br>设 $\widetilde{x_i}$ 为转换后的第i个指标</p>
+<ul>
+<li>极大型：指标数值越大越好，不用转换</li>
+<li>极小型：指标数值越小越好，转换方法：<script type="math/tex; mode=display">\widetilde{x_i}= max(x) - x_i</script></li>
+<li>中间型：即数值越接近中间一个最优值 $x_{best}$ 越好：<br>要先计算M：<script type="math/tex; mode=display">M=max(|x_i-x_{best}|)</script><script type="math/tex; mode=display">\widetilde{x_i}= 1 - \frac{|x_i-x_{best}|}{M}</script></li>
+<li>区间型:数值处于某个区间 [a,b] 内最好，此时分区间讨论：<script type="math/tex; mode=display">M=max(max(x_i)-b,a-min(x_i))</script><script type="math/tex; mode=display">
+\widetilde{x_i}= 
+\begin{cases}
+1-\frac{a-x_i}{M} \quad \text{ $x_i$ <a} \\
+1\quad \text{$ a \leq x_i \leq b $} \\
+1-\frac{x_i-b}{M} \quad \text{ $x_i$ >b}
+\end{cases}</script><h2 id="2-正向化矩阵标准化"><a href="#2-正向化矩阵标准化" class="headerlink" title="2.正向化矩阵标准化"></a>2.正向化矩阵标准化</h2></li>
+</ul>
+<p>有<strong>n个待评价对象，m个指标</strong>，矩阵元素 $x_{ij}$ 表示第i个对象第j个指标的得分。则：  </p>
+<script type="math/tex; mode=display">\widetilde{x_{ij}}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{n}{x_{ij}^2}}}</script><p>标准化后，默认各指标权重相同，也可以使用层次分析法，熵权法等赋予权重。  </p>
+<h2 id="3-计算得分"><a href="#3-计算得分" class="headerlink" title="3.计算得分"></a>3.计算得分</h2><ul>
+<li><p>定义正理想解向量 <script type="math/tex">Z^+=(Z_1^+, Z_2^+, ...,Z_m^+)</script><br>其中 $Z_i^+$ 为第i列元素最大值。  </p>
+</li>
+<li><p>负理想解向量 <script type="math/tex">Z^-=(Z_1^-, Z_2^-, ...,Z_m^-)</script><br>其中 $Z_i^-$ 为第i列元素最小值。  </p>
+</li>
+<li><p>记权重向量 $w$，$w_j$表示第j个指标的权重。  </p>
+</li>
+<li><p>第i个对象与正理想解距离：</p>
+<script type="math/tex; mode=display">D_{i}^+=\sqrt{\sum_{j=1}^{m}{w_j(Z_i^+-\widetilde{x_{ij}})^2}}</script></li>
+<li>第i个对象与负理想解距离：<script type="math/tex; mode=display">D_{i}^-=\sqrt{\sum_{j=1}^{m}{w_j(Z_i^--\widetilde{x_{ij}})^2}}</script>计算原始得分：<script type="math/tex; mode=display">S_i=\frac{D_{i}^-}{D_{i}^++D_{i}^-}</script>显然 $S_i\in [0,1]$ ,且 $S_i$ 越大，越接近正理想解。  </li>
+</ul>
+<p>为便于比较，再将个对象的得分归一化后*100转化为百分制。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TOPSIS 法是基于 “距离排序” 的客观评价模型，核心逻辑是通过计算各方案与 “正理想解（最优值组合）”“负理想解（最劣值组合）” 的加权距离，量化方案的优劣程度。<br>该模型的优势是兼顾客观数据规律与指标重要性差异，可灵活结合 AHP（主观赋权）或熵权法（客观赋权），适用于多指标、多方案的排序决策（如产品评选、绩效评价、资源分配等）。</p>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+      </categories>
+      <tags>
+        <tag>数学建模</tag>
+        <tag>TOPSIS法</tag>
+        <tag>评价类模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>熵权法</title>
+    <url>/2025/12/04/%E7%86%B5%E6%9D%83%E6%B3%95/</url>
+    <content><![CDATA[<p>水一篇<br><span id="more"></span><br>    前置知识：最好会层次分析法</p>
+<h1 id="模型引出"><a href="#模型引出" class="headerlink" title="模型引出"></a>模型引出</h1><p>熵权法和前面的层次分析法一样，是一种赋权方法。但不一样的是，熵权法是完全客观的方法，仅依赖数据本身的分布。<br>先来看个例子：<br>两个人比较身材，他们的身高只差一厘米，但体重差10千克，那么我们重点需要比较两人的体重而不是身高。在这个例子中，身高的权重就比较低，体重的权重比较高，并且根据数据是可以具体算出二者权重的。</p>
+<h1 id="模型原理"><a href="#模型原理" class="headerlink" title="模型原理"></a>模型原理</h1><p>由信息论基本原理：</p>
+<ul>
+<li>信息是系统有序程度的度量</li>
+<li>熵是系统无序程度的度量  </li>
+</ul>
+<p>信息熵是衡量随机变量不确定性的量化指标——不确定性越高，熵值越大；确定性越高，熵值越小。  </p>
+<p>简单的例子：</p>
+<ul>
+<li>太阳从东边升起。这是必然时间，没有不确定性，信息熵为0</li>
+<li>掷一枚均匀硬币，结果是正面。有不确定性，熵不为0</li>
+<li>掷一次六面骰子，结果是 3 点。不确定性比掷硬币更高，熵更大  </li>
+</ul>
+<p>在熵权法中，使用信息熵值来判断某个指标的离散程度。离散程度越大，权重越高，反之权重小。  </p>
+<h1 id="主要过程"><a href="#主要过程" class="headerlink" title="主要过程"></a>主要过程</h1><h2 id="1-数据标准化"><a href="#1-数据标准化" class="headerlink" title="1.数据标准化"></a>1.数据标准化</h2><script type="math/tex; mode=display">
+ \widetilde{x_{ij}}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{n}{x_{ij}^2}}}</script><p>如果 $x_{ij}$ 中有负数，也可以用：</p>
+<script type="math/tex; mode=display">
+ \widetilde{x_{ij}}=\frac{x_{ij}-min(x_{1j},x_{2j},...,x_{nj})}{max(x_{1j},x_{2j},...,x_{nj})-min(x_{1j},x_{2j},...,x_{nj})}</script><h2 id="2-归一化"><a href="#2-归一化" class="headerlink" title="2.归一化"></a>2.归一化</h2><script type="math/tex; mode=display">
+ p_{ij}=\frac{\widetilde{x_{ij}}}{\sum_{i=1}^{n}{\widetilde {x_{ij}}}}</script><h2 id="3-计算熵权"><a href="#3-计算熵权" class="headerlink" title="3.计算熵权"></a>3.计算熵权</h2><script type="math/tex; mode=display">e_j=-\frac{1}{ln(n)}\sum_{i=1}^{n}{p_{ij}}ln(p_{ij})</script><p>注意，此处定义 $ln(0)=0$   </p>
+<script type="math/tex; mode=display">d_j=1-e_j</script><p>然后再归一化：</p>
+<script type="math/tex; mode=display">W_j=\frac{d_j}{\sum_{j=1}^{m}{d_j}}</script><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>熵权法是一种基于数据客观分布的评价类模型赋权方法。但是，绝对的客观有时也是不行的，比如上面评价身材的例子，如果身高都一样，那么权重为0，说明比较中身材完全与身高无关，但实际上身材和身高是密切相关的。我们在评价类问题中，往往需要综合多种方法，比如使用层次分析法的主观方法和客观的熵权法的组合来更精确的评价目标。</p>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+      </categories>
+      <tags>
+        <tag>数学建模</tag>
+        <tag>评价类模型</tag>
+        <tag>熵权法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>逻辑回归</title>
+    <url>/2025/11/25/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</url>
+    <content><![CDATA[<p>简单的逻辑回归和样例ヾ(<em>´∀ ˋ</em>)ﾉ<br><span id="more"></span>  <!-- 就加这行！前面的内容（标题+前置知识）首页不显示，只显文章标题 --><br><del>这篇文章是本蒟蒻第一个博客，各处表述难免欠妥，希望各位佬指出</del></p>
+<pre><code>前置知识：线性回归，简单概率论，一点点机器学习基础
+</code></pre><h1 id="什么是逻辑回归"><a href="#什么是逻辑回归" class="headerlink" title="什么是逻辑回归"></a>什么是逻辑回归</h1><p>逻辑回归 <code>logistic regression</code> 是一种经典分类算法，通常用于二分类。逻辑回归是一种对数线性模型(从下面的公式也可以看出来)  </p>
+<h1 id="逻辑回归基础"><a href="#逻辑回归基础" class="headerlink" title="逻辑回归基础"></a>逻辑回归基础</h1><p>先来了解一下逻辑斯谛分布, 设 <code>X</code> 为连续随机变量, 逻辑斯谛分布的累积分布函数为：</p>
+<script type="math/tex; mode=display">F(x) = P(X \leq x) = \frac{1}{1 + e^{-\frac{x - \mu}{\gamma}}}</script><p>对应的概率密度函数（CDF 的导数）为：</p>
+<script type="math/tex; mode=display">f(x) = F'(x) = \frac{e^{-\frac{x - \mu}{\gamma}}}{\gamma \cdot \left(1 + e^{-\frac{x - \mu}{\gamma}}\right)^2}</script><p>式中 $\mu$ 为位置参数,  $\gamma$ 为形状参数  </p>
+<p><del>好复杂看不懂</del><br>先看看简单的。<br>当逻辑斯谛分布的位置参数 $\mu$、形状参数 $\gamma$ 时，其累积分布函数（CDF）就是 sigmoid 函数（激活函数）：</p>
+<script type="math/tex; mode=display">sigmoid(x) = \frac{1}{1 + e^{-x}}</script><p>作用：将($-\infty, +\infty$) 映射到 (0, 1)</p>
+<p>再结合线性回归，就可以做到逻辑回归最简单的应用: 二分类  </p>
+<p>就是<strong>将线性回归的输出作为逻辑回归的输入</strong><br>具体一点，就是将线性回归的值，带入上面的激活函数，映射到 (0-1) 后，再根据阈值分类<br>选定阈值（0-1）后大于阈值为正样本， 小于为负样本</p>
+<script type="math/tex; mode=display">h(x)=sigmoid(w^T·x+b)</script><h2 id="下面介绍逻辑回归损失函数"><a href="#下面介绍逻辑回归损失函数" class="headerlink" title="下面介绍逻辑回归损失函数"></a>下面介绍逻辑回归损失函数</h2><script type="math/tex; mode=display">Loss(L) = -y_i \log p - (1 - y_i) \log(1 - p)</script><p>式中，$y_i$ 为逻辑回归的预估的类别，A类为1，B类为0，即正样本只看前半部分，负样本只看后半部分。<br> $p$ 为上面 h(x) 的返回值，即概率。<br>损失函数的工作原理：每个样本有A，B两个类别，<strong>真实类别对应的位置，概率值越大越好</strong>  </p>
+<p>下面具体讲讲概率分布  </p>
+<h3 id="对于一个样本"><a href="#对于一个样本" class="headerlink" title="对于一个样本"></a>对于一个样本</h3><p>假设有0，1两个类别，显然有：</p>
+<script type="math/tex; mode=display">
+L= 
+\begin{cases}
+p & y = 1 \quad (\text{样本为正类}) \\
+1-p & y = 0 \quad (\text{样本为负类})
+\end{cases}</script><p>等价于</p>
+<script type="math/tex; mode=display">L=p^y(1-p)^{1-y}</script><h3 id="推广到n个样本"><a href="#推广到n个样本" class="headerlink" title="推广到n个样本"></a>推广到n个样本</h3><script type="math/tex; mode=display">P=\displaystyle \prod_{i=1}^{n}{p^{y_i}(1-p)^{1-{y_i}}}</script><p>这个就是所有样本都预测正确的概率。</p>
+<p>问题转换为：当上述联合概率取最大时，估计 $w$ 和 $b$ ，就变成了极大似然估计。</p>
+<h3 id="极大似然函数转对数似然函数"><a href="#极大似然函数转对数似然函数" class="headerlink" title="极大似然函数转对数似然函数"></a>极大似然函数转对数似然函数</h3><p>对上述式子取对数，有:</p>
+<script type="math/tex; mode=display">H(L)=\sum_{i=1}^n y_i \log p + (1 - y_i) \log(1 - p)</script><p>因为是损失函数，所以应该取最小值，只需加个负号。</p>
+<script type="math/tex; mode=display">Loss(L)=-\sum_{i=1}^n y_i \log p + (1 - y_i) \log(1 - p)</script><p>也就得到了之前是式子。<br>通过这个转换，将最小化损失函数的任务交给了极大似然函数，所以逻辑回归本质上没有新的算法。  </p>
+<p>总结即是：逻辑回归损失函数= - 极大似然估计函数  </p>
+<h1 id="实战训练——癌症预测"><a href="#实战训练——癌症预测" class="headerlink" title="实战训练——癌症预测"></a>实战训练——癌症预测</h1><p>逻辑回归的包<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br></pre></td></tr></table></figure></p>
+<p>简单介绍一下api<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">LogisticRegression(solver=<span class="string">&#x27;liblinear&#x27;</span>,penalty=<span class="string">&#x27;l2&#x27;</span>,C=<span class="number">1.0</span>)</span><br></pre></td></tr></table></figure><br>其中 <code>liblinear</code> 在数据集较小是比较快，对大数据集也可以换成 <code>sag</code> or <code>saga</code><br> <code>penalty</code> 表示正则化种类，l1或者l2<br>C 表示正则化力度<br>默认将数量少的类别作为正例  </p>
+<p>下面是完整代码，只是换成了 <code>LogisticRegression</code> ,其他和别的方法一样</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">d1</span>():</span><br><span class="line">    df = pd.read_csv(<span class="string">&quot;breast-cancer-wisconsin.data&quot;</span>, sep=<span class="string">&quot;,&quot;</span>, header=<span class="literal">None</span>)</span><br><span class="line">    <span class="comment"># df.info()</span></span><br><span class="line">    df=df.replace(to_replace=<span class="string">&#x27;?&#x27;</span>,value=np.NaN)</span><br><span class="line">    df=df.dropna()</span><br><span class="line">    df.info()</span><br><span class="line">    x=df.iloc[:,<span class="number">1</span>:-<span class="number">1</span>]</span><br><span class="line">    y=df.iloc[:,-<span class="number">1</span>]</span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">22</span>)</span><br><span class="line">    transfer=StandardScaler()</span><br><span class="line">    x_train=transfer.fit_transform(x_train)</span><br><span class="line">    x_test=transfer.transform(x_test)</span><br><span class="line">    model=LogisticRegression()</span><br><span class="line">    model.fit(x_train,y_train)</span><br><span class="line">    y_pred=model.predict(x_test)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score: <span class="subst">&#123;model.score(x_test,y_test)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d1()</span><br></pre></td></tr></table></figure>
+<h1 id="模型的评估"><a href="#模型的评估" class="headerlink" title="模型的评估"></a>模型的评估</h1><p>像上面那样，仅使用 ‘准确率’ 进行估计，事实上是不精确，甚至是不可取的  </p>
+<p>比如：1000 人中仅 10 人患癌（正例占 1%，健康人占 99%，极度不平衡）若模型 “躺平” 全预测 “健康”，准确率 = 990/1000=99%（看似优秀），但漏诊了所有 10 名患者（相当于最坏情况下根本没测出来）。<br>而如果说继续提升这个准确率，确实可以提高测出来的比例，但是这在精度上的要求将是巨大的，现实情况样本容量巨大，实现是不可能的。  </p>
+<p>在正负样例容量差距较大时，需要进行进一步的评估，下面介绍一些方法  </p>
+<h2 id="混淆矩阵"><a href="#混淆矩阵" class="headerlink" title="混淆矩阵"></a>混淆矩阵</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">正例（预测）</th>
+<th style="text-align:center">反例（预测）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">正例（真实）</td>
+<td style="text-align:center">真正例（TP）</td>
+<td style="text-align:center">伪反例（FN）</td>
+</tr>
+<tr>
+<td style="text-align:center">反例（真实）</td>
+<td style="text-align:center">伪正例（FP）</td>
+<td style="text-align:center">真反例（TN）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其中，T/F表示真/假，P/N表示正/负（样例）<br>比如伪反例，就是本来应该是正例，被错误预测为反例，即假的反例 <code>False Negative</code>  </p>
+<p>下面的评估需要用到混淆矩阵  </p>
+<ul>
+<li>精确率 <code>precision</code> <script type="math/tex; mode=display">P= \frac{TP}{TP + FP}</script></li>
+<li>召回率（查全率） <code>recall</code><script type="math/tex; mode=display">P= \frac{TP}{TP + FN}</script></li>
+<li><code>F1 score</code> (用于综合上面两个)  <script type="math/tex; mode=display">P= \frac{2·precision·recall}{precision + recall}</script></li>
+</ul>
+<p>从各公式就可以明显看出来这三个值的含义了，再简单解释一下，精确率就是预测出来的正例确实是正例的概率，查全率就是有多少正例被预测出来了。这两个指标当然越大越好，F1值即综合上面两个指标，也就是可以用F1值作为模型好坏的评价，<strong>F1值越大模型越好</strong>。  </p>
+<p>代码也很简单，先加个包<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, f1_score,confusion_matrix</span><br></pre></td></tr></table></figure><br>其他的和上面的代码一样，得分改成F1值<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;F1 Score (pos_label=4): <span class="subst">&#123;f1_score(y_test, y_pred, pos_label=<span class="number">4</span>):<span class="number">.4</span>f&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure><br>当然这里也可以不加 <code>pos_label</code> ，默认样本少的为正例<br>也可以打印出混淆矩阵来看看<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cm = confusion_matrix(y_test, y_pred)</span><br><span class="line">cm_df = pd.DataFrame(</span><br><span class="line">    cm,</span><br><span class="line">    index=[<span class="string">&quot;真实_良性(2)&quot;</span>, <span class="string">&quot;真实_恶性(4)&quot;</span>],</span><br><span class="line">    columns=[<span class="string">&quot;预测_良性(2)&quot;</span>, <span class="string">&quot;预测_恶性(4)&quot;</span>]</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(cm_df)</span><br></pre></td></tr></table></figure><br>至此，就可以得到更加精准的模型评估  </p>
+<h2 id="ROC曲线和AUC指标"><a href="#ROC曲线和AUC指标" class="headerlink" title="ROC曲线和AUC指标"></a>ROC曲线和AUC指标</h2><p>这两个就是进一步拓展了，这里简单讲一点  </p>
+<p>ROC <code>Receiver Operating Characteristic Curve</code> 曲线可以就是上面混淆矩阵的可视化  </p>
+<ul>
+<li><p>横轴（FPR）：假阳性率 = 假阳性样本数/(假阳性+真阴性样本数) → 模型误将负样本判为正样本的比例（反映“误诊”风险）  </p>
+</li>
+<li><p>纵轴（TPR）：真阳性率 = 真阳性样本数/(真阳性+假阴性样本数) → 模型正确识别正样本的比例（即召回率，反映“漏诊”风险）  </p>
+</li>
+</ul>
+<p>同一数据集下，性能更优的模型ROC曲线会更靠近左上角（TPR高且FPR低） </p>
+<p>AUC <code>Area Under the ROC Curve</code> 是ROC曲线下方的面积，取值范围为0~1：</p>
+<p>核心意义：代表模型在随机抽取一个正样本和一个负样本时，正样本被预测为正类的概率大于负样本的概率（即模型区分正/负样本的能力, 也可以作为模型评分）<br>使用AUC可以直接比较多个模型的整体性能  </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>逻辑回归看着带“回归”二字，其实是做分类的，尤其适合分二类（比如判断是不是癌症）。</p>
+<p>核心思路很简单：先拿线性回归算出一个结果，再用sigmoid函数把这个结果变成0到1之间的概率，定个阈值（比如0.5），概率超阈值就是正例，反之就是负例。</p>
+<p>实战里要注意：</p>
+<ul>
+<li>先给特征做标准化（不然模型不准）；</li>
+<li>遇到像癌症预测这种“少数人患病、多数人健康”的情况，别只看准确率（容易骗人），用混淆矩阵、F1分数或者AUC这些指标才靠谱，能避免漏诊、误诊。</li>
+</ul>
+<p>它的好处就是模型简单、训练快，还能看懂每个特征的影响（比如哪个指标对判断癌症更重要），是新手入门机器学习的好选择</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>逻辑回归</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>层次分析法</title>
     <url>/2025/11/29/%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95/</url>
     <content><![CDATA[<p>简单的层次分析法(ゝ∀･)<br><span id="more"></span><br>    前置知识：一点点矩阵基础</p>
@@ -298,136 +428,6 @@ CR= \frac{CI}{RI}
         <tag>数学建模</tag>
         <tag>评价类模型</tag>
         <tag>层次分析法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>逻辑回归</title>
-    <url>/2025/11/25/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</url>
-    <content><![CDATA[<p>简单的逻辑回归和样例ヾ(<em>´∀ ˋ</em>)ﾉ<br><span id="more"></span>  <!-- 就加这行！前面的内容（标题+前置知识）首页不显示，只显文章标题 --><br><del>这篇文章是本蒟蒻第一个博客，各处表述难免欠妥，希望各位佬指出</del></p>
-<pre><code>前置知识：线性回归，简单概率论，一点点机器学习基础
-</code></pre><h1 id="什么是逻辑回归"><a href="#什么是逻辑回归" class="headerlink" title="什么是逻辑回归"></a>什么是逻辑回归</h1><p>逻辑回归 <code>logistic regression</code> 是一种经典分类算法，通常用于二分类。逻辑回归是一种对数线性模型(从下面的公式也可以看出来)  </p>
-<h1 id="逻辑回归基础"><a href="#逻辑回归基础" class="headerlink" title="逻辑回归基础"></a>逻辑回归基础</h1><p>先来了解一下逻辑斯谛分布, 设 <code>X</code> 为连续随机变量, 逻辑斯谛分布的累积分布函数为：</p>
-<script type="math/tex; mode=display">F(x) = P(X \leq x) = \frac{1}{1 + e^{-\frac{x - \mu}{\gamma}}}</script><p>对应的概率密度函数（CDF 的导数）为：</p>
-<script type="math/tex; mode=display">f(x) = F'(x) = \frac{e^{-\frac{x - \mu}{\gamma}}}{\gamma \cdot \left(1 + e^{-\frac{x - \mu}{\gamma}}\right)^2}</script><p>式中 $\mu$ 为位置参数,  $\gamma$ 为形状参数  </p>
-<p><del>好复杂看不懂</del><br>先看看简单的。<br>当逻辑斯谛分布的位置参数 $\mu$、形状参数 $\gamma$ 时，其累积分布函数（CDF）就是 sigmoid 函数（激活函数）：</p>
-<script type="math/tex; mode=display">sigmoid(x) = \frac{1}{1 + e^{-x}}</script><p>作用：将($-\infty, +\infty$) 映射到 (0, 1)</p>
-<p>再结合线性回归，就可以做到逻辑回归最简单的应用: 二分类  </p>
-<p>就是<strong>将线性回归的输出作为逻辑回归的输入</strong><br>具体一点，就是将线性回归的值，带入上面的激活函数，映射到 (0-1) 后，再根据阈值分类<br>选定阈值（0-1）后大于阈值为正样本， 小于为负样本</p>
-<script type="math/tex; mode=display">h(x)=sigmoid(w^T·x+b)</script><h2 id="下面介绍逻辑回归损失函数"><a href="#下面介绍逻辑回归损失函数" class="headerlink" title="下面介绍逻辑回归损失函数"></a>下面介绍逻辑回归损失函数</h2><script type="math/tex; mode=display">Loss(L) = -y_i \log p - (1 - y_i) \log(1 - p)</script><p>式中，$y_i$ 为逻辑回归的预估的类别，A类为1，B类为0，即正样本只看前半部分，负样本只看后半部分。<br> $p$ 为上面 h(x) 的返回值，即概率。<br>损失函数的工作原理：每个样本有A，B两个类别，<strong>真实类别对应的位置，概率值越大越好</strong>  </p>
-<p>下面具体讲讲概率分布  </p>
-<h3 id="对于一个样本"><a href="#对于一个样本" class="headerlink" title="对于一个样本"></a>对于一个样本</h3><p>假设有0，1两个类别，显然有：</p>
-<script type="math/tex; mode=display">
-L= 
-\begin{cases}
-p & y = 1 \quad (\text{样本为正类}) \\
-1-p & y = 0 \quad (\text{样本为负类})
-\end{cases}</script><p>等价于</p>
-<script type="math/tex; mode=display">L=p^y(1-p)^{1-y}</script><h3 id="推广到n个样本"><a href="#推广到n个样本" class="headerlink" title="推广到n个样本"></a>推广到n个样本</h3><script type="math/tex; mode=display">P=\displaystyle \prod_{i=1}^{n}{p^{y_i}(1-p)^{1-{y_i}}}</script><p>这个就是所有样本都预测正确的概率。</p>
-<p>问题转换为：当上述联合概率取最大时，估计 $w$ 和 $b$ ，就变成了极大似然估计。</p>
-<h3 id="极大似然函数转对数似然函数"><a href="#极大似然函数转对数似然函数" class="headerlink" title="极大似然函数转对数似然函数"></a>极大似然函数转对数似然函数</h3><p>对上述式子取对数，有:</p>
-<script type="math/tex; mode=display">H(L)=\sum_{i=1}^n y_i \log p + (1 - y_i) \log(1 - p)</script><p>因为是损失函数，所以应该取最小值，只需加个负号。</p>
-<script type="math/tex; mode=display">Loss(L)=-\sum_{i=1}^n y_i \log p + (1 - y_i) \log(1 - p)</script><p>也就得到了之前是式子。<br>通过这个转换，将最小化损失函数的任务交给了极大似然函数，所以逻辑回归本质上没有新的算法。  </p>
-<p>总结即是：逻辑回归损失函数= - 极大似然估计函数  </p>
-<h1 id="实战训练——癌症预测"><a href="#实战训练——癌症预测" class="headerlink" title="实战训练——癌症预测"></a>实战训练——癌症预测</h1><p>逻辑回归的包<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br></pre></td></tr></table></figure></p>
-<p>简单介绍一下api<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">LogisticRegression(solver=<span class="string">&#x27;liblinear&#x27;</span>,penalty=<span class="string">&#x27;l2&#x27;</span>,C=<span class="number">1.0</span>)</span><br></pre></td></tr></table></figure><br>其中 <code>liblinear</code> 在数据集较小是比较快，对大数据集也可以换成 <code>sag</code> or <code>saga</code><br> <code>penalty</code> 表示正则化种类，l1或者l2<br>C 表示正则化力度<br>默认将数量少的类别作为正例  </p>
-<p>下面是完整代码，只是换成了 <code>LogisticRegression</code> ,其他和别的方法一样</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">d1</span>():</span><br><span class="line">    df = pd.read_csv(<span class="string">&quot;breast-cancer-wisconsin.data&quot;</span>, sep=<span class="string">&quot;,&quot;</span>, header=<span class="literal">None</span>)</span><br><span class="line">    <span class="comment"># df.info()</span></span><br><span class="line">    df=df.replace(to_replace=<span class="string">&#x27;?&#x27;</span>,value=np.NaN)</span><br><span class="line">    df=df.dropna()</span><br><span class="line">    df.info()</span><br><span class="line">    x=df.iloc[:,<span class="number">1</span>:-<span class="number">1</span>]</span><br><span class="line">    y=df.iloc[:,-<span class="number">1</span>]</span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">22</span>)</span><br><span class="line">    transfer=StandardScaler()</span><br><span class="line">    x_train=transfer.fit_transform(x_train)</span><br><span class="line">    x_test=transfer.transform(x_test)</span><br><span class="line">    model=LogisticRegression()</span><br><span class="line">    model.fit(x_train,y_train)</span><br><span class="line">    y_pred=model.predict(x_test)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;score: <span class="subst">&#123;model.score(x_test,y_test)&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    d1()</span><br></pre></td></tr></table></figure>
-<h1 id="模型的评估"><a href="#模型的评估" class="headerlink" title="模型的评估"></a>模型的评估</h1><p>像上面那样，仅使用 ‘准确率’ 进行估计，事实上是不精确，甚至是不可取的  </p>
-<p>比如：1000 人中仅 10 人患癌（正例占 1%，健康人占 99%，极度不平衡）若模型 “躺平” 全预测 “健康”，准确率 = 990/1000=99%（看似优秀），但漏诊了所有 10 名患者（相当于最坏情况下根本没测出来）。<br>而如果说继续提升这个准确率，确实可以提高测出来的比例，但是这在精度上的要求将是巨大的，现实情况样本容量巨大，实现是不可能的。  </p>
-<p>在正负样例容量差距较大时，需要进行进一步的评估，下面介绍一些方法  </p>
-<h2 id="混淆矩阵"><a href="#混淆矩阵" class="headerlink" title="混淆矩阵"></a>混淆矩阵</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">正例（预测）</th>
-<th style="text-align:center">反例（预测）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">正例（真实）</td>
-<td style="text-align:center">真正例（TP）</td>
-<td style="text-align:center">伪反例（FN）</td>
-</tr>
-<tr>
-<td style="text-align:center">反例（真实）</td>
-<td style="text-align:center">伪正例（FP）</td>
-<td style="text-align:center">真反例（TN）</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>其中，T/F表示真/假，P/N表示正/负（样例）<br>比如伪反例，就是本来应该是正例，被错误预测为反例，即假的反例 <code>False Negative</code>  </p>
-<p>下面的评估需要用到混淆矩阵  </p>
-<ul>
-<li>精确率 <code>precision</code> <script type="math/tex; mode=display">P= \frac{TP}{TP + FP}</script></li>
-<li>召回率（查全率） <code>recall</code><script type="math/tex; mode=display">P= \frac{TP}{TP + FN}</script></li>
-<li><code>F1 score</code> (用于综合上面两个)  <script type="math/tex; mode=display">P= \frac{2·precision·recall}{precision + recall}</script></li>
-</ul>
-<p>从各公式就可以明显看出来这三个值的含义了，再简单解释一下，精确率就是预测出来的正例确实是正例的概率，查全率就是有多少正例被预测出来了。这两个指标当然越大越好，F1值即综合上面两个指标，也就是可以用F1值作为模型好坏的评价，<strong>F1值越大模型越好</strong>。  </p>
-<p>代码也很简单，先加个包<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, f1_score,confusion_matrix</span><br></pre></td></tr></table></figure><br>其他的和上面的代码一样，得分改成F1值<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;F1 Score (pos_label=4): <span class="subst">&#123;f1_score(y_test, y_pred, pos_label=<span class="number">4</span>):<span class="number">.4</span>f&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure><br>当然这里也可以不加 <code>pos_label</code> ，默认样本少的为正例<br>也可以打印出混淆矩阵来看看<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cm = confusion_matrix(y_test, y_pred)</span><br><span class="line">cm_df = pd.DataFrame(</span><br><span class="line">    cm,</span><br><span class="line">    index=[<span class="string">&quot;真实_良性(2)&quot;</span>, <span class="string">&quot;真实_恶性(4)&quot;</span>],</span><br><span class="line">    columns=[<span class="string">&quot;预测_良性(2)&quot;</span>, <span class="string">&quot;预测_恶性(4)&quot;</span>]</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(cm_df)</span><br></pre></td></tr></table></figure><br>至此，就可以得到更加精准的模型评估  </p>
-<h2 id="ROC曲线和AUC指标"><a href="#ROC曲线和AUC指标" class="headerlink" title="ROC曲线和AUC指标"></a>ROC曲线和AUC指标</h2><p>这两个就是进一步拓展了，这里简单讲一点  </p>
-<p>ROC <code>Receiver Operating Characteristic Curve</code> 曲线可以就是上面混淆矩阵的可视化  </p>
-<ul>
-<li><p>横轴（FPR）：假阳性率 = 假阳性样本数/(假阳性+真阴性样本数) → 模型误将负样本判为正样本的比例（反映“误诊”风险）  </p>
-</li>
-<li><p>纵轴（TPR）：真阳性率 = 真阳性样本数/(真阳性+假阴性样本数) → 模型正确识别正样本的比例（即召回率，反映“漏诊”风险）  </p>
-</li>
-</ul>
-<p>同一数据集下，性能更优的模型ROC曲线会更靠近左上角（TPR高且FPR低） </p>
-<p>AUC <code>Area Under the ROC Curve</code> 是ROC曲线下方的面积，取值范围为0~1：</p>
-<p>核心意义：代表模型在随机抽取一个正样本和一个负样本时，正样本被预测为正类的概率大于负样本的概率（即模型区分正/负样本的能力, 也可以作为模型评分）<br>使用AUC可以直接比较多个模型的整体性能  </p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>逻辑回归看着带“回归”二字，其实是做分类的，尤其适合分二类（比如判断是不是癌症）。</p>
-<p>核心思路很简单：先拿线性回归算出一个结果，再用sigmoid函数把这个结果变成0到1之间的概率，定个阈值（比如0.5），概率超阈值就是正例，反之就是负例。</p>
-<p>实战里要注意：</p>
-<ul>
-<li>先给特征做标准化（不然模型不准）；</li>
-<li>遇到像癌症预测这种“少数人患病、多数人健康”的情况，别只看准确率（容易骗人），用混淆矩阵、F1分数或者AUC这些指标才靠谱，能避免漏诊、误诊。</li>
-</ul>
-<p>它的好处就是模型简单、训练快，还能看懂每个特征的影响（比如哪个指标对判断癌症更重要），是新手入门机器学习的好选择</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>逻辑回归</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>熵权法</title>
-    <url>/2025/12/04/%E7%86%B5%E6%9D%83%E6%B3%95/</url>
-    <content><![CDATA[<p>水一篇<br><span id="more"></span><br>    前置知识：最好会层次分析法</p>
-<h1 id="模型引出"><a href="#模型引出" class="headerlink" title="模型引出"></a>模型引出</h1><p>熵权法和前面的层次分析法一样，是一种赋权方法。但不一样的是，熵权法是完全客观的方法，仅依赖数据本身的分布。<br>先来看个例子：<br>两个人比较身材，他们的身高只差一厘米，但体重差10千克，那么我们重点需要比较两人的体重而不是身高。在这个例子中，身高的权重就比较低，体重的权重比较高，并且根据数据是可以具体算出二者权重的。</p>
-<h1 id="模型原理"><a href="#模型原理" class="headerlink" title="模型原理"></a>模型原理</h1><p>由信息论基本原理：</p>
-<ul>
-<li>信息是系统有序程度的度量</li>
-<li>熵是系统无序程度的度量  </li>
-</ul>
-<p>信息熵是衡量随机变量不确定性的量化指标——不确定性越高，熵值越大；确定性越高，熵值越小。  </p>
-<p>简单的例子：</p>
-<ul>
-<li>太阳从东边升起。这是必然时间，没有不确定性，信息熵为0</li>
-<li>掷一枚均匀硬币，结果是正面。有不确定性，熵不为0</li>
-<li>掷一次六面骰子，结果是 3 点。不确定性比掷硬币更高，熵更大  </li>
-</ul>
-<p>在熵权法中，使用信息熵值来判断某个指标的离散程度。离散程度越大，权重越高，反之权重小。  </p>
-<h1 id="主要过程"><a href="#主要过程" class="headerlink" title="主要过程"></a>主要过程</h1><h2 id="1-数据标准化"><a href="#1-数据标准化" class="headerlink" title="1.数据标准化"></a>1.数据标准化</h2><script type="math/tex; mode=display">
- \widetilde{x_{ij}}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{n}{x_{ij}^2}}}</script><p>如果 $x_{ij}$ 中有负数，也可以用：</p>
-<script type="math/tex; mode=display">
- \widetilde{x_{ij}}=\frac{x_{ij}-min(x_{1j},x_{2j},...,x_{nj})}{max(x_{1j},x_{2j},...,x_{nj})-min(x_{1j},x_{2j},...,x_{nj})}</script><h2 id="2-归一化"><a href="#2-归一化" class="headerlink" title="2.归一化"></a>2.归一化</h2><script type="math/tex; mode=display">
- p_{ij}=\frac{\widetilde{x_{ij}}}{\sum_{i=1}^{n}{\widetilde {x_{ij}}}}</script><h2 id="3-计算熵权"><a href="#3-计算熵权" class="headerlink" title="3.计算熵权"></a>3.计算熵权</h2><script type="math/tex; mode=display">e_j=-\frac{1}{ln(n)}\sum_{i=1}^{n}{p_{ij}}ln(p_{ij})</script><p>注意，此处定义 $ln(0)=0$   </p>
-<script type="math/tex; mode=display">d_j=1-e_j</script><p>然后再归一化：</p>
-<script type="math/tex; mode=display">W_j=\frac{d_j}{\sum_{j=1}^{m}{d_j}}</script><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>熵权法是一种基于数据客观分布的评价类模型赋权方法。但是，绝对的客观有时也是不行的，比如上面评价身材的例子，如果身高都一样，那么权重为0，说明比较中身材完全与身高无关，但实际上身材和身高是密切相关的。我们在评价类问题中，往往需要综合多种方法，比如使用层次分析法的主观方法和客观的熵权法的组合来更精确的评价目标。</p>
-]]></content>
-      <categories>
-        <category>数学建模</category>
-      </categories>
-      <tags>
-        <tag>数学建模</tag>
-        <tag>评价类模型</tag>
-        <tag>熵权法</tag>
       </tags>
   </entry>
   <entry>
