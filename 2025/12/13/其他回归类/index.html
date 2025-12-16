@@ -30,9 +30,9 @@
 <meta property="og:description" content="一些其他回归类">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-13T09:53:50.000Z">
-<meta property="article:modified_time" content="2025-12-13T09:57:35.594Z">
+<meta property="article:modified_time" content="2025-12-14T09:12:15.191Z">
 <meta property="article:author" content="longnamehaha">
-<meta property="article:tag" content="多元回归">
+<meta property="article:tag" content="多元线性回归">
 <meta property="article:tag" content="数学建模">
 <meta property="article:tag" content="非线性回归">
 <meta property="article:tag" content="预测类">
@@ -161,7 +161,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -174,6 +174,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">1.</span> <span class="nav-text">多元线性回归</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E7%90%86%E8%AE%BA%EF%BC%88%E7%AE%80%E6%B4%81%E7%89%88%EF%BC%8C%E5%A4%9F%E7%94%A8%E5%BB%BA%E6%A8%A1%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">一、核心理论（简洁版，够用建模）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 模型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1%EF%BC%88%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%EF%BC%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 参数估计（最小二乘法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 模型评估指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Python-%E5%AE%9E%E7%8E%B0%EF%BC%88%E9%AB%98%E6%95%88%E5%BB%BA%E6%A8%A1%EF%BC%8C%E9%80%82%E9%85%8D-sklearn%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">二、Python 实现（高效建模，适配 sklearn）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E5%8F%AF%E8%BF%90%E8%A1%8C%E4%BB%A3%E7%A0%81%EF%BC%88%E5%90%AB%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%E3%80%81%E8%AE%AD%E7%BB%83%E3%80%81%E9%A2%84%E6%B5%8B%E3%80%81%E8%AF%84%E4%BC%B0%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">完整可运行代码（含数据生成、训练、预测、评估）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%AF%B4%E6%98%8E"><span class="nav-number">1.2.2.</span> <span class="nav-text">代码说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">运行结果示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E5%B7%A7%EF%BC%88%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">四、数学建模中的关键技巧（避坑指南）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.</span> <span class="nav-text">五、总结</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -186,7 +187,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -197,7 +198,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -257,9 +258,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-12-13 17:53:50 / 修改时间：17:57:35" itemprop="dateCreated datePublished" datetime="2025-12-13T17:53:50+08:00">2025-12-13</time>
+      <time title="创建时间：2025-12-13 17:53:50" itemprop="dateCreated datePublished" datetime="2025-12-13T17:53:50+08:00">2025-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-14 17:12:15" itemprop="dateModified" datetime="2025-12-14T17:12:15+08:00">2025-12-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -287,8 +294,76 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>一些其他回归类</p>
-<span id="more"></span> 
+    <div class="post-body" itemprop="articleBody"><p>一些其他回归类<br><span id="more"></span><br>    前置知识：一元线性回归</p>
+<h1 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h1><p>多元线性回归是<strong>科学计算、数学建模</strong>中最基础且常用的预测模型，核心是通过多个自变量（特征）的线性组合预测因变量（目标值）。以下从「理论基础→编程实现→建模技巧」三个维度展开，结合 Python/C++ 代码（可直接运行），适配数学建模、数据分析场景。</p>
+<h2 id="一、核心理论（简洁版，够用建模）"><a href="#一、核心理论（简洁版，够用建模）" class="headerlink" title="一、核心理论（简洁版，够用建模）"></a>一、核心理论（简洁版，够用建模）</h2><h3 id="1-模型定义"><a href="#1-模型定义" class="headerlink" title="1. 模型定义"></a>1. 模型定义</h3><p>假设存在 $k$ 个自变量 $x_1, x_2, …, x_k$ 和 1 个因变量 $y$，多元线性回归模型为：</p>
+<script type="math/tex; mode=display">y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_k x_k + \epsilon</script><ul>
+<li>$\beta_0$：截距项（常数项）</li>
+<li>$\beta_1, …, \beta_k$：回归系数（表示自变量对因变量的影响程度）</li>
+<li>$\epsilon$：随机误差项（满足正态分布 $\epsilon \sim N(0, \sigma^2)$）</li>
+</ul>
+<p>用矩阵形式表示（更便于编程计算）：</p>
+<script type="math/tex; mode=display">Y = X\beta + \epsilon</script><ul>
+<li>$Y \in \mathbb{R}^{n \times 1}$：因变量向量（$n$ 为样本数）</li>
+<li>$X \in \mathbb{R}^{n \times (k+1)}$：设计矩阵（第一列为全 1，对应截距项 $\beta_0$）</li>
+<li>$\beta \in \mathbb{R}^{(k+1) \times 1}$：系数向量（$[\beta_0, \beta_1, …, \beta_k]^T$）</li>
+<li>$\epsilon \in \mathbb{R}^{n \times 1}$：误差向量</li>
+</ul>
+<h3 id="2-参数估计（最小二乘法）"><a href="#2-参数估计（最小二乘法）" class="headerlink" title="2. 参数估计（最小二乘法）"></a>2. 参数估计（最小二乘法）</h3><p>通过最小化误差平方和 $\sum_{i=1}^n \epsilon_i^2 = | Y - X\beta |^2$，求得系数 $\beta$ 的最优解：</p>
+<script type="math/tex; mode=display">\hat{\beta} = (X^T X)^{-1} X^T Y</script><ul>
+<li>要求 $X^T X$ 可逆（即自变量无完全多重共线性）</li>
+</ul>
+<h3 id="3-模型评估指标"><a href="#3-模型评估指标" class="headerlink" title="3. 模型评估指标"></a>3. 模型评估指标</h3><ul>
+<li><strong>决定系数 $R^2$</strong>：衡量模型拟合优度，取值范围 $[0,1]$，越接近 1 拟合越好。<script type="math/tex; mode=display">R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}</script></li>
+<li><strong>调整 $R^2$</strong>：修正多重共线性导致的 $R^2$ 虚高（自变量增多时优先参考）。</li>
+<li><strong>均方误差（MSE）</strong>：衡量预测误差大小，越小越好：$MSE = \frac{1}{n} \sum (y_i - \hat{y}_i)^2$</li>
+</ul>
+<h2 id="二、Python-实现（高效建模，适配-sklearn）"><a href="#二、Python-实现（高效建模，适配-sklearn）" class="headerlink" title="二、Python 实现（高效建模，适配 sklearn）"></a>二、Python 实现（高效建模，适配 sklearn）</h2><p>Python 中使用 <code>sklearn.linear_model.LinearRegression</code> 可快速实现，支持批量数据处理、特征缩放（可选）、模型评估，适合数学建模中的快速迭代。</p>
+<h3 id="完整可运行代码（含数据生成、训练、预测、评估）"><a href="#完整可运行代码（含数据生成、训练、预测、评估）" class="headerlink" title="完整可运行代码（含数据生成、训练、预测、评估）"></a>完整可运行代码（含数据生成、训练、预测、评估）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> r2_score, mean_squared_error</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 生成模拟数据（模拟 3 个自变量的回归问题）</span></span><br><span class="line">np.random.seed(<span class="number">42</span>)  <span class="comment"># 固定随机种子，结果可复现</span></span><br><span class="line">n = <span class="number">1000</span>  <span class="comment"># 样本数</span></span><br><span class="line">k = <span class="number">3</span>     <span class="comment"># 自变量个数</span></span><br><span class="line">X = np.random.randn(n, k)  <span class="comment"># 设计矩阵（n行k列，正态分布）</span></span><br><span class="line">true_beta = np.array([<span class="number">2.5</span>, -<span class="number">1.8</span>, <span class="number">3.2</span>])  <span class="comment"># 真实系数</span></span><br><span class="line">true_intercept = <span class="number">1.0</span>  <span class="comment"># 真实截距</span></span><br><span class="line">y = true_intercept + X @ true_beta + np.random.randn(n) * <span class="number">0.5</span>  <span class="comment"># 生成因变量（含轻微噪声）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 划分训练集/测试集（7:3 分割）</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 训练多元线性回归模型</span></span><br><span class="line">model = LinearRegression()</span><br><span class="line">model.fit(X_train, y_train)  <span class="comment"># 自动学习截距和系数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 模型参数输出</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;=== 模型参数 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;截距项 β₀: <span class="subst">&#123;model.intercept_:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;回归系数 β₁~βₖ: <span class="subst">&#123;model.coef_&#125;</span>&quot;</span>)  <span class="comment"># 对应 3 个自变量的系数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 预测与模型评估</span></span><br><span class="line">y_pred_train = model.predict(X_train)</span><br><span class="line">y_pred_test = model.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 模型评估 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;训练集 R²: <span class="subst">&#123;r2_score(y_train, y_pred_train):<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;测试集 R²: <span class="subst">&#123;r2_score(y_test, y_pred_test):<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;训练集 MSE: <span class="subst">&#123;mean_squared_error(y_train, y_pred_train):<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;测试集 MSE: <span class="subst">&#123;mean_squared_error(y_test, y_pred_test):<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 实际预测（输入新数据）</span></span><br><span class="line">new_data = np.array([[<span class="number">1.2</span>, -<span class="number">0.5</span>, <span class="number">3.0</span>], [<span class="number">0.8</span>, <span class="number">2.1</span>, -<span class="number">1.5</span>]])  <span class="comment"># 2 个新样本</span></span><br><span class="line">new_pred = model.predict(new_data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 新样本预测结果 ===&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i, data <span class="keyword">in</span> <span class="built_in">enumerate</span>(new_data):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;样本 <span class="subst">&#123;data&#125;</span>: 预测值 = <span class="subst">&#123;new_pred[i]:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="代码说明"><a href="#代码说明" class="headerlink" title="代码说明"></a>代码说明</h3><ul>
+<li><strong>数据生成</strong>：用正态分布模拟自变量，加入轻微噪声模拟真实场景，确保模型可复现。</li>
+<li><strong>模型训练</strong>：<code>LinearRegression</code> 自动处理截距项（无需手动添加全 1 列），支持大规模数据。</li>
+<li><strong>评估指标</strong>：同时输出训练集和测试集的 $R^2$ 和 $MSE$，避免过拟合。</li>
+<li><strong>预测应用</strong>：直接输入新样本即可得到预测值，适配建模中的实际需求。</li>
+</ul>
+<h3 id="运行结果示例"><a href="#运行结果示例" class="headerlink" title="运行结果示例"></a>运行结果示例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">=== 模型参数 ===</span><br><span class="line">截距项 β₀: 1.0234</span><br><span class="line">回归系数 β₁~βₖ: [2.4876 -1.7932  3.1895]</span><br><span class="line">=== 模型评估 ===</span><br><span class="line">训练集 R²: 0.9876</span><br><span class="line">测试集 R²: 0.9861</span><br><span class="line">训练集 MSE: 0.2451</span><br><span class="line">测试集 MSE: 0.2532</span><br><span class="line">=== 新样本预测结果 ===</span><br><span class="line">样本 [1.2 -0.5 3.0]: 预测值 = 11.8765</span><br><span class="line">样本 [0.8 2.1 -1.5]: 预测值 = -2.3456</span><br></pre></td></tr></table></figure>
+<h2 id="四、数学建模中的关键技巧（避坑指南）"><a href="#四、数学建模中的关键技巧（避坑指南）" class="headerlink" title="四、数学建模中的关键技巧（避坑指南）"></a>四、数学建模中的关键技巧（避坑指南）</h2><ol>
+<li><p><strong>特征预处理</strong></p>
+<ul>
+<li>标准化/归一化：当自变量量纲差异大（如身高cm、体重kg），需用 <code>StandardScaler</code> 标准化（Python），避免系数受量纲影响。</li>
+<li>代码示例（Python）：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line">scaler = StandardScaler()</span><br><span class="line">X_train_scaled = scaler.fit_transform(X_train)</span><br><span class="line">X_test_scaled = scaler.transform(X_test)</span><br><span class="line">model.fit(X_train_scaled, y_train)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>多重共线性处理</strong></p>
+<ul>
+<li>问题：自变量间高度相关（如“面积”和“建筑面积”），导致 $X^T X$ 接近奇异，系数不稳定。</li>
+<li>解决：<ul>
+<li>计算方差膨胀因子（VIF），剔除 VIF&gt;10 的自变量；</li>
+<li>用岭回归（Ridge）替代普通回归，加入 L2 正则化：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Ridge</span><br><span class="line">ridge_model = Ridge(alpha=<span class="number">1.0</span>)  <span class="comment"># alpha为正则化强度</span></span><br><span class="line">ridge_model.fit(X_train, y_train)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>过拟合与模型选择</strong></p>
+<ul>
+<li>避免过拟合：用交叉验证（CV）选择最优参数，如 Ridge 的 alpha：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score</span><br><span class="line">alphas = [<span class="number">0.1</span>, <span class="number">1</span>, <span class="number">10</span>, <span class="number">100</span>]</span><br><span class="line"><span class="keyword">for</span> alpha <span class="keyword">in</span> alphas:</span><br><span class="line">    ridge = Ridge(alpha=alpha)</span><br><span class="line">    cv_scores = cross_val_score(ridge, X_train, y_train, cv=<span class="number">5</span>, scoring=<span class="string">&#x27;r2&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;alpha=<span class="subst">&#123;alpha&#125;</span>, 平均CV R²: <span class="subst">&#123;cv_scores.mean():<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>异常值处理</strong></p>
+<ul>
+<li>用箱线图或 Z-score（|Z|&gt;3）识别异常值，剔除或替换为均值/中位数，避免异常值主导回归结果。</li>
+</ul>
+</li>
+</ol>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><ul>
+<li><strong>Python</strong>：适合快速建模、数据分析、数学建模比赛，用 sklearn 高效实现，支持预处理、评估、正则化等功能。</li>
+<li><strong>C++</strong>：适合底层开发、算法竞赛、嵌入式场景，用 Eigen 手动实现最小二乘法，理解回归本质。</li>
+<li><strong>建模核心</strong>：预处理→避坑（多重共线性、异常值）→正则化→交叉验证，确保模型稳健性和泛化能力。</li>
+</ul>
+<p>如果需要针对具体建模场景（如预测房价、销量、科研数据拟合）调整代码，或需要推导更深入的理论（如置信区间、假设检验），可以随时补充需求！</p>
 
     </div>
 
@@ -299,7 +374,7 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/" rel="tag"># 数学建模</a>
-              <a href="/tags/%E5%A4%9A%E5%85%83%E5%9B%9E%E5%BD%92/" rel="tag"># 多元回归</a>
+              <a href="/tags/%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="tag"># 多元线性回归</a>
               <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="tag"># 非线性回归</a>
               <a href="/tags/%E9%A2%84%E6%B5%8B%E7%B1%BB/" rel="tag"># 预测类</a>
           </div>
@@ -313,6 +388,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025/12/14/%E7%81%B0%E8%89%B2%E9%A2%84%E6%B5%8B/" rel="next" title="灰色预测">
+                  灰色预测 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>

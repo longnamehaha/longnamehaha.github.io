@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous" defer></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"longnamehaha.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":-1,"unescape":true,"preload":true}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这么火的ARIMA，来看看( ´•̥̥̥ω•̥̥̥&#96; )">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARIMA">
+<meta property="og:url" content="https://longnamehaha.github.io/2025/12/15/ARIMA/index.html">
+<meta property="og:site_name" content="欢迎到访(*´∀&#96;)~♥">
+<meta property="og:description" content="这么火的ARIMA，来看看( ´•̥̥̥ω•̥̥̥&#96; )">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-15T09:05:11.000Z">
+<meta property="article:modified_time" content="2025-12-16T13:31:47.380Z">
+<meta property="article:author" content="longnamehaha">
+<meta property="article:tag" content="ARIMA">
+<meta property="article:tag" content="AR模型">
+<meta property="article:tag" content="MA模型">
+<meta property="article:tag" content="数学建模">
+<meta property="article:tag" content="时序模型">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://longnamehaha.github.io/2025/12/15/ARIMA/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://longnamehaha.github.io/2025/12/15/ARIMA/","path":"2025/12/15/ARIMA/","title":"ARIMA"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ARIMA | 欢迎到访(*´∀`)~♥</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+  <script src="/js/third-party/pace.js" defer></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">欢迎到访(*´∀`)~♥</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">longnamehaha的自学笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">时间序列模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">简单概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.</span> <span class="nav-text">时间序列分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%8F%98%E9%87%8F%E5%92%8C%E5%A4%9A%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.</span> <span class="nav-text">单变量和多变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E4%B8%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.4.</span> <span class="nav-text">时间序列与机器学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B%E5%BB%BA%E6%A8%A1%E8%BF%87%E7%A8%8B"><span class="nav-number">1.5.</span> <span class="nav-text">时间序列模型建模过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%92%E5%88%86%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">划分数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%96%B9%E5%BC%8F"><span class="nav-number">1.5.2.</span> <span class="nav-text">训练方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E6%AD%A5%E9%A2%84%E6%B5%8B"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">单步预测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%AD%A5%E9%A2%84%E6%B5%8B"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">多步预测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%90%E7%82%B9%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E5%B8%83%E9%A2%84%E6%B5%8B"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">逐点预测与分布预测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E4%BB%BB%E5%8A%A1%E5%88%86%E7%B1%BB"><span class="nav-number">1.6.</span> <span class="nav-text">时序任务分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Forecasting"><span class="nav-number">1.6.1.</span> <span class="nav-text">Forecasting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Time-Supervision"><span class="nav-number">1.6.2.</span> <span class="nav-text">Time Supervision</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AR%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">AR模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">公式：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E7%90%86%E8%A7%A3"><span class="nav-number">2.3.</span> <span class="nav-text">重要理解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MA%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">MA模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">3.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E7%90%86%E8%A7%A3-1"><span class="nav-number">3.3.</span> <span class="nav-text">重要理解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ARMA-p-q-%E6%A8%A1%E5%9E%8B%EF%BC%88%E8%87%AA%E5%9B%9E%E5%BD%92%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">ARMA(p,q) 模型（自回归移动平均模型）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ARIMA%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">ARIMA模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E6%88%90"><span class="nav-number">5.1.</span> <span class="nav-text">组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%AE%E5%88%86"><span class="nav-number">5.2.</span> <span class="nav-text">差分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F"><span class="nav-number">5.3.</span> <span class="nav-text">模型核心公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ACF%E4%B8%8EPACF"><span class="nav-number">5.4.</span> <span class="nav-text">ACF与PACF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E9%93%BA%E5%9E%AB"><span class="nav-number">5.4.1.</span> <span class="nav-text">概念铺垫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ACF"><span class="nav-number">5.4.2.</span> <span class="nav-text">ACF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%A0%B8%E5%BF%83%E5%AE%9A%E4%B9%89"><span class="nav-number">5.4.2.1.</span> <span class="nav-text">1. 核心定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F"><span class="nav-number">5.4.2.2.</span> <span class="nav-text">2. 数学公式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E6%80%BB%E4%BD%93%E8%87%AA%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0%EF%BC%88%E7%90%86%E8%AE%BA%E5%80%BC%EF%BC%89"><span class="nav-number">5.4.2.2.1.</span> <span class="nav-text">（1）总体自相关函数（理论值）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E6%A0%B7%E6%9C%AC%E8%87%AA%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0%EF%BC%88%E5%AE%9E%E9%99%85%E8%AE%A1%E7%AE%97%E5%80%BC%EF%BC%89"><span class="nav-number">5.4.2.2.2.</span> <span class="nav-text">（2）样本自相关函数（实际计算值）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%85%B3%E9%94%AE%E6%80%A7%E8%B4%A8"><span class="nav-number">5.4.2.3.</span> <span class="nav-text">3. 关键性质</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PACF"><span class="nav-number">5.4.3.</span> <span class="nav-text">PACF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%A0%B8%E5%BF%83%E5%AE%9A%E4%B9%89-1"><span class="nav-number">5.4.3.1.</span> <span class="nav-text">1. 核心定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F-1"><span class="nav-number">5.4.3.2.</span> <span class="nav-text">2. 数学公式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E7%9B%B4%E8%A7%82%E5%AE%9A%E4%B9%89%EF%BC%88%E6%9D%A1%E4%BB%B6%E7%9B%B8%E5%85%B3%E8%A7%86%E8%A7%92%EF%BC%89"><span class="nav-number">5.4.3.2.1.</span> <span class="nav-text">（1）直观定义（条件相关视角）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E4%B8%A5%E6%A0%BC%E5%85%AC%E5%BC%8F%EF%BC%88Yule-Walker%E6%96%B9%E7%A8%8B%E6%8E%A8%E5%AF%BC%EF%BC%89"><span class="nav-number">5.4.3.2.2.</span> <span class="nav-text">（2）严格公式（Yule-Walker方程推导）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89%E6%A0%B7%E6%9C%AC%E5%81%8F%E8%87%AA%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0%EF%BC%88%E5%AE%9E%E9%99%85%E8%AE%A1%E7%AE%97%E5%80%BC%EF%BC%89"><span class="nav-number">5.4.3.2.3.</span> <span class="nav-text">（3）样本偏自相关函数（实际计算值）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%85%B3%E9%94%AE%E6%80%A7%E8%B4%A8-1"><span class="nav-number">5.4.3.3.</span> <span class="nav-text">3. 关键性质</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ACF%E4%B8%8EPACF%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.4.4.</span> <span class="nav-text">ACF与PACF的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ADF%E6%A3%80%E9%AA%8C"><span class="nav-number">5.5.</span> <span class="nav-text">ADF检验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="nav-number">5.5.1.</span> <span class="nav-text">核心原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E6%B5%81%E7%A8%8B"><span class="nav-number">5.5.2.</span> <span class="nav-text">步骤流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">5.5.3.</span> <span class="nav-text">注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A-p-%E5%92%8C-q-%EF%BC%9AAR%E9%98%B6%E6%95%B0%E5%92%8CMA%E9%98%B6%E6%95%B0"><span class="nav-number">5.6.</span> <span class="nav-text">确定 $p$ 和 $q$：AR阶数和MA阶数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ACF-PACF%E5%9B%BE%E5%BD%A2%E7%9B%B4%E8%A7%82%E5%88%A4%E6%96%AD%EF%BC%88%E5%BF%AB%E9%80%9F%E5%AE%9A%E8%8C%83%E5%9B%B4%EF%BC%89"><span class="nav-number">5.6.1.</span> <span class="nav-text">ACF&#x2F;PACF图形直观判断（快速定范围）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AIC%E5%92%8CBIC"><span class="nav-number">5.7.</span> <span class="nav-text">AIC和BIC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8%EF%BC%9A%E8%A7%A3%E5%86%B3%E2%80%9C%E4%B8%BB%E8%A7%82%E5%88%A4%E6%96%AD%E7%9A%84%E4%B8%8D%E8%B6%B3%E2%80%9D"><span class="nav-number">5.7.1.</span> <span class="nav-text">核心作用：解决“主观判断的不足”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F%E4%B8%8E%E6%A0%B8%E5%BF%83%E5%90%AB%E4%B9%89"><span class="nav-number">5.7.2.</span> <span class="nav-text">公式与核心含义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F%E7%9A%84%E6%A0%B8%E5%BF%83%E9%80%BB%E8%BE%91%EF%BC%9A"><span class="nav-number">5.7.2.1.</span> <span class="nav-text">公式的核心逻辑：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIC-vs-BIC%EF%BC%9A"><span class="nav-number">5.7.3.</span> <span class="nav-text">AIC vs BIC：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">5.7.3.1.</span> <span class="nav-text">对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E6%93%8D%E9%80%89%E6%8B%A9%E6%8A%80%E5%B7%A7%EF%BC%9A"><span class="nav-number">5.7.3.2.</span> <span class="nav-text">实操选择技巧：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="nav-number">5.7.4.</span> <span class="nav-text">常见误区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">5.7.5.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARIMA%E6%A8%A1%E5%9E%8B%E5%B0%8F%E7%BB%93"><span class="nav-number">5.8.</span> <span class="nav-text">ARIMA模型小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E4%BB%A3%E7%A0%81"><span class="nav-number">6.</span> <span class="nav-text">详细代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%AE%E5%88%86-1"><span class="nav-number">6.1.</span> <span class="nav-text">差分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ADF"><span class="nav-number">6.2.</span> <span class="nav-text">ADF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#p%E5%92%8Cq%E5%88%9D%E6%AD%A5%E7%A1%AE%E5%AE%9A"><span class="nav-number">6.3.</span> <span class="nav-text">p和q初步确定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#p%E5%92%8Cq%E7%9A%84%E5%85%B7%E4%BD%93%E7%A1%AE%E5%AE%9A"><span class="nav-number">6.4.</span> <span class="nav-text">p和q的具体确定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AE%8B%E5%B7%AE%E6%A3%80%E9%AA%8C"><span class="nav-number">6.5.</span> <span class="nav-text">残差检验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B"><span class="nav-number">6.6.</span> <span class="nav-text">模型预测</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%93%E5%B1%95%E2%80%94SARIMA"><span class="nav-number">7.</span> <span class="nav-text">拓展—SARIMA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%9E%E5%90%8E%E5%B7%AE%E5%88%86%E5%AE%9A%E4%B9%89"><span class="nav-number">7.1.</span> <span class="nav-text">滞后差分定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F"><span class="nav-number">7.2.</span> <span class="nav-text">核心公式</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">longnamehaha</p>
+  <div class="site-description" itemprop="description">欢迎各位大佬指点</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/longnamehaha" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;longnamehaha" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://longnamehaha.github.io/2025/12/15/ARIMA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="longnamehaha">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢迎到访(*´∀`)~♥">
+      <meta itemprop="description" content="欢迎各位大佬指点">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ARIMA | 欢迎到访(*´∀`)~♥">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ARIMA
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-15 17:05:11" itemprop="dateCreated datePublished" datetime="2025-12-15T17:05:11+08:00">2025-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-16 21:31:47" itemprop="dateModified" datetime="2025-12-16T21:31:47+08:00">2025-12-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/" itemprop="url" rel="index"><span itemprop="name">数学建模</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这么火的ARIMA，来看看( ´•̥̥̥ω•̥̥̥` )<br><span id="more"></span><br>    说在前面：本文讲到的都属于时间序列相关模型，本质任务就是使用过去的数据预测未来的数据。<br>篇幅有点长，可以分部分选择阅读</p>
+<h1 id="时间序列模型"><a href="#时间序列模型" class="headerlink" title="时间序列模型"></a>时间序列模型</h1><h2 id="简单概念"><a href="#简单概念" class="headerlink" title="简单概念"></a>简单概念</h2><p>从专业定义上来讲：时间序列是按时间顺序排列的数据集合。这些数据可以在任何时间间隔（例如，每秒、每分钟、每小时、每天、每月、每年等）观察和收集。<br>时间序列可以简单理解为一串与时间相关的数字，比如每月的销售额，每年的GDP，每天的气温等。</p>
+<h2 id="时间序列分类"><a href="#时间序列分类" class="headerlink" title="时间序列分类"></a>时间序列分类</h2><p>时间序列分为两类：  </p>
+<ul>
+<li>时期时间序列：结果表示一段时间总和，比如国家今年GDP，就是这一年的总和。</li>
+<li>时点时间序列：结果表示目标某一个时刻达到的值，比如今天的温度，这个月你的体重。  </li>
+</ul>
+<p>简单的区分方法：时期时间序列的累加是有意义的，比如2024年和2025年GDP累加，就表示这两年的GDP之和；而时点时间序列的累加是没有意义的，比如今天的气温+明天的气温，或者你这个月的体重+上个月的体重，这些值没有意义。  </p>
+<h2 id="单变量和多变量"><a href="#单变量和多变量" class="headerlink" title="单变量和多变量"></a>单变量和多变量</h2><p>单变量时间序列只涉及一个变量随时间的变化。比如上面的每月的销售额变化，只看了销售额这一个变量。<br>既然有单变量，就会有多变量。多变量时间序列描述一个事件多个指标随时间的变化，而且由于是同一个事件，各个指标之间也会有关系。<br>比如出售商品，涉及到销售额，广告费，产品数量等指标，这些指标之间会产生联系。  </p>
+<p>从预测结果的角度，单变量的预测只需要考虑该变量前面时间的数据；而多变量中，每一个变量的预测都需要考虑前面时间每个变量的数据，并不是简单的多个单变量组合起来。  </p>
+<h2 id="时间序列与机器学习"><a href="#时间序列与机器学习" class="headerlink" title="时间序列与机器学习"></a>时间序列与机器学习</h2><p>从前面可以了解到，时间序列就是通过过去数据来预测未来数据，容易联想到机器学习。机器学习也是从已知的数据训练出模型去预测未知的数据。这样看来，是不是用机器学习就可以解除时间序列的预测问题呢？  </p>
+<p>答案是否定的。  </p>
+<p>机器学习和时间序列模型的内在不同，</p>
+<ul>
+<li>对于机器学习，其训练数据直接往往没有联系，只是单纯组合并训练出模型结果。</li>
+<li>对于时间序列模型，其数据是严格依赖时间的，因此无法忽略数据之间的联系，其数据之间存在相互影响，需要额外考虑。  </li>
+</ul>
+<p>这里我将机器学习和时间序列模型放在同等地位理解，下面的内容也和机器学习过程有很多相似。</p>
+<h2 id="时间序列模型建模过程"><a href="#时间序列模型建模过程" class="headerlink" title="时间序列模型建模过程"></a>时间序列模型建模过程</h2><p>时间序列模型也是预测未知数据的模型，各步骤类似机器学习。</p>
+<h3 id="划分数据集"><a href="#划分数据集" class="headerlink" title="划分数据集"></a>划分数据集</h3><p>前面说过，时间序列相关模型，本质任务就是使用过去的数据预测未来的数据。所以训练集一定是用历史数据，而测试集要预测的时间一定在训练集之后。  </p>
+<h3 id="训练方式"><a href="#训练方式" class="headerlink" title="训练方式"></a>训练方式</h3><h4 id="单步预测"><a href="#单步预测" class="headerlink" title="单步预测"></a>单步预测</h4><p>仅预测需要的某一个时间点的值，比如通过1月-8月的销售量，预测9月的。<br>这里，我们只关心这一个点的预测结果，而不考虑后面的结果。</p>
+<h4 id="多步预测"><a href="#多步预测" class="headerlink" title="多步预测"></a>多步预测</h4><p>预测需要的某一段时间的值，比如通过1月-8月的销售量，预测9月-12月的。<br>这里，我们不只关心一个点的预测结果。很明显，离现在越远的未来越难预测，因此应该要尽量压缩训练集与测试集之间的时间差。<br>一种预测方法是按照时间进行，将先预测到的值作为后面预测的参考。比如使用6-8月预测出9月的值，然后使用7-8月的真实值+9月的预测值预测出10月的，以此类推。<br>当然，对于这样的预测结果，缺陷也是很明显的，因为误差会逐步累计。如果第一步预测有问题，那么后面误差会越来越大。</p>
+<h4 id="逐点预测与分布预测"><a href="#逐点预测与分布预测" class="headerlink" title="逐点预测与分布预测"></a>逐点预测与分布预测</h4><p>逐点预测是指在需要的时间点，预测一个最可能的值。这是我们最常见的预测形式，例如在天气预测中，我们可能会预测明天的最高气温为28度。<br>分布预测，顾名思义，即预测需要的点，在该点各个结果可能出现的分别情况。例如在天气预测中，我们可能会预测明天的最高气温为27-29度的可能性为70%，25-26以及30-31的可能性为10%等。</p>
+<h2 id="时序任务分类"><a href="#时序任务分类" class="headerlink" title="时序任务分类"></a>时序任务分类</h2><h3 id="Forecasting"><a href="#Forecasting" class="headerlink" title="Forecasting"></a>Forecasting</h3><p>即前面常举例的预测任务，这里的数据一般需要满足：</p>
+<ul>
+<li>数据样本由时间顺序排列</li>
+<li>各个样本之间的时间间隔保持一致</li>
+<li>数据样本之间存在关联</li>
+<li><p>过去的样本数据影响未来的预测值</p>
+<h3 id="Time-Supervision"><a href="#Time-Supervision" class="headerlink" title="Time Supervision"></a>Time Supervision</h3><p>类似机器学习，<br>时序有监督学习包括时间序列回归和时间序列分类两种有监督学习方法（Time Series Regression/ Time Series Classification），指的是在<strong>多变量</strong>时间序列上，基于时间或时间相关的数据，完成回归或分类任务，这类任务对样本与样本之间的时间顺序、相关等都没有要求、反而更关注特征之间的关系，因此这类任务要求：</p>
+</li>
+<li><p>数据中必须存在除时间之外的其他特征，且特征越多越好</p>
+</li>
+<li>可以完成“去时序化”处理，将时序数据彻底变为一般机器学习数据</li>
+<li>这一类任务是学习特征值、预测标签值，并不关心样本。</li>
+</ul>
+<p>时间序列模型同机器学习一样有很多应用，也有很多实例算法，比如下面即将讲到的：</p>
+<h1 id="AR模型"><a href="#AR模型" class="headerlink" title="AR模型"></a>AR模型</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>AR模型，即自回归模型（Autoregressive Model），是统计学中处理时间序列的常用方法，广泛应用于经济学、信息学、自然现象预测及计算机视觉等领域。  </p>
+<h2 id="公式："><a href="#公式：" class="headerlink" title="公式："></a>公式：</h2><script type="math/tex; mode=display">X_t = \phi_ 0 + \phi_ 1 X_{t-1} + \phi_ 2 X_{t-2} + \dots + \phi_ p X_{t-p} + \varepsilon_t</script><p>其中， $X<em>t$ 为t时刻的预测值， $\phi</em> 0$ 为常数项， $X<em>t$ 到 $X</em>{t-p}$ 为历史数据，阶数 $p$ 表示考虑前p个的历史值，$\phi<em> 1$ 到 $\phi</em> p$ 表示权重。</p>
+<h2 id="重要理解"><a href="#重要理解" class="headerlink" title="重要理解"></a>重要理解</h2><p>AR模型当前的结果一定依赖于过去的积累，因此AR模型相信：一个时间点上的标签值一定是依赖于之前的时间点上的标签值而存在的。</p>
+<h1 id="MA模型"><a href="#MA模型" class="headerlink" title="MA模型"></a>MA模型</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>MA模型，即移动平均模型，是时间序列分析中的一种模型，它描述的是当前时间点的数据与过去<strong>噪声</strong>的关系。<br>严格定义上来讲：其模型的定义是基于白噪声序列的假设。白噪声是一种特殊的时间序列模型，每个时间点的数据都是独立且服从相同分布的，且具有常数的均值和方差。</p>
+<h2 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h2><script type="math/tex; mode=display">X_t = \mu + \varepsilon_t - \theta_ 1 \varepsilon_{t-1} - \theta_ 2 \varepsilon_{t-2} - \dots - \theta_q \varepsilon_{t-q}</script><p>其中，</p>
+<ul>
+<li>$X_t$ 为t时刻的预测值（此处实际上是误差的预测），</li>
+<li>$\varepsilon_t$ 为当前误差，</li>
+<li>$\mu$ 为常数项, 是时间序列的均值或期望值</li>
+<li>$\varepsilon<em>{t-1}$ 到 $\varepsilon</em>{t-q}$ 为历史的误差，</li>
+<li>q表示考虑前q个，</li>
+<li>$\theta<em> 1$ 到 $\theta</em> q$ 表示权重。<h2 id="重要理解-1"><a href="#重要理解-1" class="headerlink" title="重要理解"></a>重要理解</h2>从定义上来看：MA模型的基本思想和基本假设与AR模型大不相同。MA模型的基本思想是：大部分时候时间序列应当是相对稳定的。在稳定的基础上，每个时间点上的标签值受过去一段时间内、不可预料的各种偶然事件影响而波动。<br>也就是说，AR模型是考虑了数据从历史以来的稳定性，而MA模型考虑这种稳定性上的突发情况。因此，二者相辅相成，组成ARMA模型。</li>
+</ul>
+<h1 id="ARMA-p-q-模型（自回归移动平均模型）"><a href="#ARMA-p-q-模型（自回归移动平均模型）" class="headerlink" title="ARMA(p,q) 模型（自回归移动平均模型）"></a>ARMA(p,q) 模型（自回归移动平均模型）</h1><script type="math/tex; mode=display">X_t = \phi_0 + \phi_1 X_{t-1} + \dots + \phi_p X_{t-p} + \varepsilon_t - \theta_1 \varepsilon_{t-1} - \dots - \theta_q \varepsilon_{t-q}</script><h1 id="ARIMA模型"><a href="#ARIMA模型" class="headerlink" title="ARIMA模型"></a>ARIMA模型</h1><h2 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h2><p>ARIMA模型全称为自回归差分移动平均模型（Autoregressive Integrated Moving Average Model）。ARIMA模型主要由三部分构成，分别为自回归模型（AR）、差分过程（I）和移动平均模型（MA）。</p>
+<ul>
+<li>使用差分将时间序列变平稳</li>
+<li>使用AR考虑过去历史值的影响</li>
+<li>使用MA考虑过去误差，突发事件的影响  </li>
+</ul>
+<p>在ARIMA模型（$ARIMA(p,d,q)$）中，参数选择的核心逻辑是 <strong>“先定d（差分阶数）→ 再选p（AR阶数）和q（MA阶数）”</strong>，其中：</p>
+<ul>
+<li>$d$ 依赖 <strong>ADF平稳性检验</strong>（确保序列平稳）；</li>
+<li>$p$ 和 $q$ 结合 <strong>ACF/PACF图形特征</strong>（直观判断）和 <strong>AIC/BIC准则</strong>（客观择优）；</li>
+<li>最终通过 <strong>残差检验</strong> 验证模型合理性。</li>
+</ul>
+<h2 id="差分"><a href="#差分" class="headerlink" title="差分"></a>差分</h2><p>1阶差分：$\nabla X<em>t = X_t - X</em>{t-1}$<br>d阶差分：$\nabla^d X_t = \nabla(\nabla^{d-1} X_t)$  </p>
+<p>一个序列要平稳，关键是「统计特性不随时间变化」，核心需要满足：</p>
+<ol>
+<li>均值恒定：不管在哪个时间点（比如 t=10 或 t=100），序列的平均水平不变；</li>
+<li>方差恒定：序列的波动幅度（离散程度）不随时间变大或变小；  </li>
+</ol>
+<p>于是，对于各种非平稳的序列，比如线性增长或者二次增长等，就可以通过一次或多次差分使序列变平稳，序列平稳也是AR和MA模型使用的前提。</p>
+<h2 id="模型核心公式"><a href="#模型核心公式" class="headerlink" title="模型核心公式"></a>模型核心公式</h2><script type="math/tex; mode=display">\nabla^d X_t = \phi_0 + \phi_1 \nabla^d X_{t-1} + \dots + \phi_p \nabla^d X_{t-p} + \varepsilon_t - \theta_1 \varepsilon_{t-1} - \dots - \theta_q \varepsilon_{t-q}</script><p>这个公式基本上是将AR模型和MA模型的公式组合在一起，其中有重复的常数项就合并了，各项的定义同前面的公式。</p>
+<h2 id="ACF与PACF"><a href="#ACF与PACF" class="headerlink" title="ACF与PACF"></a>ACF与PACF</h2><h3 id="概念铺垫"><a href="#概念铺垫" class="headerlink" title="概念铺垫"></a>概念铺垫</h3><ol>
+<li><strong>时间序列平稳性</strong>：以下所有公式均基于「宽平稳序列」（均值恒定、方差恒定、自协方差仅与时间间隔有关）——非平稳序列需先差分（如ARIMA的d步），再对差分后的平稳序列分析ACF/PACF；</li>
+<li><strong>滞后阶数</strong>：用 $k$ 表示「时间间隔」（ $k=0,1,2,…$ ），$k=0$表示序列与自身的相关（恒为1），$k=1$表示 $y<em>t$ 与 $y</em>{t-1}$ 的相关，$k=2$ 表示 $y<em>t$ 与 $y</em>{t-2}$ 的相关，以此类推。</li>
+</ol>
+<h3 id="ACF"><a href="#ACF" class="headerlink" title="ACF"></a>ACF</h3><h4 id="1-核心定义"><a href="#1-核心定义" class="headerlink" title="1. 核心定义"></a>1. 核心定义</h4><p>ACF（自相关函数，Auto-Correlation Function）是描述时间序列中「相隔$k$期的两个观测值 $y<em>t$ 和 $y</em>{t-k}$ 之间的线性相关程度」，反映的是「总相关关系」（包含直接相关和通过中间变量的间接相关）。</p>
+<h4 id="2-数学公式"><a href="#2-数学公式" class="headerlink" title="2. 数学公式"></a>2. 数学公式</h4><h5 id="（1）总体自相关函数（理论值）"><a href="#（1）总体自相关函数（理论值）" class="headerlink" title="（1）总体自相关函数（理论值）"></a>（1）总体自相关函数（理论值）</h5><p>设平稳序列 $y_t$ 的均值为 $\mu = E(y_t)$，方差为 $\sigma^2 = Var(y_t)$，则滞后 $k$ 阶的ACF记为 $\rho_k$：</p>
+<script type="math/tex; mode=display">
+\rho_k = \frac{Cov(y_t, y_{t-k})}{\sqrt{Var(y_t)} \cdot \sqrt{Var(y_{t-k})}} = \frac{\gamma_k}{\gamma_0}</script><p>其中：</p>
+<ul>
+<li>$\gamma<em>k = Cov(y_t, y</em>{t-k}) = E[(y<em>t - \mu)(y</em>{t-k} - \mu)]$：滞后$k$阶的自协方差（衡量$y<em>t$与$y</em>{t-k}$的线性关联强度）；</li>
+<li>$\gamma_0 = Cov(y_t, y_t) = Var(y_t) = \sigma^2$：滞后0阶的自协方差（即序列本身的方差）。</li>
+</ul>
+<h5 id="（2）样本自相关函数（实际计算值）"><a href="#（2）样本自相关函数（实际计算值）" class="headerlink" title="（2）样本自相关函数（实际计算值）"></a>（2）样本自相关函数（实际计算值）</h5><p>建模时需用样本数据估计ACF，记为$\hat{\rho}_k$：</p>
+<script type="math/tex; mode=display">
+\hat{\rho}_k = \frac{\sum_{t=k+1}^T (y_t - \bar{y})(y_{t-k} - \bar{y})}{\sum_{t=1}^T (y_t - \bar{y})^2}</script><p>其中：</p>
+<ul>
+<li>$T$：样本量；</li>
+<li>$\bar{y} = \frac{1}{T}\sum_{t=1}^T y_t$：样本均值；</li>
+<li>分子：样本自协方差（滞后$k$阶）；</li>
+<li>分母：样本方差（滞后0阶自协方差）。</li>
+</ul>
+<h4 id="3-关键性质"><a href="#3-关键性质" class="headerlink" title="3. 关键性质"></a>3. 关键性质</h4><ul>
+<li>对称性：$\rho<em>k = \rho</em>{-k}$（$y<em>t$与$y</em>{t-k}$的相关和$y_{t-k}$与$y_t$的相关相同）；</li>
+<li>取值范围：$-1 \leq \rho_k \leq 1$（与普通相关系数一致，越接近±1，相关越强）；</li>
+<li>$\rho_0 = 1$（序列与自身完全相关）。</li>
+</ul>
+<h3 id="PACF"><a href="#PACF" class="headerlink" title="PACF"></a>PACF</h3><h4 id="1-核心定义-1"><a href="#1-核心定义-1" class="headerlink" title="1. 核心定义"></a>1. 核心定义</h4><p>PACF（偏自相关函数，Partial Auto-Correlation Function）是描述时间序列中「相隔 $k$ 期的两个观测值 $y<em>t$ 和 $y</em>{t-k}$，在剔除了中间 $k-1$ 个观测值（$y<em>{t-1}, y</em>{t-2}, …, y_{t-k+1}$）的干扰后，剩余的直接线性相关程度」——简单说，PACF“剥离了间接相关”，只保留「直接相关关系」。</p>
+<h4 id="2-数学公式-1"><a href="#2-数学公式-1" class="headerlink" title="2. 数学公式"></a>2. 数学公式</h4><h5 id="（1）直观定义（条件相关视角）"><a href="#（1）直观定义（条件相关视角）" class="headerlink" title="（1）直观定义（条件相关视角）"></a>（1）直观定义（条件相关视角）</h5><p>滞后$k$阶的PACF记为 $\phi_{kk}$ ，本质是以下线性回归模型中的系数 $\beta_k$ ：</p>
+<script type="math/tex; mode=display">
+y_t = \beta_1 y_{t-1} + \beta_2 y_{t-2} + ... + \beta_k y_{t-k} + \epsilon_t</script><p>即 $\phi<em>{kk} = \beta_k$——表示在控制了 $y</em>{t-1}$ 到 $y<em>{t-k+1}$ 的影响后， $y</em>{t-k}$ 对 $y_t$ 的直接影响系数。</p>
+<h5 id="（2）严格公式（Yule-Walker方程推导）"><a href="#（2）严格公式（Yule-Walker方程推导）" class="headerlink" title="（2）严格公式（Yule-Walker方程推导）"></a>（2）严格公式（Yule-Walker方程推导）</h5><script type="math/tex; mode=display">
+\phi_{kk} = \frac{\rho_k - \sum_{i=1}^{k-1} \phi_{k-1,i} \rho_{k-i}}{1 - \sum_{i=1}^{k-1} \phi_{k-1,i} \rho_i}</script><p>其中：</p>
+<ul>
+<li>$\phi_{k-1,i}$：滞后$k-1$阶PACF模型中的系数；</li>
+<li>$\rho_k$：滞后$k$阶的ACF值。</li>
+</ul>
+<h5 id="（3）样本偏自相关函数（实际计算值）"><a href="#（3）样本偏自相关函数（实际计算值）" class="headerlink" title="（3）样本偏自相关函数（实际计算值）"></a>（3）样本偏自相关函数（实际计算值）</h5><p>建模时用样本数据估计，记为 $\hat{\phi}_{kk}$ ，通常通过「递推法」计算（避免直接解高阶方程组），核心递推公式：</p>
+<script type="math/tex; mode=display">
+\hat{\phi}_{11} = \hat{\rho}_1</script><script type="math/tex; mode=display">
+\hat{\phi}_{kk} = \hat{\rho}_k - \sum_{i=1}^{k-1} \hat{\phi}_{k-1,i} \hat{\rho}_{k-i} \quad (k \geq 2)</script><h4 id="3-关键性质-1"><a href="#3-关键性质-1" class="headerlink" title="3. 关键性质"></a>3. 关键性质</h4><ul>
+<li>取值范围：$-1 \leq \phi_{kk} \leq 1$；</li>
+<li>$\phi_{11} = \rho_1$（滞后1阶时，无中间变量，ACF=PACF）；</li>
+<li>高阶滞后时，PACF会快速衰减或截尾（核心用于AR模型定阶）。</li>
+</ul>
+<h3 id="ACF与PACF的区别"><a href="#ACF与PACF的区别" class="headerlink" title="ACF与PACF的区别"></a>ACF与PACF的区别</h3><p>简单理解</p>
+<ul>
+<li>假设序列是 $y<em>t$ （今天的气温）、$y</em>{t-1}$（昨天的气温）、$y_{t-2}$（前天的气温）；</li>
+<li>ACF($k=2$)： $\rho_2$ 衡量今天和前天的「总相关」——包含“前天→昨天→今天”的间接相关（前天影响昨天，昨天再影响今天）和“前天→今天”的直接相关；</li>
+<li>PACF($k=2$)： $\phi_{22}$ 衡量今天和前天的「直接相关」——剔除了昨天的干扰，只看前天是否直接影响今天（比如前天的冷空气是否直接持续到今天，不通过昨天传递）。</li>
+</ul>
+<h2 id="ADF检验"><a href="#ADF检验" class="headerlink" title="ADF检验"></a>ADF检验</h2><p>$d$ 是使非平稳序列变为平稳序列所需的 <strong>最小差分次数</strong>，核心工具是 <strong>ADF检验</strong>（Augmented Dickey-Fuller Test）。</p>
+<h3 id="核心原理"><a href="#核心原理" class="headerlink" title="核心原理"></a>核心原理</h3><p>ADF检验的目的是 <strong>检验序列是否存在单位根</strong>：</p>
+<ul>
+<li>原假设 $H_0$：序列存在单位根 → 非平稳；</li>
+<li>备择假设 $H_1$：序列不存在单位根 → 平稳；</li>
+<li>判定规则：计算ADF统计量，与临界值（1%/5%/10%）对比：<ul>
+<li>若 <strong>ADF统计量 &lt; 临界值</strong> → 拒绝 $H_0$ → 序列平稳；</li>
+<li>若 <strong>ADF统计量 ≥ 临界值</strong> → 接受 $H_0$ → 序列非平稳，需差分。</li>
+</ul>
+</li>
+</ul>
+<h3 id="步骤流程"><a href="#步骤流程" class="headerlink" title="步骤流程"></a>步骤流程</h3><ol>
+<li>对原始序列 $y_t$ 做ADF检验：<ul>
+<li>若平稳（ADF统计量 &lt; 5%临界值）→ $d=0$；</li>
+<li>若不平稳 → 做1阶差分（ $d^1<em>t = y_t - y</em>{t-1}$ ），对 $d^1$ 做ADF检验；</li>
+</ul>
+</li>
+<li>对1阶差分序列 $d^1$ 做ADF检验：<ul>
+<li>若平稳 → $d=1$；</li>
+<li>若不平稳 → 做2阶差分（$d^2<em>t = d^1_t - d^1</em>{t-1}$），对 $d^2_t$ 做ADF检验；</li>
+</ul>
+</li>
+<li>对2阶差分序列 $d^2_t$ 做ADF检验：<ul>
+<li>若平稳 → $d=2$；</li>
+<li>若仍不平稳 → 优先检查序列是否有季节性（需用SARIMA模型），而非继续增加 $d$（$d≥3$ 时模型易过拟合，现实中极少用）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>$d$ 通常取0、1、2，超过2时模型解释性差，且易出现过拟合；</li>
+<li>若原始序列本身平稳（如白噪声），则 $d=0$（此时ARIMA退化为ARMA模型）；</li>
+<li>差分过度会导致序列信息丢失（如2阶差分可能把平稳序列变成“过度差分”，方差变大），因此需用ADF检验严格验证，而非盲目差分。</li>
+</ul>
+<h2 id="确定-p-和-q-：AR阶数和MA阶数"><a href="#确定-p-和-q-：AR阶数和MA阶数" class="headerlink" title="确定 $p$ 和 $q$：AR阶数和MA阶数"></a>确定 $p$ 和 $q$：AR阶数和MA阶数</h2><p>确定 $d$ 后，基于 <strong>差分后的平稳序列</strong>（记为 $y_{diff}^d$），通过“ACF/PACF图形特征”初步判断 $p$ 和 $q$，再用“AIC/BIC准则”客观择优。</p>
+<h3 id="ACF-PACF图形直观判断（快速定范围）"><a href="#ACF-PACF图形直观判断（快速定范围）" class="headerlink" title="ACF/PACF图形直观判断（快速定范围）"></a>ACF/PACF图形直观判断（快速定范围）</h3><p>ACF（自相关函数）反映“总相关”，PACF（偏自相关函数）反映“直接相关”，两者的 <strong>截尾/拖尾特征</strong> 是选择 $p$ 和 $q$ 的核心依据（仅适用于平稳序列）：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>模型类型</th>
+<th>ACF（自相关函数）</th>
+<th>PACF（偏自相关函数）</th>
+<th>核心逻辑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AR(p)</td>
+<td>拖尾（缓慢衰减至0）</td>
+<td>截尾（$k=p$后落入置信区间）</td>
+<td>PACF“截尾”对应AR的阶数p：比如PACF在k=2后显著为0，说明p=2</td>
+</tr>
+<tr>
+<td>MA(q)</td>
+<td>截尾（$k=q$后落入置信区间）</td>
+<td>拖尾（缓慢衰减至0）</td>
+<td>ACF“截尾”对应MA的阶数q：比如ACF在k=3后显著为0，说明q=3</td>
+</tr>
+<tr>
+<td>ARMA(p,q)</td>
+<td>拖尾</td>
+<td>拖尾</td>
+<td>无法仅通过图形确定，需结合AIC/BIC遍历搜索</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其实实际问题，通常采用逐个检验的傻瓜方法来确定p和q，通常都是较小的数字。</p>
+<h2 id="AIC和BIC"><a href="#AIC和BIC" class="headerlink" title="AIC和BIC"></a>AIC和BIC</h2><p>在 ARIMA 模型参数选择中，AIC（赤池信息准则）和 BIC（贝叶斯信息准则）是客观判断最优模型的核心工具—— 本质是通过 “平衡模型拟合效果” 和 “模型复杂度”，避免欠拟合或过拟合，最终选出 “性价比最高” 的模型。  </p>
+<p>在ARIMA模型参数选择中，<strong>AIC（赤池信息准则）和BIC（贝叶斯信息准则）是客观判断最优模型的核心工具</strong>——本质是通过“平衡模型拟合效果”和“模型复杂度”，避免欠拟合或过拟合，最终选出“性价比最高”的模型。以下从「核心作用、公式含义、判断规则、关键差异、实操步骤」全维度讲解，结合ARIMA场景落地：</p>
+<h3 id="核心作用：解决“主观判断的不足”"><a href="#核心作用：解决“主观判断的不足”" class="headerlink" title="核心作用：解决“主观判断的不足”"></a>核心作用：解决“主观判断的不足”</h3><p>之前用ACF/PACF图判断p、q时，“拖尾/截尾”的界定有主观性（比如有人认为k=2截尾，有人认为k=3）；而AIC/BIC通过<strong>量化指标</strong>，从“所有候选模型”中选出最优，核心目标是：</p>
+<blockquote>
+<p>在“拟合得好”和“参数少（简单）”之间找最优解——既不因为参数太少导致欠拟合，也不因为参数太多导致过拟合。</p>
+</blockquote>
+<h3 id="公式与核心含义"><a href="#公式与核心含义" class="headerlink" title="公式与核心含义"></a>公式与核心含义</h3><p>AIC和BIC的公式都围绕“似然值（拟合度）”和“参数个数（复杂度）”展开，先记住核心公式和每个符号的意义：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>准则</th>
+<th>公式（简化版）</th>
+<th>各部分含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AIC</td>
+<td>$AIC = 2k - 2\ln(L)$</td>
+<td>- $k$：模型的参数个数（ARIMA中$k = p + q + 1$，+1是常数项；比如ARIMA(2,1,1)的$k=2+1+1=4$）<br>- $\ln(L)$：模型的对数似然值（$L$是似然值，越大表示模型对数据的拟合效果越好；$\ln(L)$越大，$-2\ln(L)$越小）<br>- $2k$：复杂度惩罚项（参数越多，惩罚越重）</td>
+</tr>
+<tr>
+<td>BIC</td>
+<td>$BIC = k\ln(n) - 2\ln(L)$</td>
+<td>- $k$：同AIC（参数个数）<br>- $n$：样本量（数据行数）<br>- $\ln(n)$：样本量越大，对参数的惩罚越重<br>- $-2\ln(L)$：同AIC（拟合度项）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="公式的核心逻辑："><a href="#公式的核心逻辑：" class="headerlink" title="公式的核心逻辑："></a>公式的核心逻辑：</h4><ul>
+<li><strong>拟合度越好</strong>（$\ln(L)$越大）→ $-2\ln(L)$越小 → AIC/BIC越小（越优）；</li>
+<li><strong>参数越多</strong>（$k$越大）→ 惩罚项（$2k$或$k\ln(n)$）越大 → AIC/BIC越大（越差）；</li>
+<li>AIC/BIC的最终值，是“拟合度”和“复杂度”的综合得分——<strong>得分越低，模型越优</strong>。</li>
+</ul>
+<h3 id="AIC-vs-BIC："><a href="#AIC-vs-BIC：" class="headerlink" title="AIC vs BIC："></a>AIC vs BIC：</h3><h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p>两者的核心区别是<strong>对“模型复杂度（参数个数）”的惩罚力度不同</strong>，直接决定了适用场景：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>AIC（赤池信息准则）</th>
+<th>BIC（贝叶斯信息准则）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>惩罚力度</td>
+<td>轻（惩罚项是$2k$，与样本量无关）</td>
+<td>重（惩罚项是$k\ln(n)$，样本量越大，惩罚越重）</td>
+</tr>
+<tr>
+<td>核心倾向</td>
+<td>优先保证拟合效果，允许稍多参数（易选复杂模型）</td>
+<td>优先保证模型简单，严控参数个数（易选简单模型）</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>1. 样本量小（n<100）<br>2. 希望模型拟合精度高<br>3. 允许少量过拟合</td>
+<td>1. 样本量大（n≥100）<br>2. 追求模型解释性（参数少）<br>3. 避免过拟合</td>
+</tr>
+<tr>
+<td>极端情况</td>
+<td>样本量再大，也可能选参数多的模型</td>
+<td>样本量足够大时，一定会选参数最少的“有效模型”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="实操选择技巧："><a href="#实操选择技巧：" class="headerlink" title="实操选择技巧："></a>实操选择技巧：</h4><ul>
+<li>若AIC和BIC指向同一个模型 → 直接选这个模型（最优解）；</li>
+<li>若AIC和BIC指向不同模型：<ul>
+<li>样本量小（比如n&lt;50）→ 选AIC最优（避免欠拟合）；</li>
+<li>样本量大（比如n≥100）→ 选BIC最优（避免过拟合，模型更简洁）；</li>
+<li>折中方案：选两个模型中“参数更少、AIC/BIC接近最小值”的（比如AIC最小是162（p=1,q=1），次小是163（p=1,q=0），选p=1,q=0）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="常见误区"><a href="#常见误区" class="headerlink" title="常见误区"></a>常见误区</h3><ol>
+<li><strong>误区1</strong>：AIC/BIC越小越好 → 错！如果参数搜索范围过大（比如p=0~10），可能选到过拟合模型（AIC小但泛化能力差），需结合ACF/PACF限定搜索范围（通常0~3/0~4）；</li>
+<li><strong>误区2</strong>：只看AIC/BIC，忽略残差检验 → 错！AIC/BIC是“择优”，但不能保证模型“有效”（比如序列有季节性，ARIMA本身不适用，AIC/BIC再小也没用）；</li>
+<li><strong>误区3</strong>：不同模型的AIC/BIC可直接对比 → 错！只有“同一数据集、同一d值”的ARIMA模型，AIC/BIC才可比（比如d=1的模型和d=2的模型，AIC不可比）；</li>
+<li><strong>误区4</strong>：BIC一定比AIC好 → 错！样本量小时，BIC的强惩罚可能导致欠拟合（比如明明p=2更好，BIC却选p=1），需结合场景。</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>AIC和BIC的核心判断逻辑是：<strong>在限定的p/q范围内，选准则值最小的模型</strong>，其中：</p>
+<ul>
+<li>AIC：“拟合优先”，适合小样本；</li>
+<li>BIC：“简洁优先”，适合大样本；</li>
+<li>最终必须用残差检验验证，避免“最优但无效”的模型。</li>
+</ul>
+<p>这两个准则的价值是“把主观判断变成客观量化”，是ARIMA参数选择中最核心的“兜底工具”——结合ACF/PACF的直观判断+AIC/BIC的客观择优，才能选出最优的p、q、d。</p>
+<h2 id="ARIMA模型小结"><a href="#ARIMA模型小结" class="headerlink" title="ARIMA模型小结"></a>ARIMA模型小结</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>核心工具</th>
+<th>目标</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>ADF检验</td>
+<td>使序列平稳</td>
+<td>确定d</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ACF/PACF图</td>
+<td>初步判断p和q的范围</td>
+<td>p_range, q_range</td>
+</tr>
+<tr>
+<td>3</td>
+<td>AIC/BIC准则</td>
+<td>客观选择最优p和q</td>
+<td>确定p, q</td>
+</tr>
+<tr>
+<td>4</td>
+<td>残差检验</td>
+<td>验证模型合理性</td>
+<td>确认参数或调整</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h1><p>下面代码很多部分使用python <code>statsmodels</code> 库，先去下载一下。<br>使用股票价格预测举例</p>
+<h2 id="差分-1"><a href="#差分-1" class="headerlink" title="差分"></a>差分</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">PATH=<span class="string">&#x27;ChinaBank.csv&#x27;</span></span><br><span class="line"></span><br><span class="line">ChinaBank = pd.read_csv(PATH,index_col = <span class="string">&#x27;Date&#x27;</span>,parse_dates=[<span class="string">&#x27;Date&#x27;</span>])</span><br><span class="line"></span><br><span class="line">ChinaBank.head()</span><br><span class="line">ChinaBank.index = pd.to_datetime(ChinaBank.index)</span><br><span class="line">sub = ChinaBank.loc[<span class="string">&#x27;2014-01&#x27;</span>:<span class="string">&#x27;2014-06&#x27;</span>,<span class="string">&#x27;Close&#x27;</span>]</span><br><span class="line"></span><br><span class="line">sub.head()</span><br><span class="line">train = sub.loc[<span class="string">&#x27;2014-01&#x27;</span>:<span class="string">&#x27;2014-03&#x27;</span>]</span><br><span class="line">test = sub.loc[<span class="string">&#x27;2014-04&#x27;</span>:<span class="string">&#x27;2014-06&#x27;</span>]</span><br><span class="line"><span class="comment">#查看训练集的时间序列与数据(只包含训练集)</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">6</span>))</span><br><span class="line">plt.plot(train)</span><br><span class="line">plt.xticks(rotation=<span class="number">45</span>) <span class="comment">#旋转45度</span></span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#.diff(1)做一个时间间隔</span></span><br><span class="line">ChinaBank[<span class="string">&#x27;diff_1&#x27;</span>] = ChinaBank[<span class="string">&#x27;Close&#x27;</span>].diff(<span class="number">1</span>) <span class="comment">#1阶差分</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#对一阶差分数据在划分时间间隔</span></span><br><span class="line">ChinaBank[<span class="string">&#x27;diff_2&#x27;</span>] = ChinaBank[<span class="string">&#x27;diff_1&#x27;</span>].diff(<span class="number">1</span>) <span class="comment">#2阶差分</span></span><br><span class="line"></span><br><span class="line">fig = plt.figure(figsize=(<span class="number">12</span>,<span class="number">10</span>))</span><br><span class="line"><span class="comment">#原数据</span></span><br><span class="line">ax1 = fig.add_subplot(<span class="number">311</span>)</span><br><span class="line">ax1.plot(ChinaBank[<span class="string">&#x27;Close&#x27;</span>])</span><br><span class="line"><span class="comment">#1阶差分</span></span><br><span class="line">ax2 = fig.add_subplot(<span class="number">312</span>)</span><br><span class="line">ax2.plot(ChinaBank[<span class="string">&#x27;diff_1&#x27;</span>])</span><br><span class="line"><span class="comment">#2阶差分</span></span><br><span class="line">ax3 = fig.add_subplot(<span class="number">313</span>)</span><br><span class="line">ax3.plot(ChinaBank[<span class="string">&#x27;diff_2&#x27;</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>这个代码可以直观看到差分可以将时间序列变平稳。</p>
+<h2 id="ADF"><a href="#ADF" class="headerlink" title="ADF"></a>ADF</h2><p>使用ADF检验确定d<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> statsmodels.api <span class="keyword">as</span> sm</span><br><span class="line"><span class="keyword">from</span> statsmodels.tsa.seasonal <span class="keyword">import</span> seasonal_decompose</span><br><span class="line"><span class="keyword">from</span> statsmodels.tsa.stattools <span class="keyword">import</span> adfuller <span class="keyword">as</span> ADF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算原始序列、一阶差分序列、二阶差分序列的单位根检验结果</span></span><br><span class="line">ChinaBank[<span class="string">&#x27;diff_1&#x27;</span>] = ChinaBank[<span class="string">&#x27;diff_1&#x27;</span>].fillna(<span class="number">0</span>)</span><br><span class="line">ChinaBank[<span class="string">&#x27;diff_2&#x27;</span>] = ChinaBank[<span class="string">&#x27;diff_2&#x27;</span>].fillna(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">timeseries_adf = ADF(ChinaBank[<span class="string">&#x27;Close&#x27;</span>].tolist())</span><br><span class="line">timeseries_diff1_adf = ADF(ChinaBank[<span class="string">&#x27;diff_1&#x27;</span>].tolist())</span><br><span class="line">timeseries_diff2_adf = ADF(ChinaBank[<span class="string">&#x27;diff_2&#x27;</span>].tolist())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印单位根检验结果</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;timeseries_adf : &#x27;</span>, timeseries_adf)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;timeseries_diff1_adf : &#x27;</span>, timeseries_diff1_adf)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;timeseries_diff2_adf : &#x27;</span>, timeseries_diff2_adf)</span><br></pre></td></tr></table></figure><br>下面是运行结果<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">timeseries_adf :  (0.527919808483182, 0.9856974415734416, 9, 335, &#123;&#x27;1%&#x27;: -3.4500219858626227, &#x27;5%&#x27;: -2.870206553997666, &#x27;10%&#x27;: -2.571387268879483&#125;, -734.0738716811488)</span><br><span class="line">timeseries_diff1_adf :  (-6.177185544979001, 6.58710923976123e-08, 8, 336, &#123;&#x27;1%&#x27;: -3.449962981927952, &#x27;5%&#x27;: -2.870180642420163, &#x27;10%&#x27;: -2.5713734527352607&#125;, -735.8436797171294)</span><br><span class="line">timeseries_diff2_adf :  (-9.202545123160352, 1.9841232339615405e-15, 13, 331, &#123;&#x27;1%&#x27;: -3.4502615951739393, &#x27;5%&#x27;: -2.8703117734117742, &#x27;10%&#x27;: -2.5714433728242714&#125;, -717.2833732193085)</span><br></pre></td></tr></table></figure><br>只需要看第二个数（P值），如果小于一个较小值（如0.05），表示接受该差分结果。具体说明看上面，其中证明过程类似高中学的相关性检验。</p>
+<h2 id="p和q初步确定"><a href="#p和q初步确定" class="headerlink" title="p和q初步确定"></a>p和q初步确定</h2><p>前面代码不变，加上下面这些<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">fig = plt.figure(figsize=(<span class="number">12</span>,<span class="number">7</span>))</span><br><span class="line"></span><br><span class="line">ax1 = fig.add_subplot(<span class="number">211</span>)</span><br><span class="line">fig = sm.graphics.tsa.plot_acf(train, lags=<span class="number">20</span>,ax=ax1)</span><br><span class="line">ax1.xaxis.set_ticks_position(<span class="string">&#x27;bottom&#x27;</span>) <span class="comment"># 设置坐标轴上的数字显示的位置，top:显示在顶部  bottom:显示在底部</span></span><br><span class="line"><span class="comment">#fig.tight_layout()</span></span><br><span class="line"></span><br><span class="line">ax2 = fig.add_subplot(<span class="number">212</span>)</span><br><span class="line">fig = sm.graphics.tsa.plot_pacf(train, lags=<span class="number">20</span>, ax=ax2)</span><br><span class="line">ax2.xaxis.set_ticks_position(<span class="string">&#x27;bottom&#x27;</span>)</span><br><span class="line"><span class="comment">#fig.tight_layout()</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><br>其中，是使用<code>sm.graphics.tsa.plot_acf</code>帮你直接确定的拖尾，不需要自己找，详细原理就是前面ACF和PACF的公式。</p>
+<h2 id="p和q的具体确定"><a href="#p和q的具体确定" class="headerlink" title="p和q的具体确定"></a>p和q的具体确定</h2><p>通过上面查找拖尾大致确定p和q范围后，就可以进一步通过遍历确定具体值。<br>遍历中检查的原理就是上面提到的AIC，BIC准则<br>下面以BIC为例<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="comment">#确定pq的取值范围</span></span><br><span class="line">p_min = <span class="number">0</span></span><br><span class="line">d_min = <span class="number">0</span></span><br><span class="line">q_min = <span class="number">0</span></span><br><span class="line">p_max = <span class="number">5</span></span><br><span class="line">d_max = <span class="number">0</span></span><br><span class="line">q_max = <span class="number">5</span></span><br><span class="line"><span class="comment">#Initialize a DataFrame to store the results,，以BIC准则</span></span><br><span class="line">results_bic = pd.DataFrame(index=[<span class="string">&#x27;AR&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(p_min,p_max+<span class="number">1</span>)],</span><br><span class="line">                           columns=[<span class="string">&#x27;MA&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(q_min,q_max+<span class="number">1</span>)])</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> p,d,q <span class="keyword">in</span> itertools.product(<span class="built_in">range</span>(p_min,p_max+<span class="number">1</span>),</span><br><span class="line">                               <span class="built_in">range</span>(d_min,d_max+<span class="number">1</span>),</span><br><span class="line">                               <span class="built_in">range</span>(q_min,q_max+<span class="number">1</span>)):</span><br><span class="line">    <span class="keyword">if</span> p==<span class="number">0</span> <span class="keyword">and</span> d==<span class="number">0</span> <span class="keyword">and</span> q==<span class="number">0</span>:</span><br><span class="line">        results_bic.loc[<span class="string">&#x27;AR&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(p), <span class="string">&#x27;MA&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(q)] = np.nan</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        model = sm.tsa.ARIMA(train, order=(p, d, q),</span><br><span class="line">                               <span class="comment">#enforce_stationarity=False,</span></span><br><span class="line">                               <span class="comment">#enforce_invertibility=False,</span></span><br><span class="line">                              )</span><br><span class="line">        results = model.fit()</span><br><span class="line">        results_bic.loc[<span class="string">&#x27;AR&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(p), <span class="string">&#x27;MA&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(q)] = results.bic</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">results_bic = results_bic[results_bic.columns].astype(<span class="built_in">float</span>)</span><br><span class="line"><span class="comment">#绘制热力图</span></span><br><span class="line">fig, ax = plt.subplots(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">ax = sns.heatmap(results_bic,</span><br><span class="line">                 mask=results_bic.isnull(),</span><br><span class="line">                 ax=ax,</span><br><span class="line">                 annot=<span class="literal">True</span>,</span><br><span class="line">                 fmt=<span class="string">&#x27;.2f&#x27;</span>,</span><br><span class="line">                 cmap=<span class="string">&quot;Purples&quot;</span></span><br><span class="line">                 )</span><br><span class="line"></span><br><span class="line">ax.set_title(<span class="string">&#x27;BIC&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="built_in">print</span>(results_bic.stack().idxmin())</span><br></pre></td></tr></table></figure><br>过程就是遍历并逐个训练，计算得分，得到最优值。这样的手动遍历可以看出不同的参数组合的不同影响。<br>当然，也有更加简单的方法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">train_results = sm.tsa.arma_order_select_ic(train, ic=[<span class="string">&#x27;aic&#x27;</span>, <span class="string">&#x27;bic&#x27;</span>], trend=<span class="string">&#x27;n&#x27;</span>, max_ar=<span class="number">8</span>, max_ma=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;AIC&#x27;</span>, train_results.aic_min_order)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;BIC&#x27;</span>, train_results.bic_min_order)</span><br></pre></td></tr></table></figure><br>直接使用statsmodels 内置的 ARMA 阶数自动选择函数，直接得到最优的p和q</p>
+<h2 id="残差检验"><a href="#残差检验" class="headerlink" title="残差检验"></a>残差检验</h2><p>绘制残差的自相关函数（ACF）图，<br>这是一步关键的检验，如果这里出了大问题，那前面的参数就需要进行调整<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#根据以上求得</span></span><br><span class="line">p = <span class="number">1</span></span><br><span class="line">d = <span class="number">0</span></span><br><span class="line">q = <span class="number">0</span></span><br><span class="line">model = sm.tsa.ARIMA(train, order=(p,d,q))</span><br><span class="line">results = model.fit()</span><br><span class="line">resid = results.resid <span class="comment">#获取残差</span></span><br><span class="line"><span class="comment">#绘制</span></span><br><span class="line"><span class="comment">#查看测试集的时间序列与数据(只包含测试集)</span></span><br><span class="line">fig, ax = plt.subplots(figsize=(<span class="number">12</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">ax = sm.graphics.tsa.plot_acf(resid, lags=<span class="number">40</span>,ax=ax)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><br>如果观察到除了第一个以外的点都在指定区域内，就算通过检验。</p>
+<h2 id="模型预测"><a href="#模型预测" class="headerlink" title="模型预测"></a>模型预测</h2><p>经历九九八十一难，终于构建成了模型，现在使用这个模型进行预测<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">predict_sunspots = results.predict(dynamic=<span class="literal">False</span>)</span><br><span class="line">fig, ax = plt.subplots(figsize=(<span class="number">12</span>, <span class="number">6</span>))</span><br><span class="line">ax = sub.plot(ax=ax)</span><br><span class="line"><span class="comment">#预测数据</span></span><br><span class="line">predict_sunspots.plot(ax=ax)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><br>同时绘制出原始数据和预测数据</p>
+<h1 id="拓展—SARIMA"><a href="#拓展—SARIMA" class="headerlink" title="拓展—SARIMA"></a>拓展—SARIMA</h1><p>SARIMA(p,d,q)(P,D,Q)s 模型（季节性自回归积分移动平均模型）<br>该模型就是将ARIMA的差分增加滞后性，比如每周的数据，可以进行滞后7的差分，年度每月数据进行滞后12的差分等。其他方面和ARIMA相似。</p>
+<h2 id="滞后差分定义"><a href="#滞后差分定义" class="headerlink" title="滞后差分定义"></a>滞后差分定义</h2><p>1阶季节性差分（周期s）：$\nabla<em>s X_t = X_t - X</em>{t-s}$<br>D阶季节性差分：$\nabla_s^D X_t = \nabla_s(\nabla_s^{D-1} X_t)$</p>
+<h2 id="核心公式"><a href="#核心公式" class="headerlink" title="核心公式"></a>核心公式</h2><p>$\nabla^d \nabla<em>s^D X_t = \phi_0 + \sum</em>{i=1}^p \phi<em>i \nabla^d \nabla_s^D X</em>{t-i} + \sum<em>{j=1}^P \Phi_j \nabla^d \nabla_s^D X</em>{t-js} + \varepsilon<em>t - \sum</em>{k=1}^q \theta<em>k \varepsilon</em>{t-k} - \sum<em>{l=1}^Q \Theta_l \varepsilon</em>{t-ls}$</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/" rel="tag"># 数学建模</a>
+              <a href="/tags/ARIMA/" rel="tag"># ARIMA</a>
+              <a href="/tags/%E6%97%B6%E5%BA%8F%E6%A8%A1%E5%9E%8B/" rel="tag"># 时序模型</a>
+              <a href="/tags/AR%E6%A8%A1%E5%9E%8B/" rel="tag"># AR模型</a>
+              <a href="/tags/MA%E6%A8%A1%E5%9E%8B/" rel="tag"># MA模型</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/14/2023%E7%BE%8E%E8%B5%9BD%E9%A2%98%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" rel="prev" title="2023美赛D题论文阅读">
+                  <i class="fa fa-angle-left"></i> 2023美赛D题论文阅读
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">longnamehaha</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<!-- 强制注入 MathJax 3 脚本，确保 100% 加载 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],  // 支持两种行内分隔符
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],  // 支持两种块级分隔符
+      processEscapes: true,  // 允许用 \$ 表示普通美元符号
+      processEnvironments: true  // 支持 align/equation 等复杂环境
+    },
+    startup: {
+      typeset: true,  // 页面加载后自动渲染公式
+      pageReady: function () {
+        return MathJax.startup.defaultPageReady().then(function () {
+          MathJax.typeset();  // 强制触发渲染，避免漏渲染
+        });
+      }
+    },
+    svg: {
+      fontCache: 'global'  // 优化渲染性能
+    }
+  };
+</script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"longnamehaha/longnamehaha.github.io","issue_term":"pathname","label":"这是评论","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+  <!-- 手动加载粒子特效脚本 -->
+  <script src="/js/particle.js"></script>
+</body>
+</html>
