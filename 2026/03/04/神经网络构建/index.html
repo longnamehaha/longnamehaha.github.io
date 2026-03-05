@@ -29,16 +29,16 @@
 <meta property="og:site_name" content="欢迎到访(*´∀&#96;)~♥">
 <meta property="og:description" content="神经网络构建方法">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/longnamehaha/blog-images/raw/master/images/8a2ca03f050e1dcd420153ebc83c8fc2.png">
+<meta property="og:image" content="https://longnamehaha.github.io/2026/03/04/images/neural_network.png">
 <meta property="article:published_time" content="2026-03-04T08:11:27.000Z">
-<meta property="article:modified_time" content="2026-03-04T12:16:14.327Z">
+<meta property="article:modified_time" content="2026-03-05T08:19:20.450Z">
 <meta property="article:author" content="longnamehaha">
 <meta property="article:tag" content="张量">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="神经网络">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/longnamehaha/blog-images/raw/master/images/8a2ca03f050e1dcd420153ebc83c8fc2.png">
+<meta name="twitter:image" content="https://longnamehaha.github.io/2026/03/04/images/neural_network.png">
 
 
 <link rel="canonical" href="https://longnamehaha.github.io/2026/03/04/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA/">
@@ -260,9 +260,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-03-04 16:11:27 / 修改时间：20:16:14" itemprop="dateCreated datePublished" datetime="2026-03-04T16:11:27+08:00">2026-03-04</time>
+      <time title="创建时间：2026-03-04 16:11:27" itemprop="dateCreated datePublished" datetime="2026-03-04T16:11:27+08:00">2026-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-05 16:19:20" itemprop="dateModified" datetime="2026-03-05T16:19:20+08:00">2026-03-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -298,9 +304,9 @@
 <li>
 <p>均匀分布初始化<br>
 权重参数初始化从区间均匀随机取值，默认区间为（0，1）。可以设置为在 
-    <span id="mjx-dd9e9d">
+    <span id="mjx-acf42b3">
       <style>
-      #mjx-dd9e9d{
+      #mjx-acf42b3{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -482,9 +488,9 @@ HE 初始化分为正态分布的 HE 初始化、均匀分布的 HE 初始化.</
 <ul>
 <li>正态分布的he初始化<br>
 它是从 [0, std] 中抽取样本的，
-    <span id="mjx-43e815c">
+    <span id="mjx-6850d99">
       <style>
-      #mjx-43e815c{
+      #mjx-6850d99{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -645,9 +651,9 @@ g[data-mml-node="xypic"] path {
   </li>
 <li>均匀分布的he初始化<br>
 它从 [-limit，limit] 中的均匀分布中抽取样本, 
-    <span id="mjx-bcf3abc">
+    <span id="mjx-0a9ef998">
       <style>
-      #mjx-bcf3abc{
+      #mjx-0a9ef998{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -815,9 +821,9 @@ fan_in 输入层神经元的个数</li>
 <ul>
 <li>正态化的Xavier初始化<br>
 它是从 [0, std] 中抽取样本的，
-    <span id="mjx-0a6ba9e8">
+    <span id="mjx-4e1aa8f8">
       <style>
-      #mjx-0a6ba9e8{
+      #mjx-4e1aa8f8{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -978,9 +984,9 @@ g[data-mml-node="xypic"] path {
   </li>
 <li>均匀分布的Xavier初始化<br>
 [-limit，limit] 中的均匀分布中抽取样本, 
-    <span id="mjx-a812e0f">
+    <span id="mjx-04da7a3">
       <style>
-      #mjx-a812e0f{
+      #mjx-04da7a3{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -1168,7 +1174,7 @@ fan_in 是输入层神经元的个数， fan_out 是输出层神经元个数</li
 </ul>
 <h2 id="具体代码">具体代码</h2>
 <p>我们以下面这个图片的简单神经网络为例<br>
-<img src="https://gitee.com/longnamehaha/blog-images/raw/master/images/8a2ca03f050e1dcd420153ebc83c8fc2.png" alt="神经网络示意图"><br>
+<img src="../images/neural_network.png" alt="神经网络示意图"><br>
 先安装torchsummary, 可以计算模型参数, 查看模型结构</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torchsummary</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">from</span> torchsummary <span class="keyword">import</span> summary</span><br><span class="line"><span class="comment"># 创建神经网络模型类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Model</span>(nn.Module):</span><br><span class="line">    <span class="comment"># 初始化属性值</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(Model, <span class="variable language_">self</span>).__init__() <span class="comment"># 调用父类的初始化属性值</span></span><br><span class="line">        <span class="variable language_">self</span>.linear1 = nn.Linear(<span class="number">3</span>, <span class="number">3</span>) <span class="comment"># 创建第一个隐藏层模型, 3个输入特征,3个输出特征</span></span><br><span class="line">        nn.init.xavier_normal_(<span class="variable language_">self</span>.linear1.weight) <span class="comment"># 初始化权重</span></span><br><span class="line">        nn.init.zeros_(<span class="variable language_">self</span>.linear1.bias)</span><br><span class="line">        <span class="comment"># 创建第二个隐藏层模型, 3个输入特征(上一层的输出特征),2个输出特征</span></span><br><span class="line">        <span class="variable language_">self</span>.linear2 = nn.Linear(<span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line">        <span class="comment"># 初始化权重</span></span><br><span class="line">        nn.init.kaiming_normal_(<span class="variable language_">self</span>.linear2.weight, nonlinearity=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">        nn.init.zeros_(<span class="variable language_">self</span>.linear2.bias)</span><br><span class="line">        <span class="comment"># 创建输出层模型</span></span><br><span class="line">        <span class="variable language_">self</span>.out = nn.Linear(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">    <span class="comment"># 创建前向传播方法,自动执行forward()方法，这里是使用类似__init__的魔法方法，函数名字不能修改</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># 数据经过第一个线性层</span></span><br><span class="line">        x = <span class="variable language_">self</span>.linear1(x)</span><br><span class="line">        <span class="comment"># 使用sigmoid激活函数</span></span><br><span class="line">        x = torch.sigmoid(x)</span><br><span class="line">        <span class="comment"># 数据经过第二个线性层</span></span><br><span class="line">        x = <span class="variable language_">self</span>.linear2(x)</span><br><span class="line">        <span class="comment"># 使用relu激活函数</span></span><br><span class="line">        x = torch.relu(x)</span><br><span class="line">        <span class="comment"># 数据经过输出层</span></span><br><span class="line">        x = <span class="variable language_">self</span>.out(x)</span><br><span class="line">        <span class="comment"># 使用softmax激活函数</span></span><br><span class="line">        <span class="comment"># dim=-1:每一维度行数据相加为1</span></span><br><span class="line">        x = torch.softmax(x, dim=-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 实例化model对象</span></span><br><span class="line">    my_model = Model()</span><br><span class="line">    <span class="comment"># 随机产生数据</span></span><br><span class="line">    my_data = torch.randn(<span class="number">5</span>, <span class="number">3</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;mydata shape&quot;</span>, my_data.shape)</span><br><span class="line">    <span class="comment"># 数据经过神经网络模型训练</span></span><br><span class="line">    output = my_model(my_data)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;output shape--&gt;&quot;</span>, output.shape)</span><br><span class="line">    <span class="comment"># 计算模型参数</span></span><br><span class="line">    <span class="comment"># 计算每层每个神经元的w和b个数总和</span></span><br><span class="line">    summary(my_model, input_size=(<span class="number">3</span>,), batch_size=<span class="number">5</span>) </span><br><span class="line">    <span class="comment"># 查看模型参数</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;======查看模型参数w和b======&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> name, parameter <span class="keyword">in</span> my_model.named_parameters():</span><br><span class="line">        <span class="built_in">print</span>(name, parameter)</span><br></pre></td></tr></table></figure>
