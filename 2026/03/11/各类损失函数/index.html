@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous" defer></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"longnamehaha.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":-1,"unescape":true,"preload":true}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="为不同任务选择不同的损失函数σ&#96;∀´)σ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="各类损失函数">
+<meta property="og:url" content="https://longnamehaha.github.io/2026/03/11/%E5%90%84%E7%B1%BB%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="欢迎到访(*´∀&#96;)~♥">
+<meta property="og:description" content="为不同任务选择不同的损失函数σ&#96;∀´)σ">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://longnamehaha.github.io/images/loss_function.jpg">
+<meta property="article:published_time" content="2026-03-11T12:37:19.000Z">
+<meta property="article:modified_time" content="2026-03-12T08:48:40.094Z">
+<meta property="article:author" content="longnamehaha">
+<meta property="article:tag" content="张量">
+<meta property="article:tag" content="损失函数">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="神经网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://longnamehaha.github.io/images/loss_function.jpg">
+
+
+<link rel="canonical" href="https://longnamehaha.github.io/2026/03/11/%E5%90%84%E7%B1%BB%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://longnamehaha.github.io/2026/03/11/%E5%90%84%E7%B1%BB%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/","path":"2026/03/11/各类损失函数/","title":"各类损失函数"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>各类损失函数 | 欢迎到访(*´∀`)~♥</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+  <script src="/js/third-party/pace.js" defer></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">欢迎到访(*´∀`)~♥</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">longnamehaha的自学笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%95%E4%B8%BA%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">何为损失函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB%E4%BB%BB%E5%8A%A1%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">分类任务损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%88%86%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">多分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E7%B1%BB"><span class="nav-number">2.2.</span> <span class="nav-text">二分类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92%E4%BB%BB%E5%8A%A1%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">回归任务损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MAE%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">MAE损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MSE%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text">MSE损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Smooth-L1%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">Smooth L1损失函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%BC%94%E7%A4%BA"><span class="nav-number">4.</span> <span class="nav-text">代码演示</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">longnamehaha</p>
+  <div class="site-description" itemprop="description">欢迎各位大佬指点</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/longnamehaha" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;longnamehaha" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://longnamehaha.github.io/2026/03/11/%E5%90%84%E7%B1%BB%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="longnamehaha">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢迎到访(*´∀`)~♥">
+      <meta itemprop="description" content="欢迎各位大佬指点">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="各类损失函数 | 欢迎到访(*´∀`)~♥">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          各类损失函数
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-03-11 20:37:19" itemprop="dateCreated datePublished" datetime="2026-03-11T20:37:19+08:00">2026-03-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-12 16:48:40" itemprop="dateModified" datetime="2026-03-12T16:48:40+08:00">2026-03-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>为不同任务选择不同的损失函数σ&#96;∀´)σ</p>
+<span id="more"></span>
+<h1 id="何为损失函数"><a href="#何为损失函数" class="headerlink" title="何为损失函数"></a>何为损失函数</h1><p>损失函数（loss function，也称代价函数，成本函数等）相信大家都耳熟能详。损失函数是用来衡量模型参数的质量的函数, 衡量的方式是比较网络输出和真实输出的差异。<br>神经网络中的损失函数作用如下图：<br><img src="/../images/loss_function.jpg" alt="神经网络示意图"><br>损失函数根据用途一般分为分类损失函数以及回归损失函数，不同任务都有自己适合的损失函数。</p>
+<h1 id="分类任务损失函数"><a href="#分类任务损失函数" class="headerlink" title="分类任务损失函数"></a>分类任务损失函数</h1><h2 id="多分类"><a href="#多分类" class="headerlink" title="多分类"></a>多分类</h2><p>在多分类任务通常使用softmax将logits转换为概率的形式，所以多分类的交叉熵损失也叫做softmax损失：<br>$$<br>L &#x3D; -\sum_{i&#x3D;1}^{n} y_i \log\left(S\left(f_\theta(x_i)\right)\right)<br>$$<br>其中:</p>
+<ul>
+<li>$ y_i $ 是样本x属于某一个类别的真实概率</li>
+<li>而f(x)是样本属于某一类别的预测分数</li>
+<li>S是softmax激活函数，将属于某一类别的预测分数转换成概率</li>
+<li>L用来衡量真实值y和预测值f(x)之间差异性的损失结果</li>
+</ul>
+<p>api：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nn.CrossEntropyLoss()</span><br><span class="line"><span class="comment"># nn.CrossEntropyLoss()=softmax + 损失计算</span></span><br></pre></td></tr></table></figure>
+<p>注意，该损失函数<strong>自带softmax激活函数</strong>，也就是再前面处理x时不需要写激活函数。</p>
+<h2 id="二分类"><a href="#二分类" class="headerlink" title="二分类"></a>二分类</h2><p>公式：<br>$$<br>L &#x3D; -y \log \hat{y} - (1 - y) \log(1 - \hat{y})<br>$$<br>api：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nn.BCELoss()</span><br><span class="line"><span class="comment"># 没有自带的激活函数，一般用sigmoid，需要手动添加</span></span><br></pre></td></tr></table></figure>
+<p>其实就是<a href="https://longnamehaha.github.io/2025/11/25/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" title="看看逻辑回归">逻辑回归</a>的损失函数，此处不再赘述。</p>
+<h1 id="回归任务损失函数"><a href="#回归任务损失函数" class="headerlink" title="回归任务损失函数"></a>回归任务损失函数</h1><h2 id="MAE损失函数"><a href="#MAE损失函数" class="headerlink" title="MAE损失函数"></a>MAE损失函数</h2><p>Mean absolute loss(MAE)也被称为L1 Loss，是以绝对误差作为距离:<br>$$<br>L &#x3D; \frac{1}{n} \sum_{i&#x3D;1}^{n} \left| y_i - f_\theta(x_i) \right|<br>$$<br>简单理解就是绝对值函数 y&#x3D;|x|  </p>
+<p>特点是：</p>
+<ul>
+<li>由于L1 loss具有稀疏性，为了惩罚较大的值，因此常常将其作为<br>正则项添加到其他loss中作为约束。</li>
+<li>L1 loss的最大问题是梯度在零点不平滑，导致会跳过极小值（这点我们再后面会处理）</li>
+</ul>
+<h2 id="MSE损失函数"><a href="#MSE损失函数" class="headerlink" title="MSE损失函数"></a>MSE损失函数</h2><p>Mean Squared Loss&#x2F; Quadratic Loss(MSE loss)也被称为L2 loss，或欧氏距离，它以误差的平方和的均值作为距离:</p>
+<p>$$<br>L &#x3D; \frac{1}{n} \sum_{i&#x3D;1}^{n} \left( y_i - f_\theta(x_i) \right)^2<br>$$<br>简单理解就是平方函数 y&#x3D;x*x  </p>
+<p>特点是：</p>
+<ul>
+<li>L2 loss也常常作为正则项。</li>
+<li>当预测值与目标值相差很大时, 梯度容易爆炸（离群惩罚严重）</li>
+</ul>
+<h2 id="Smooth-L1损失函数"><a href="#Smooth-L1损失函数" class="headerlink" title="Smooth L1损失函数"></a>Smooth L1损失函数</h2><p>Smooth L1说的是光滑之后的L1:<br>$$<br>\text{smooth}_{L_1}(x) &#x3D;<br>\begin{cases}<br>0.5 x^2 &amp; \text{if } |x| &lt; 1 \<br>|x| - 0.5 &amp; \text{otherwise}<br>\end{cases}<br>$$<br>综合了L1和L2：</p>
+<ul>
+<li>在[-1,1]之间实际上就是L2损失，这样解决了L1的不光滑问题</li>
+<li>在[-1,1]区间外，实际上就是L1损失，这样就解决了离群点梯度爆炸的问题</li>
+</ul>
+<h1 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分类损失函数：交叉熵损失使用nn.CrossEntropyLoss()实现。nn.CrossEntropyLoss()=softmax + 损失计算</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test01</span>():</span><br><span class="line">    <span class="comment"># 设置真实值: 可以是热编码后的结果也可以不进行热编码</span></span><br><span class="line">    <span class="comment"># y_true = torch.tensor([[0, 1, 0], [0, 0, 1]], dtype=torch.float32)</span></span><br><span class="line">    <span class="comment"># 注意的类型必须是64位整型数据</span></span><br><span class="line">    y_true = torch.tensor([<span class="number">1</span>, <span class="number">2</span>], dtype=torch.int64)</span><br><span class="line">    y_pred = torch.tensor([[<span class="number">0.2</span>, <span class="number">0.6</span>, <span class="number">0.2</span>], [<span class="number">0.1</span>, <span class="number">0.8</span>, <span class="number">0.1</span>]], requires_grad=<span class="literal">True</span>, dtype=torch.float32)</span><br><span class="line">    <span class="comment"># 实例化交叉熵损失</span></span><br><span class="line">    loss = nn.CrossEntropyLoss()</span><br><span class="line">    <span class="comment"># 计算损失结果</span></span><br><span class="line">    my_loss = loss(y_pred, y_true).detach().numpy()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;loss:&#x27;</span>, my_loss)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test02</span>():</span><br><span class="line">    <span class="comment"># 1 设置真实值和预测值</span></span><br><span class="line">    <span class="comment"># 预测值是sigmoid输出的结果</span></span><br><span class="line">    y_pred = torch.tensor([<span class="number">0.6901</span>, <span class="number">0.5459</span>, <span class="number">0.2469</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">    y_true = torch.tensor([<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>], dtype=torch.float32)</span><br><span class="line">    <span class="comment"># 2 实例化二分类交叉熵损失</span></span><br><span class="line">    loss = nn.BCELoss()</span><br><span class="line">    <span class="comment"># 3 计算损失</span></span><br><span class="line">    my_loss = loss(y_pred, y_true).detach().numpy()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;loss：&#x27;</span>, my_loss)</span><br><span class="line"><span class="comment"># 计算inputs与target之差的绝对值</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test03</span>():</span><br><span class="line">    <span class="comment"># 1 设置真实值和预测值</span></span><br><span class="line">    y_pred = torch.tensor([<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.9</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">    y_true = torch.tensor([<span class="number">2.0</span>, <span class="number">2.0</span>, <span class="number">2.0</span>], dtype=torch.float32)</span><br><span class="line">    <span class="comment"># 2 实例MAE损失对象</span></span><br><span class="line">    loss = nn.L1Loss()</span><br><span class="line">    <span class="comment"># 3 计算损失</span></span><br><span class="line">    my_loss = loss(y_pred, y_true).detach().numpy()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;loss:&#x27;</span>, my_loss)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test04</span>():</span><br><span class="line">    <span class="comment"># 1 设置真实值和预测值</span></span><br><span class="line">    y_pred = torch.tensor([<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.9</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">    y_true = torch.tensor([<span class="number">2.0</span>, <span class="number">2.0</span>, <span class="number">2.0</span>], dtype=torch.float32)</span><br><span class="line">    <span class="comment"># 2 实例MSE损失对象</span></span><br><span class="line">    loss = nn.MSELoss()</span><br><span class="line">    <span class="comment"># 3 计算损失</span></span><br><span class="line">    my_loss = loss(y_pred, y_true).detach().numpy()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;myloss:&#x27;</span>, my_loss)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test05</span>():</span><br><span class="line">    <span class="comment"># 1 设置真实值和预测值</span></span><br><span class="line">    y_true = torch.tensor([<span class="number">0</span>, <span class="number">3</span>])</span><br><span class="line">    y_pred = torch.tensor ([<span class="number">0.6</span>, <span class="number">0.4</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># 2 实例smmothL1损失对象</span></span><br><span class="line">    loss = nn.SmoothL1Loss()</span><br><span class="line">    <span class="comment"># 3 计算损失</span></span><br><span class="line">    my_loss = loss(y_pred, y_true).detach().numpy()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;loss:&#x27;</span>, my_loss)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    test01()</span><br><span class="line">    <span class="comment"># test02()</span></span><br><span class="line">    <span class="comment"># test03()</span></span><br><span class="line">    <span class="comment"># test04()</span></span><br><span class="line">    <span class="comment"># test05()</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/%E5%BC%A0%E9%87%8F/" rel="tag"># 张量</a>
+              <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"># 神经网络</a>
+              <a href="/tags/%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/" rel="tag"># 损失函数</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/04/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA/" rel="prev" title="神经网络构建">
+                  <i class="fa fa-angle-left"></i> 神经网络构建
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">longnamehaha</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<!-- 强制注入 MathJax 3 脚本，确保 100% 加载 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],  // 支持两种行内分隔符
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],  // 支持两种块级分隔符
+      processEscapes: true,  // 允许用 \$ 表示普通美元符号
+      processEnvironments: true  // 支持 align/equation 等复杂环境
+    },
+    startup: {
+      typeset: true,  // 页面加载后自动渲染公式
+      pageReady: function () {
+        return MathJax.startup.defaultPageReady().then(function () {
+          MathJax.typeset();  // 强制触发渲染，避免漏渲染
+        });
+      }
+    },
+    svg: {
+      fontCache: 'global'  // 优化渲染性能
+    }
+  };
+</script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"longnamehaha/longnamehaha.github.io","issue_term":"pathname","label":"这是评论","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+  <!-- 手动加载粒子特效脚本 -->
+  <script src="/js/particle.js"></script>
+</body>
+</html>
