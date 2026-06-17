@@ -186,7 +186,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -197,7 +197,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -293,39 +293,36 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>简单的TOPSIS法｡ﾟ(ﾟ´ω`ﾟ)ﾟ｡<br><span id="more"></span><br>    前置知识：最好会层次分析法</p>
+    <div class="post-body" itemprop="articleBody"><p>简单的TOPSIS法｡ﾟ(ﾟ´ω&#96;ﾟ)ﾟ｡</p>
+<span id="more"></span>
+<pre><code>前置知识：最好会层次分析法
+</code></pre>
 <h1 id="模型引出"><a href="#模型引出" class="headerlink" title="模型引出"></a>模型引出</h1><p>本节的TOPSIS法，同前面的一样，都是是评价类模型。<br>TOPSIS法（Technique for Order Preference by Similarity to Ideal Solution）可翻译为逼近理想解排序法，或简称为优劣解距离法。<br>首先需要引入两个概念：</p>
 <ul>
 <li>理想解：各维度都达到所有备选方案最优秀的解</li>
-<li>反理想解：各维度都达到所有备选方案最差的解  </li>
+<li>反理想解：各维度都达到所有备选方案最差的解</li>
 </ul>
 <p>比如工厂生产，第一维表示产量，第二维表示耗资。三个工厂（备选方案）为：（100，100），（150，110），（200，300）则理想解为（200，100），反理想解为（100，300）.  </p>
 <p>方案排序的规则就是根据与最优解的距离来，同时要尽量远离反理性解。</p>
 <h1 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h1><h2 id="1-原始矩阵正向化"><a href="#1-原始矩阵正向化" class="headerlink" title="1.原始矩阵正向化"></a>1.原始矩阵正向化</h2><p>正向化，即将各指标转化为“越大越好”<br>首先将指标分为4种：极大型，极小型，中间型，区间型<br>设 $\widetilde{x_i}$ 为转换后的第i个指标</p>
 <ul>
 <li>极大型：指标数值越大越好，不用转换</li>
-<li>极小型：指标数值越小越好，转换方法：<script type="math/tex; mode=display">\widetilde{x_i}= max(x) - x_i</script></li>
-<li>中间型：即数值越接近中间一个最优值 $x_{best}$ 越好：<br>要先计算M：<script type="math/tex; mode=display">M=max(|x_i-x_{best}|)</script><script type="math/tex; mode=display">\widetilde{x_i}= 1 - \frac{|x_i-x_{best}|}{M}</script></li>
-<li>区间型:数值处于某个区间 [a,b] 内最好，此时分区间讨论：<script type="math/tex; mode=display">M=max(max(x_i)-b,a-min(x_i))</script><script type="math/tex; mode=display">
-\widetilde{x_i}= 
-\begin{cases}
-1-\frac{a-x_i}{M} \quad \text{ $x_i$ <a} \\
-1\quad \text{$ a \leq x_i \leq b $} \\
-1-\frac{x_i-b}{M} \quad \text{ $x_i$ >b}
-\end{cases}</script><h2 id="2-正向化矩阵标准化"><a href="#2-正向化矩阵标准化" class="headerlink" title="2.正向化矩阵标准化"></a>2.正向化矩阵标准化</h2></li>
+<li>极小型：指标数值越小越好，转换方法：<br>$$ \widetilde{x_i}&#x3D; max(x) - x_i<br>$$</li>
+<li>中间型：即数值越接近中间一个最优值 $x_{best}$ 越好：<br>要先计算M：<br>$$ M&#x3D;max(|x_i-x_{best}|)$$<br>$$ \widetilde{x_i}&#x3D; 1 - \frac{|x_i-x_{best}|}{M}<br>$$</li>
+<li>区间型:数值处于某个区间 [a,b] 内最好，此时分区间讨论：<br>$$ M&#x3D;max(max(x_i)-b,a-min(x_i))$$<br>$$<br>\widetilde{x_i}&#x3D;<br>\begin{cases}<br>1-\frac{a-x_i}{M} \quad \text{ $x_i$ &lt;a} \<br>1\quad \text{$ a \leq x_i \leq b $} \<br>1-\frac{x_i-b}{M} \quad \text{ $x_i$ &gt;b}<br>\end{cases}<br>$$</li>
 </ul>
-<p>有<strong>n个待评价对象，m个指标</strong>，矩阵元素 $x_{ij}$ 表示第i个对象第j个指标的得分。则：  </p>
-<script type="math/tex; mode=display">\widetilde{x_{ij}}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{n}{x_{ij}^2}}}</script><p>标准化后，默认各指标权重相同，也可以使用层次分析法，熵权法等赋予权重。  </p>
+<h2 id="2-正向化矩阵标准化"><a href="#2-正向化矩阵标准化" class="headerlink" title="2.正向化矩阵标准化"></a>2.正向化矩阵标准化</h2><p>有<strong>n个待评价对象，m个指标</strong>，矩阵元素 $x_{ij}$ 表示第i个对象第j个指标的得分。则：<br> $$ \widetilde{x_{ij}}&#x3D;\frac{x_{ij}}{\sqrt{\sum_{i&#x3D;1}^{n}{x_{ij}^2}}}<br> $$<br>标准化后，默认各指标权重相同，也可以使用层次分析法，熵权法等赋予权重。  </p>
 <h2 id="3-计算得分"><a href="#3-计算得分" class="headerlink" title="3.计算得分"></a>3.计算得分</h2><ul>
-<li><p>定义正理想解向量 <script type="math/tex">Z^+=(Z_1^+, Z_2^+, ...,Z_m^+)</script><br>其中 $Z_i^+$ 为第i列元素最大值。  </p>
+<li><p>定义正理想解向量 $$Z^+&#x3D;(Z_1^+, Z_2^+, …,Z_m^+)$$<br>其中 $Z_i^+$ 为第i列元素最大值。  </p>
 </li>
-<li><p>负理想解向量 <script type="math/tex">Z^-=(Z_1^-, Z_2^-, ...,Z_m^-)</script><br>其中 $Z_i^-$ 为第i列元素最小值。  </p>
+<li><p>负理想解向量 $$Z^-&#x3D;(Z_1^-, Z_2^-, …,Z_m^-)$$<br>其中 $Z_i^-$ 为第i列元素最小值。  </p>
 </li>
 <li><p>记权重向量 $w$，$w_j$表示第j个指标的权重。  </p>
 </li>
-<li><p>第i个对象与正理想解距离：</p>
-<script type="math/tex; mode=display">D_{i}^+=\sqrt{\sum_{j=1}^{m}{w_j(Z_i^+-\widetilde{x_{ij}})^2}}</script></li>
-<li>第i个对象与负理想解距离：<script type="math/tex; mode=display">D_{i}^-=\sqrt{\sum_{j=1}^{m}{w_j(Z_i^--\widetilde{x_{ij}})^2}}</script>计算原始得分：<script type="math/tex; mode=display">S_i=\frac{D_{i}^-}{D_{i}^++D_{i}^-}</script>显然 $S_i\in [0,1]$ ,且 $S_i$ 越大，越接近正理想解。  </li>
+<li><p>第i个对象与正理想解距离：<br>$$D_{i}^+&#x3D;\sqrt{\sum_{j&#x3D;1}^{m}{w_j(Z_i^+-\widetilde{x_{ij}})^2}}<br>$$</p>
+</li>
+<li><p>第i个对象与负理想解距离：<br>$$D_{i}^-&#x3D;\sqrt{\sum_{j&#x3D;1}^{m}{w_j(Z_i^–\widetilde{x_{ij}})^2}}<br>$$<br>计算原始得分：<br>$$ S_i&#x3D;\frac{D_{i}^-}{D_{i}^++D_{i}^-}<br>$$<br>显然 $S_i\in [0,1]$ ,且 $S_i$ 越大，越接近正理想解。</p>
+</li>
 </ul>
 <p>为便于比较，再将个对象的得分归一化后*100转化为百分制。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TOPSIS 法是基于 “距离排序” 的客观评价模型，核心逻辑是通过计算各方案与 “正理想解（最优值组合）”“负理想解（最劣值组合）” 的加权距离，量化方案的优劣程度。<br>该模型的优势是兼顾客观数据规律与指标重要性差异，可灵活结合 AHP（主观赋权）或熵权法（客观赋权），适用于多指标、多方案的排序决策（如产品评选、绩效评价、资源分配等）。</p>

@@ -187,7 +187,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -198,7 +198,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -294,30 +294,31 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>简单看看AdaBoost(,,・ω・,,)<br><span id="more"></span><br>    前置知识：集成学习</p>
+    <div class="post-body" itemprop="articleBody"><p>简单看看AdaBoost(,,・ω・,,)</p>
+<span id="more"></span>
+<pre><code>前置知识：集成学习
+</code></pre>
 <h1 id="什么是AdaBoost"><a href="#什么是AdaBoost" class="headerlink" title="什么是AdaBoost"></a>什么是AdaBoost</h1><p>前面的<a href="https://longnamehaha.github.io/2025/11/27/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" title="看看">随机森林篇</a>已经学习过并行算法， <code>AdaBoost</code> ，从后缀Boost也可以看出来，这是集成学习中Boosting（串行）算法的一种。<br> Boosting是将原始数据经过第一个过程处理后，输入第二个过程继续…（比如数学先学习1+1，再学微积分）  </p>
 <p> <code>AdaBoost</code> , 即自适应提升树，是基于集成学习中Boosting思想，来训练样本的强学习器，其核心在于<strong>逐步提高前一步被错误分类的样本的权重</strong>。没错，在训练过程中，样本不在看做等价值的，而是在训练过程中不断调整权重。  </p>
 <p> 其实仔细一想也很好理解，比如当前先进行了一个分类，对于分类正确的部分，我们就不需要花更多的精力，而应该重点关注分类错误的样本，即增大错误样本的权重，减少正确样本的权重。  </p>
 <p> 同样的，比如像刚刚讲的，训练了很多轮后，取最后的一个模型作为训练结果，那么，这仍然是一个模型，无非训练过程复杂些，也还是一个弱学习器。所以，在每步训练出来的模型，都要参与最后的决策。由于是串行，每一步训练出来的模型并非等价的（区别于随机森林的“平权投票”），所以每一步的模型对样本改变的程度和模型对最后的贡献，也是加权的。  </p>
 <h1 id="AdaBoost算法过程"><a href="#AdaBoost算法过程" class="headerlink" title="AdaBoost算法过程"></a>AdaBoost算法过程</h1><p>刚刚已经简述了AdaBoost的工作原理，下面需要对其进行数学量化。<br>以二分类为例子, 即y取1或-1，算法流程：  </p>
 <ol>
-<li>初始化所有样本权重为 $\frac{1}{N}$ (N为样本数量)，记$D<em>i$=($w</em>{i1}$,$w<em>{i2}$…$w</em>{iN}$)为第 <code>i</code> 个样本集，其中，$w_{1j}$=$\frac{1}{N}$, j=1,2…N</li>
-<li><p>设执行M次训练，则对应m=1. 2. 3….M</p>
+<li><p>初始化所有样本权重为 $\frac{1}{N}$ (N为样本数量)，记$D_i$&#x3D;($w_{i1}$,$w_{i2}$…$w_{iN}$)为第 <code>i</code> 个样本集，其中，$w_{1j}$&#x3D;$\frac{1}{N}$, j&#x3D;1,2…N</p>
+</li>
+<li><p>设执行M次训练，则对应m&#x3D;1. 2. 3….M</p>
 <ol>
-<li>先用第m次的数据集学习，得到基分类器$G_m$, 使用$G_m$对数据集分类并计算错误率$\varepsilon_m$:  <script type="math/tex; mode=display">\varepsilon_m=\sum_{i=1}^N w_{mi}I(G_m(x_i)\neq y_i)</script></li>
-<li>计算得到$G_m$的系数：<script type="math/tex; mode=display">\alpha_m=\frac{1}{2}·\ln\frac{1-\varepsilon_m}{\varepsilon_m}</script></li>
-<li>更新样本权重：<script type="math/tex; mode=display">w_{m+1,i}=\frac{w_{mi}}{Z_m} e^{\alpha_m t}</script>其中，<script type="math/tex; mode=display">t= \begin{cases} 
- 1 & 分类错误 \\
- -1 & 分类正确 
- \end{cases}</script><script type="math/tex; mode=display">Z_m=\sum_{i=1}^N w_ie^{\alpha_m t}</script>$Z_m$为规范化因子，保证所有样本权值和为1  </li>
+<li>先用第m次的数据集学习，得到基分类器$G_m$, 使用$G_m$对数据集分类并计算错误率$\varepsilon_m$:<br> $$ \varepsilon_m&#x3D;\sum_{i&#x3D;1}^N w_{mi}I(G_m(x_i)\neq y_i)<br> $$</li>
+<li>计算得到$G_m$的系数：<br> $$ \alpha_m&#x3D;\frac{1}{2}·\ln\frac{1-\varepsilon_m}{\varepsilon_m}<br> $$</li>
+<li>更新样本权重：<br> $$ w_{m+1,i}&#x3D;\frac{w_{mi}}{Z_m} e^{\alpha_m t}<br> $$<br> 其中，<br> $$ t&#x3D; \begin{cases}<br> 1 &amp; 分类错误 \<br> -1 &amp; 分类正确<br> \end{cases}<br> $$<br> $$ Z_m&#x3D;\sum_{i&#x3D;1}^N w_ie^{\alpha_m t}<br> $$<br> $Z_m$为规范化因子，保证所有样本权值和为1</li>
 </ol>
 </li>
-<li><p>构建基分类器的线性组合<br>这一步就是与<a href="https://longnamehaha.github.io/2025/11/27/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" title="看看">随机森林</a>“平权投票”不一样的地方了，此次各基学习器都是有权重的，即上面的$ \alpha_m$  </p>
+<li><p>构建基分类器的线性组合<br>这一步就是与<a href="https://longnamehaha.github.io/2025/11/27/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" title="看看">随机森林</a>“平权投票”不一样的地方了，此次各基学习器都是有权重的，即上面的$ \alpha_m$</p>
 </li>
 </ol>
-<p>线性组合：  </p>
-<script type="math/tex; mode=display">f(x)= \sum_{i=1}^M \alpha_m G_m(x)</script><p>得到最终分类器：  </p>
-<script type="math/tex; mode=display">G(x)=sign(f(x))</script><h1 id="应用案例——葡萄酒分类"><a href="#应用案例——葡萄酒分类" class="headerlink" title="应用案例——葡萄酒分类"></a>应用案例——葡萄酒分类</h1><h2 id="先介绍一下api："><a href="#先介绍一下api：" class="headerlink" title="先介绍一下api："></a>先介绍一下api：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> AdaBoostClassifier</span><br><span class="line">model=AdaBoostClassifier(estimator=mytree,n_estimators=<span class="number">200</span>,learning_rate=<span class="number">0.1</span>,algorithm=<span class="string">&quot;SAMME.R&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>线性组合：<br>$$ f(x)&#x3D; \sum_{i&#x3D;1}^M \alpha_m G_m(x)<br>$$</p>
+<p>得到最终分类器：<br>$$ G(x)&#x3D;sign(f(x))<br>$$</p>
+<h1 id="应用案例——葡萄酒分类"><a href="#应用案例——葡萄酒分类" class="headerlink" title="应用案例——葡萄酒分类"></a>应用案例——葡萄酒分类</h1><h2 id="先介绍一下api："><a href="#先介绍一下api：" class="headerlink" title="先介绍一下api："></a>先介绍一下api：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> AdaBoostClassifier</span><br><span class="line">model=AdaBoostClassifier(estimator=mytree,n_estimators=<span class="number">200</span>,learning_rate=<span class="number">0.1</span>,algorithm=<span class="string">&quot;SAMME.R&quot;</span>)</span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>estimator</code> 是用于训练的基学习器，要先弄出来（下面用的是决策树）</li>
 <li><code>n_estimators</code> 是串行训练的数量，即上面公式M</li>
@@ -331,7 +332,7 @@
 <li>决策树桩（最推荐）<ul>
 <li>原理：单层决策树，仅用1个特征分类，弱学习器代表</li>
 <li>代码：<code>DecisionTreeClassifier(max_depth=1)</code></li>
-<li>适用：所有分类/回归任务，训练快、泛化好</li>
+<li>适用：所有分类&#x2F;回归任务，训练快、泛化好</li>
 </ul>
 </li>
 <li>逻辑回归（线性基学习器）<ul>
@@ -374,7 +375,7 @@
 </ol>
 <h2 id="三、选型建议"><a href="#三、选型建议" class="headerlink" title="三、选型建议"></a>三、选型建议</h2><ul>
 <li>优先用决策树桩作为基学习器，性价比最高；</li>
-<li>二分类/多分类选 <code>AdaBoostClassifier</code>，回归选 <code>AdaBoostRegressor</code>；</li>
+<li>二分类&#x2F;多分类选 <code>AdaBoostClassifier</code>，回归选 <code>AdaBoostRegressor</code>；</li>
 <li>学习率建议 0.05-0.1，基学习器数量 50-200，平衡速度和效果。</li>
 </ul>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>AdaBoost 作为集成学习中 Boosting 思想的经典实现，核心魅力在于「用简单弱学习器集成强模型」，其设计逻辑既直观又严谨：通过串行训练基学习器，每一轮都聚焦前一轮的错分样本（动态调整权重），同时给每个基学习器分配差异化权重（性能越好的基学习器 “话语权” 越强），最终通过加权组合实现比单一弱学习器更优的泛化能力。  </p>

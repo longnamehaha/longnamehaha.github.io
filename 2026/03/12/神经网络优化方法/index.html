@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="欢迎到访(*´∀&#96;)~♥">
 <meta property="og:description" content="一个好的神经网络离不开优化 d(&#96;･∀･)b">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://longnamehaha.github.io/2026/03/12/images/learning_rate_decay.jpg">
+<meta property="og:image" content="https://longnamehaha.github.io/images/learning_rate_decay.jpg">
 <meta property="article:published_time" content="2026-03-12T08:56:20.000Z">
 <meta property="article:modified_time" content="2026-03-13T12:07:32.977Z">
 <meta property="article:author" content="longnamehaha">
@@ -38,7 +38,7 @@
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="神经网络">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://longnamehaha.github.io/2026/03/12/images/learning_rate_decay.jpg">
+<meta name="twitter:image" content="https://longnamehaha.github.io/images/learning_rate_decay.jpg">
 
 
 <link rel="canonical" href="https://longnamehaha.github.io/2026/03/12/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/">
@@ -189,7 +189,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -200,7 +200,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -296,8 +296,11 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>一个好的神经网络离不开优化 d(`･∀･)b<br><span id="more"></span></p>
-<h1 id="神经网络优化方法"><a href="#神经网络优化方法" class="headerlink" title="神经网络优化方法"></a>神经网络优化方法</h1><p>训练多层神经网络有很多种算法，误差反向传播算法（Back Propagation）是其中最杰出的代表，它是目前最成功的神经网络学习算法。现实任务使用神经网络时，大多是在使用 BP 算法进行训练。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">W新=W旧-梯度*学习率</span><br></pre></td></tr></table></figure><br>这是 BP 算法中最核心的公式，对神经网络的优化过程自然也从这个公式入手，主要从梯度下降和学习率两个地方着手优化。  </p>
+    <div class="post-body" itemprop="articleBody"><p>一个好的神经网络离不开优化 d(&#96;･∀･)b</p>
+<span id="more"></span>
+<h1 id="神经网络优化方法"><a href="#神经网络优化方法" class="headerlink" title="神经网络优化方法"></a>神经网络优化方法</h1><p>训练多层神经网络有很多种算法，误差反向传播算法（Back Propagation）是其中最杰出的代表，它是目前最成功的神经网络学习算法。现实任务使用神经网络时，大多是在使用 BP 算法进行训练。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">W新=W旧-梯度*学习率</span><br></pre></td></tr></table></figure>
+<p>这是 BP 算法中最核心的公式，对神经网络的优化过程自然也从这个公式入手，主要从梯度下降和学习率两个地方着手优化。  </p>
 <p>也因为这些优化很常用，pytorch也可以用optimizer优化器来进行训练过程，详细见下代码部分。</p>
 <p><strong>在进行模型训练时，让我们先回顾三个基础的概念：</strong></p>
 <ol>
@@ -317,7 +320,7 @@
 <p>比如：明天气温怎么样，和昨天气温有很大关系，而和一个月前的气温关系就小一些。</p>
 <p>当梯度下降碰到 “峡谷” 、”平缓”、”鞍点” 区域时, 参数更新速度变慢。 Momentum 通过<strong>指数加权平均法</strong>，累计历史梯度值，进行参数更新，越近的梯度值对当前参数更新的重要性越大。</p>
 <p>相关的算法在<a href="https://longnamehaha.github.io/2025/12/15/ARIMA/" title="看看ARIMA">ARIMA</a>中也有应用.</p>
-<h4 id="详细公式"><a href="#详细公式" class="headerlink" title="详细公式"></a>详细公式</h4><p><strong>梯度计算公式</strong>：<br>​                <script type="math/tex">s_t=βs_{t−1}+(1−β)g_t</script><br><strong>参数更新公式</strong>：<br>​                <script type="math/tex">w_t=w_{t−1}−ηs_t</script></p>
+<h4 id="详细公式"><a href="#详细公式" class="headerlink" title="详细公式"></a>详细公式</h4><p><strong>梯度计算公式</strong>：<br>​				$$s_t&#x3D;βs_{t−1}+(1−β)g_t$$<br><strong>参数更新公式</strong>：<br>​				$$w_t&#x3D;w_{t−1}−ηs_t$$</p>
 <ul>
 <li><p>$s_t$是当前时刻指数加权平均梯度值</p>
 </li>
@@ -338,41 +341,51 @@
 <h3 id="AdaGrad"><a href="#AdaGrad" class="headerlink" title="AdaGrad"></a>AdaGrad</h3><p>AdaGrad 通过对不同的参数分量使用不同的学习率，<strong>AdaGrad 的学习率总体会逐渐减小</strong>，这是因为 AdaGrad 认为：在起初时，我们距离最优目标仍较远，可以使用较大的学习率，加快训练速度，随着迭代次数的增加，学习率逐渐下降。</p>
 <h4 id="详细公式-1"><a href="#详细公式-1" class="headerlink" title="详细公式"></a>详细公式</h4><p>计算步骤：</p>
 <ol>
-<li>初始化学习率 η、初始化参数w、小常数 σ = 1e-10, 防止除0</li>
-<li>初始化梯度累计变量 s = 0</li>
-<li>从训练集中采样 m 个样本的小批量，计算梯度$g_t​$</li>
-<li><p><strong>累积平方梯度</strong>，⊙ 表示各个分量相乘，: </p>
-<script type="math/tex; mode=display">s_t​ = s_{t-1}​ + g_t ⊙ g_t​</script></li>
-<li><p>更新后学习率 η 的计算公式如下：</p>
-<script type="math/tex; mode=display">η=\frac{η}{\sqrt{s_t}+σ}</script></li>
+<li><p>初始化学习率 η、初始化参数w、小常数 σ &#x3D; 1e-10, 防止除0</p>
+</li>
+<li><p>初始化梯度累计变量 s &#x3D; 0</p>
+</li>
+<li><p>从训练集中采样 m 个样本的小批量，计算梯度$g_t​$</p>
+</li>
+<li><p><strong>累积平方梯度</strong>，⊙ 表示各个分量相乘，:<br>$$s_t​ &#x3D; s_{t-1}​ + g_t ⊙ g_t​$$</p>
+</li>
+<li><p>更新后学习率 η 的计算公式如下：<br>$$η&#x3D;\frac{η}{\sqrt{s_t}+σ}$$</p>
+</li>
 <li><p>权重参数更新公式如下：</p>
 </li>
 </ol>
-<script type="math/tex; mode=display">w_t = w_{t-1} - \frac{η}{\sqrt{s_t}+σ} · g_t</script><ol>
+<p>$$w_t &#x3D; w_{t-1} - \frac{η}{\sqrt{s_t}+σ} · g_t$$</p>
+<ol start="7">
 <li>重复 3-7 步骤</li>
 </ol>
 <p><strong>AdaGrad 缺点是可能会使得学习率过早、过量的降低，导致模型训练后期学习率太小，较难找到最优解。</strong></p>
 <h4 id="代码演示-1"><a href="#代码演示-1" class="headerlink" title="代码演示"></a>代码演示</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test02</span>():</span><br><span class="line">    <span class="comment"># 1 初始化权重参数</span></span><br><span class="line">    w = torch.tensor([<span class="number">1.0</span>], requires_grad=<span class="literal">True</span>, dtype=torch.float32)</span><br><span class="line">    loss = ((w ** <span class="number">2</span>) / <span class="number">2.0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    <span class="comment"># 2 实例化优化方法：adagrad优化方法</span></span><br><span class="line">    optimizer = torch.optim.Adagrad([w], lr=<span class="number">0.01</span>)</span><br><span class="line">    <span class="comment"># 3 第1次更新 计算梯度，并对参数进行更新</span></span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;第1次: 梯度w.grad: %f, 更新后的权重:%f&#x27;</span> % (w.grad.numpy(), w.detach().numpy()))</span><br><span class="line">    <span class="comment"># 4 第2次更新 计算梯度，并对参数进行更新</span></span><br><span class="line">    <span class="comment"># 使用更新后的参数机选输出结果</span></span><br><span class="line">    loss = ((w ** <span class="number">2</span>) / <span class="number">2.0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;第2次: 梯度w.grad: %f, 更新后的权重:%f&#x27;</span> % (w.grad.numpy(), w.detach().numpy()))</span><br></pre></td></tr></table></figure>
+
 <h3 id="RMSProp"><a href="#RMSProp" class="headerlink" title="RMSProp"></a>RMSProp</h3><p><strong>RMSProp 优化算法是对 AdaGrad 的优化</strong>。最主要的不同是，其使用<strong>指数加权平均梯度</strong>替换历史梯度的平方和。</p>
 <h4 id="详细公式-2"><a href="#详细公式-2" class="headerlink" title="详细公式"></a>详细公式</h4><p>计算过程：</p>
 <ol>
-<li>初始化学习率 η、初始化权重参数w、小常数 σ = 1e-10</li>
-<li>初始化梯度累计变量 s = 0</li>
-<li>从训练集中采样 m 个样本的小批量，计算梯度 $g_t$</li>
-<li><p>使用指数加权平均累计历史梯度（对比AdaGrad，仅此步优化）：</p>
-<script type="math/tex; mode=display">s_t = β·s_{t-1} + (1-β)g_t⊙g_t</script></li>
-<li><p>更新后学习率 η 的计算公式如下：</p>
-<script type="math/tex; mode=display">η=\frac{η}{\sqrt{s_t}+σ}</script></li>
+<li><p>初始化学习率 η、初始化权重参数w、小常数 σ &#x3D; 1e-10</p>
+</li>
+<li><p>初始化梯度累计变量 s &#x3D; 0</p>
+</li>
+<li><p>从训练集中采样 m 个样本的小批量，计算梯度 $g_t$</p>
+</li>
+<li><p>使用指数加权平均累计历史梯度（对比AdaGrad，仅此步优化）：<br>$$s_t &#x3D; β·s_{t-1} + (1-β)g_t⊙g_t$$</p>
+</li>
+<li><p>更新后学习率 η 的计算公式如下：<br>$$η&#x3D;\frac{η}{\sqrt{s_t}+σ}$$</p>
+</li>
 <li><p>权重参数更新公式如下：</p>
 </li>
 </ol>
-<script type="math/tex; mode=display">w_t = w_{t-1} - \frac{η}{\sqrt{s_t}+σ} · g_t</script><ol>
+<p>$$w_t &#x3D; w_{t-1} - \frac{η}{\sqrt{s_t}+σ} · g_t$$</p>
+<ol start="7">
 <li>重复 3-7 步骤</li>
 </ol>
 <p>RMSProp 与 AdaGrad 最大的区别是对梯度的累积方式不同，对于每个梯度分量仍然使用不同的学习率。</p>
 <p><strong>RMSProp 通过引入衰减系数β，控制历史梯度对历史梯度信息获取的多少</strong>. 被证明在神经网络非凸条件下的优化更好，学习率衰减更加合理一些。</p>
 <p>需要注意的是：AdaGrad 和 RMSProp 都是对于不同的参数分量使用不同的学习率，如果某个参数分量的梯度值较大，则对应的学习率就会较小，如果某个参数分量的梯度较小，则对应的学习率就会较大一些。</p>
 <h4 id="代码演示-2"><a href="#代码演示-2" class="headerlink" title="代码演示"></a>代码演示</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test03</span>():</span><br><span class="line">    <span class="comment"># 1 初始化权重参数</span></span><br><span class="line">    w = torch.tensor([<span class="number">1.0</span>], requires_grad=<span class="literal">True</span>, dtype=torch.float32)</span><br><span class="line">    loss = ((w ** <span class="number">2</span>) / <span class="number">2.0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    <span class="comment"># 2 实例化优化方法：RMSprop算法，其中alpha对应beta</span></span><br><span class="line">    optimizer = torch.optim.RMSprop([w], lr=<span class="number">0.01</span>, alpha=<span class="number">0.9</span>)</span><br><span class="line">    <span class="comment"># 3 第1次更新 计算梯度，并对参数进行更新</span></span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;第1次: 梯度w.grad: %f, 更新后的权重:%f&#x27;</span> % (w.grad.numpy(), w.detach().numpy()))</span><br><span class="line">    <span class="comment"># 4 第2次更新 计算梯度，并对参数进行更新</span></span><br><span class="line">    <span class="comment"># 使用更新后的参数机选输出结果</span></span><br><span class="line">    loss = ((w ** <span class="number">2</span>) / <span class="number">2.0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;第2次: 梯度w.grad: %f, 更新后的权重:%f&#x27;</span> % (w.grad.numpy(), w.detach().numpy()))</span><br></pre></td></tr></table></figure>
+
 <h3 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h3><h4 id="公式原理"><a href="#公式原理" class="headerlink" title="公式原理"></a>公式原理</h4><ul>
 <li><p>Momentum 使用指数加权平均计算当前的梯度值</p>
 </li>
@@ -387,17 +400,18 @@
 <li><p><strong>原理</strong>：Adam 是结合了 <strong>Momentum</strong> 和 <strong>RMSProp</strong> 优化算法的优点的自适应学习率算法。它计算了梯度的一阶矩（平均值）和二阶矩（梯度的方差）的自适应估计，从而动态调整学习率。</p>
 </li>
 </ul>
-<p>简单来讲，<strong>Adam=Momentum+RMSProp</strong></p>
+<p>简单来讲，<strong>Adam&#x3D;Momentum+RMSProp</strong></p>
 <ul>
-<li><p><strong>梯度计算公式</strong>：</p>
-<script type="math/tex; mode=display">m_t=β_1m_{t−1}+(1−β_1)g_t</script><script type="math/tex; mode=display">s_t=β_2s_{t−1}+(1−β_2)gt^2​</script><script type="math/tex; mode=display">\hat{m_t} = \frac{m_t}{1−β_1^t}</script><script type="math/tex; mode=display">\hat{s_t}​=\frac{s_t}{1−β_2^t}​</script></li>
-<li><p><strong>权重参数更新公式</strong>:</p>
-<script type="math/tex; mode=display">w_t​ = w_{t−1}​ − \frac{η}{\sqrt{\hat{s_t}}+ϵ}\hat{m_t}​</script></li>
+<li><p><strong>梯度计算公式</strong>：<br>$$m_t&#x3D;β_1m_{t−1}+(1−β_1)g_t$$<br>$$s_t&#x3D;β_2s_{t−1}+(1−β_2)gt^2​$$<br>$$\hat{m_t} &#x3D; \frac{m_t}{1−β_1^t}$$<br>$$\hat{s_t}​&#x3D;\frac{s_t}{1−β_2^t}​$$</p>
+</li>
+<li><p><strong>权重参数更新公式</strong>:<br>$$w_t​ &#x3D; w_{t−1}​ − \frac{η}{\sqrt{\hat{s_t}}+ϵ}\hat{m_t}​$$</p>
+</li>
 </ul>
 <p>其中，$m_t$ 是梯度的一阶矩估计，$s_t$ 是梯度的二阶矩估计，$ \hat{m_t}$和 $ \hat{s_t} $ 是偏差校正后的估计。</p>
 <h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test04</span>():</span><br><span class="line">    <span class="comment"># 1 初始化权重参数</span></span><br><span class="line">    w = torch.tensor([<span class="number">1.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">    loss = ((w ** <span class="number">2</span>) / <span class="number">2.0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    <span class="comment"># 2 实例化优化方法：Adam算法，其中betas是指数加权的系数</span></span><br><span class="line">    optimizer = torch.optim.Adam([w], lr=<span class="number">0.01</span>, betas=[<span class="number">0.9</span>, <span class="number">0.99</span>])</span><br><span class="line">    <span class="comment"># 3 第1次更新 计算梯度，并对参数进行更新</span></span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;第1次: 梯度w.grad: %f, 更新后的权重:%f&#x27;</span> % (w.grad.numpy(), w.detach().numpy()))</span><br><span class="line">    <span class="comment"># 4 第2次更新 计算梯度，并对参数进行更新</span></span><br><span class="line">    <span class="comment"># 使用更新后的参数机选输出结果</span></span><br><span class="line">    loss = ((w ** <span class="number">2</span>) / <span class="number">2.0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;第2次: 梯度w.grad: %f, 更新后的权重:%f&#x27;</span> % (w.grad.numpy(), w.detach().numpy()))</span><br></pre></td></tr></table></figure>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><div class="table-container">
-<table>
+
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><table>
 <thead>
 <tr>
 <th><strong>优化算法</strong></th>
@@ -406,8 +420,7 @@
 <th><strong>适用场景</strong></th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><strong>SGD</strong></td>
 <td>简单、容易实现。</td>
 <td>收敛速度较慢，容易震荡，特别是在复杂问题中。</td>
@@ -437,9 +450,7 @@
 <td>需要调节更多的超参数，训练过程中可能会产生较大波动。</td>
 <td>广泛适用于各种深度学习任务，特别是非平稳和复杂问题。</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li><p><strong>简单任务和较小的模型</strong>：SGD 或 Momentum</p>
 </li>
@@ -448,15 +459,20 @@
 <li><p><strong>需要处理稀疏数据或文本数据</strong>：Adagrad 或 RMSProp</p>
 </li>
 </ul>
-<h2 id="学习率衰减方法"><a href="#学习率衰减方法" class="headerlink" title="学习率衰减方法"></a>学习率衰减方法</h2><p>在前面梯度下降的优化方法中，某些方法或多或少已经涉及到了学习率的优化。<br>一般来说，在训练的初始阶段，学习率要比较大些，在训练后期，学习率应该减少，下面介绍一些学习率衰减方法。<br>这里的学习衰减方法，都需要设定一个衰减系数gamma，<br>学习率更新：<script type="math/tex">lr=lr·gamma</script><br>所以，广义来说，学习率都是指数衰减的。</p>
-<h3 id="等间隔学习率衰减"><a href="#等间隔学习率衰减" class="headerlink" title="等间隔学习率衰减"></a>等间隔学习率衰减</h3><p>如下图所示，我们可以手动干预学习率，一般训练初期学习率大，后期学习率小，前面的算法中也提到过.<br><img src="../images/learning_rate_decay.jpg" alt="学习率衰减示意图"><br>等间距衰减最为简单，只需要设定间隔以及下降比例就行。  </p>
-<p>api：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2.优化器</span></span><br><span class="line">optimizer = optim.SGD([w], lr=LR, momentum=<span class="number">0.9</span>)</span><br><span class="line"><span class="comment"># 3.设置学习率下降策略</span></span><br><span class="line">scheduler_lr = optim.lr_scheduler.StepLR(optimizer, step_size=<span class="number">50</span>, gamma=<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure><br>既然做完优化方法的一种，一般跟着优化器后面.</p>
+<h2 id="学习率衰减方法"><a href="#学习率衰减方法" class="headerlink" title="学习率衰减方法"></a>学习率衰减方法</h2><p>在前面梯度下降的优化方法中，某些方法或多或少已经涉及到了学习率的优化。<br>一般来说，在训练的初始阶段，学习率要比较大些，在训练后期，学习率应该减少，下面介绍一些学习率衰减方法。<br>这里的学习衰减方法，都需要设定一个衰减系数gamma，<br>学习率更新：$$ lr&#x3D;lr·gamma$$<br>所以，广义来说，学习率都是指数衰减的。</p>
+<h3 id="等间隔学习率衰减"><a href="#等间隔学习率衰减" class="headerlink" title="等间隔学习率衰减"></a>等间隔学习率衰减</h3><p>如下图所示，我们可以手动干预学习率，一般训练初期学习率大，后期学习率小，前面的算法中也提到过.<br><img src="/../images/learning_rate_decay.jpg" alt="学习率衰减示意图"><br>等间距衰减最为简单，只需要设定间隔以及下降比例就行。  </p>
+<p>api：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2.优化器</span></span><br><span class="line">optimizer = optim.SGD([w], lr=LR, momentum=<span class="number">0.9</span>)</span><br><span class="line"><span class="comment"># 3.设置学习率下降策略</span></span><br><span class="line">scheduler_lr = optim.lr_scheduler.StepLR(optimizer, step_size=<span class="number">50</span>, gamma=<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<p>既然做完优化方法的一种，一般跟着优化器后面.</p>
 <h3 id="指定间隔学习率衰减"><a href="#指定间隔学习率衰减" class="headerlink" title="指定间隔学习率衰减"></a>指定间隔学习率衰减</h3><p>原理同上，不过这里需要指定在哪几轮训练时衰减  </p>
-<p>api:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># milestones：设定调整轮次:[50, 125, 160]</span></span><br><span class="line">optim.lr_scheduler.MultiStepLR(optimizer, milestones, gamma=<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure></p>
-<h3 id="指数衰减"><a href="#指数衰减" class="headerlink" title="指数衰减"></a>指数衰减</h3><p>在神经网络训练过程中，我们一般很少关注学习率具体在哪几轮需要变化，所以指数衰减成为了适配性最广的衰减方法，但是由于涉及指数运算，计算过程可能稍复杂，计算开销稍大。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># gamma：指数的底</span></span><br><span class="line"><span class="comment"># 调整方式</span></span><br><span class="line"><span class="comment"># lr= lr∗ gamma^epoch</span></span><br><span class="line">optim.lr_scheduler.ExponentialLR(optimizer, gamma)</span><br></pre></td></tr></table></figure></p>
-<h3 id="代码演示-3"><a href="#代码演示-3" class="headerlink" title="代码演示"></a>代码演示</h3><p>下面以指数衰减为例演示训练具体流程，其他方法同理，仅需改变函数名，注意各个方法需要输入的参数即可.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="comment"># 1.参数初始化</span></span><br><span class="line">    LR = <span class="number">0.1</span>  <span class="comment"># 设置学习率初始化值为0.1</span></span><br><span class="line">    iteration = <span class="number">10</span></span><br><span class="line">    max_epoch = <span class="number">200</span></span><br><span class="line">    y_true = torch.tensor([<span class="number">0</span>])</span><br><span class="line">    x = torch.tensor([<span class="number">1.0</span>])</span><br><span class="line">    w = torch.tensor([<span class="number">1.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># 2.优化器</span></span><br><span class="line">    optimizer = optim.SGD([w], lr=LR, momentum=<span class="number">0.9</span>)</span><br><span class="line">    <span class="comment"># 3.设置学习率下降策略</span></span><br><span class="line">    gamma = <span class="number">0.95</span></span><br><span class="line">    scheduler_lr = optim.lr_scheduler.ExponentialLR(optimizer, gamma=gamma)</span><br><span class="line">    <span class="comment"># 4.获取学习率的值和当前的epoch</span></span><br><span class="line">    lr_list, epoch_list = <span class="built_in">list</span>(), <span class="built_in">list</span>()</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(max_epoch):</span><br><span class="line">        lr_list.append(scheduler_lr.get_last_lr())</span><br><span class="line">        epoch_list.append(epoch)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(iteration):  <span class="comment"># 遍历每一个batch数据</span></span><br><span class="line">            loss = ((w*x-y_true)**<span class="number">2</span>)/<span class="number">2.0</span></span><br><span class="line">            optimizer.zero_grad()</span><br><span class="line">            <span class="comment"># 反向传播</span></span><br><span class="line">            loss.backward()</span><br><span class="line">            optimizer.step()</span><br><span class="line">        <span class="comment"># 更新下一个epoch的学习率</span></span><br><span class="line">        scheduler_lr.step()</span><br><span class="line">    <span class="comment"># 5.绘制学习率变化的曲线</span></span><br><span class="line">    plt.plot(epoch_list, lr_list, label=<span class="string">&quot;Multi Step LR Scheduler&quot;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&quot;Epoch&quot;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&quot;Learning rate&quot;</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure></p>
-<h1 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h1><div class="table-container">
-<table>
+<p>api:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># milestones：设定调整轮次:[50, 125, 160]</span></span><br><span class="line">optim.lr_scheduler.MultiStepLR(optimizer, milestones, gamma=<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="指数衰减"><a href="#指数衰减" class="headerlink" title="指数衰减"></a>指数衰减</h3><p>在神经网络训练过程中，我们一般很少关注学习率具体在哪几轮需要变化，所以指数衰减成为了适配性最广的衰减方法，但是由于涉及指数运算，计算过程可能稍复杂，计算开销稍大。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># gamma：指数的底</span></span><br><span class="line"><span class="comment"># 调整方式</span></span><br><span class="line"><span class="comment"># lr= lr∗ gamma^epoch</span></span><br><span class="line">optim.lr_scheduler.ExponentialLR(optimizer, gamma)</span><br></pre></td></tr></table></figure>
+<h3 id="代码演示-3"><a href="#代码演示-3" class="headerlink" title="代码演示"></a>代码演示</h3><p>下面以指数衰减为例演示训练具体流程，其他方法同理，仅需改变函数名，注意各个方法需要输入的参数即可.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="comment"># 1.参数初始化</span></span><br><span class="line">    LR = <span class="number">0.1</span>  <span class="comment"># 设置学习率初始化值为0.1</span></span><br><span class="line">    iteration = <span class="number">10</span></span><br><span class="line">    max_epoch = <span class="number">200</span></span><br><span class="line">    y_true = torch.tensor([<span class="number">0</span>])</span><br><span class="line">    x = torch.tensor([<span class="number">1.0</span>])</span><br><span class="line">    w = torch.tensor([<span class="number">1.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># 2.优化器</span></span><br><span class="line">    optimizer = optim.SGD([w], lr=LR, momentum=<span class="number">0.9</span>)</span><br><span class="line">    <span class="comment"># 3.设置学习率下降策略</span></span><br><span class="line">    gamma = <span class="number">0.95</span></span><br><span class="line">    scheduler_lr = optim.lr_scheduler.ExponentialLR(optimizer, gamma=gamma)</span><br><span class="line">    <span class="comment"># 4.获取学习率的值和当前的epoch</span></span><br><span class="line">    lr_list, epoch_list = <span class="built_in">list</span>(), <span class="built_in">list</span>()</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(max_epoch):</span><br><span class="line">        lr_list.append(scheduler_lr.get_last_lr())</span><br><span class="line">        epoch_list.append(epoch)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(iteration):  <span class="comment"># 遍历每一个batch数据</span></span><br><span class="line">            loss = ((w*x-y_true)**<span class="number">2</span>)/<span class="number">2.0</span></span><br><span class="line">            optimizer.zero_grad()</span><br><span class="line">            <span class="comment"># 反向传播</span></span><br><span class="line">            loss.backward()</span><br><span class="line">            optimizer.step()</span><br><span class="line">        <span class="comment"># 更新下一个epoch的学习率</span></span><br><span class="line">        scheduler_lr.step()</span><br><span class="line">    <span class="comment"># 5.绘制学习率变化的曲线</span></span><br><span class="line">    plt.plot(epoch_list, lr_list, label=<span class="string">&quot;Multi Step LR Scheduler&quot;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&quot;Epoch&quot;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&quot;Learning rate&quot;</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+
+<h1 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h1><table>
 <thead>
 <tr>
 <th>方法</th>
@@ -465,8 +481,7 @@
 <th>指数学习率衰减 (Exponential Moving Average Decay)</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><strong>衰减方式</strong></td>
 <td>固定步长衰减</td>
 <td>指定步长衰减</td>
@@ -496,9 +511,7 @@
 <td>在某些情况下可能衰减过快，导致优化提前停滞</td>
 <td>超参数调节较为复杂，可能需要更多的计算资源</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 
     </div>
 
@@ -508,10 +521,10 @@
 
     <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
               <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"># 神经网络</a>
               <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
               <a href="/tags/%E5%BC%A0%E9%87%8F/" rel="tag"># 张量</a>
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
           </div>
 
         

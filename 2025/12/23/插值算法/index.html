@@ -186,7 +186,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -197,7 +197,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -287,11 +287,12 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>就讲讲最简单的应用，不涉及过多证明<br><span id="more"></span></p>
+    <div class="post-body" itemprop="articleBody"><p>就讲讲最简单的应用，不涉及过多证明</p>
+<span id="more"></span>
 <h1 id="算法引入"><a href="#算法引入" class="headerlink" title="算法引入"></a>算法引入</h1><p>插值算法，简单来讲，就是通过已经有的离散的样本点来得到该样本点符合的函数式。<br>数模中有时用于数据点较少的情况，通过插值来获得更多估算的样本点或者得出样本点之间关系等</p>
 <ul>
-<li>内插：估算 x 在已知区间 $[x_0,x_n]$ 内的值</li>
-<li>外插：估算 x 超出已知区间的值（容易失真）  </li>
+<li>内插：估算 x 在已知区间 $[x_0,x_n]$ 内的值</li>
+<li>外插：估算 x 超出已知区间的值（容易失真）</li>
 </ul>
 <p>一般多使用内插。</p>
 <h1 id="各类插值算法"><a href="#各类插值算法" class="headerlink" title="各类插值算法"></a>各类插值算法</h1><h2 id="线性插值"><a href="#线性插值" class="headerlink" title="线性插值"></a>线性插值</h2><p>直接将各个样本点用线段相连。<br>最简单的插值方法，当然有很多缺点，插值误差大等。</p>
@@ -299,7 +300,7 @@
 <h2 id="牛顿插值法"><a href="#牛顿插值法" class="headerlink" title="牛顿插值法"></a>牛顿插值法</h2><p>从两个点开始，得到第一次插值多项式，然后增加一个点，结合上一次结果得到第二次插值多项式（根据插值函数各样本点函数值已知得到）。以此迭代得到最终结果。</p>
 <h2 id="三次埃尔米特插值多项式"><a href="#三次埃尔米特插值多项式" class="headerlink" title="三次埃尔米特插值多项式"></a>三次埃尔米特插值多项式</h2><h3 id="龙格现象"><a href="#龙格现象" class="headerlink" title="龙格现象"></a>龙格现象</h3><p>前面的多项式插值和牛顿插值不可避免的涉及到多项式，而高阶多项式在数据较大时是发散的，尤其在外插时，等距节点下高次多项式插值，在区间边界剧烈振荡, 误差较大。</p>
 <h3 id="埃尔米特插值"><a href="#埃尔米特插值" class="headerlink" title="埃尔米特插值"></a>埃尔米特插值</h3><p>埃尔米特插值对每两个数据点之间都采用不同的多项式进行插值，有效避免了仅使用一个合成的多项式插值产生的龙格现象（当然在外插时也会有误差）。<br>次数较小时，会退化为多项式或者线段插值，次数较大时，计算复杂其可能产生过拟合，综合考虑，一般采用三次多项式进行两个数据点之间的插值，即三次埃尔米插值。</p>
-<h2 id="三次样条插值"><a href="#三次样条插值" class="headerlink" title="三次样条插值"></a>三次样条插值</h2><h3 id="更平滑"><a href="#更平滑" class="headerlink" title="更平滑"></a>更平滑</h3><p>前面的各种插值方法，都只考虑了函数在样本点处的值，没有考虑样本点实际表现出来的变化趋势等。<br>要更充分的挖掘样本点内信息，加上变化趋势的考虑等，可以加上导数。<br>即样本点得出的插值函数，需要存在导数，m次样条插值意味着样本点存在m-1阶连续导数。限制了可导的因素，插值函数相较于前面的方法更加平滑。<br>更高阶的导数要求，对样本点和计算的规范也越多。综合考虑，一般取m=3，即三次样条插值</p>
+<h2 id="三次样条插值"><a href="#三次样条插值" class="headerlink" title="三次样条插值"></a>三次样条插值</h2><h3 id="更平滑"><a href="#更平滑" class="headerlink" title="更平滑"></a>更平滑</h3><p>前面的各种插值方法，都只考虑了函数在样本点处的值，没有考虑样本点实际表现出来的变化趋势等。<br>要更充分的挖掘样本点内信息，加上变化趋势的考虑等，可以加上导数。<br>即样本点得出的插值函数，需要存在导数，m次样条插值意味着样本点存在m-1阶连续导数。限制了可导的因素，插值函数相较于前面的方法更加平滑。<br>更高阶的导数要求，对样本点和计算的规范也越多。综合考虑，一般取m&#x3D;3，即三次样条插值</p>
 <h1 id="代码演示1"><a href="#代码演示1" class="headerlink" title="代码演示1"></a>代码演示1</h1><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">1</span>:<span class="number">10</span>;</span><br><span class="line">y=<span class="built_in">log</span>(x);</span><br><span class="line"><span class="built_in">plot</span>(x,y,<span class="string">&#x27;o&#x27;</span>)</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line">nx=<span class="number">0.01</span>:<span class="number">0.1</span>:<span class="number">10</span>;</span><br><span class="line">p=pchip(x,y,nx);</span><br><span class="line"><span class="built_in">plot</span>(nx,p)</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line">p=spline(x,y,nx);</span><br><span class="line"><span class="built_in">plot</span>(nx,p,<span class="string">&#x27;b-&#x27;</span>)</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">&#x27;样本点&#x27;</span>,<span class="string">&#x27;三次埃尔米插值&#x27;</span>,<span class="string">&#x27;三次样条插值&#x27;</span>,<span class="string">&#x27;Location&#x27;</span>,<span class="string">&#x27;SouthEast&#x27;</span>);</span><br></pre></td></tr></table></figure>
 <h1 id="更高维度"><a href="#更高维度" class="headerlink" title="更高维度"></a>更高维度</h1><h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><p>当然，样本点不一定只有x，y，可能涉及更高维度，不够原理和二维的近似。<br>使用函数 <code>interp2</code> 表示样本点为二维的，<code>interpn</code> 表示样本点为n维的。</p>
 <h2 id="代码演示2"><a href="#代码演示2" class="headerlink" title="代码演示2"></a>代码演示2</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">-1</span>:<span class="number">0.5</span>:<span class="number">1</span>;</span><br><span class="line">y=x;</span><br><span class="line">[x,y]=<span class="built_in">meshgrid</span>(x,y);</span><br><span class="line">z=<span class="number">1</span>-x.^<span class="number">2</span>-y.^<span class="number">2</span>;</span><br><span class="line">nx=<span class="number">-1</span>:<span class="number">0.1</span>:<span class="number">1</span>;</span><br><span class="line">ny=nx;</span><br><span class="line">[nx,ny]=<span class="built_in">meshgrid</span>(nx,ny);</span><br><span class="line">p=interp2(x,y,z,nx,ny,<span class="string">&#x27;spline&#x27;</span>);</span><br><span class="line">mesh(nx,ny,p)</span><br></pre></td></tr></table></figure>

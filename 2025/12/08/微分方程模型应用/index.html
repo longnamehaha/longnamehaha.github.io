@@ -186,7 +186,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -197,7 +197,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -293,13 +293,16 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>一些简单的微分方程机理模型 ( ´•̥×•̥` )<br><span id="more"></span><br>    前置知识：微分方程</p>
+    <div class="post-body" itemprop="articleBody"><p>一些简单的微分方程机理模型 ( ´•̥×•̥&#96; )</p>
+<span id="more"></span> 
+<pre><code>前置知识：微分方程
+</code></pre>
 <h1 id="求解微分方程"><a href="#求解微分方程" class="headerlink" title="求解微分方程"></a>求解微分方程</h1><p>这里主要使用python求解  </p>
 <h2 id="1-odeint函数"><a href="#1-odeint函数" class="headerlink" title="1.odeint函数"></a>1.odeint函数</h2><p>odeint函数是scipy中的一个简单函数，用于快速求解简单微分方程<br>函数接口：</p>
 <ul>
 <li>func：微分方程函数或方程组，它必须是一个函数，该函数有至少两个入参，第一个参数为一个数组，表示当前因变量值。第二个参数是一个标量，表示当前自变量值（通常是时间）</li>
 <li>y0：一个数组，表示初始条件</li>
-<li>t：一个数组，表示积分的时间点，第一个元素为积分起点  </li>
+<li>t：一个数组，表示积分的时间点，第一个元素为积分起点</li>
 </ul>
 <h2 id="2-solve-ivp函数"><a href="#2-solve-ivp函数" class="headerlink" title="2.solve_ivp函数"></a>2.solve_ivp函数</h2><p>这是一个更强大的ODE<br>函数接口：</p>
 <ul>
@@ -311,90 +314,63 @@
 <h1 id="马尔萨斯人口模型"><a href="#马尔萨斯人口模型" class="headerlink" title="马尔萨斯人口模型"></a>马尔萨斯人口模型</h1><h2 id="原始模型假设："><a href="#原始模型假设：" class="headerlink" title="原始模型假设："></a>原始模型假设：</h2><ul>
 <li>人口数设为 $x(t)$ 对时间连续可微</li>
 <li>人口变化仅由于出生和死亡，每个个体生育能力相等</li>
-<li>人口增长率r为<strong>常数</strong>（r=出生率-死亡率）  </li>
+<li>人口增长率r为<strong>常数</strong>（r&#x3D;出生率-死亡率）</li>
 </ul>
-<p>可得：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\frac{dx}{dt}=rx  \\
-x(0)=x_0 
-\end{cases}</script><p>解得</p>
-<script type="math/tex; mode=display">x(t)=x_0e^{rt}</script><h2 id="求解过程："><a href="#求解过程：" class="headerlink" title="求解过程："></a>求解过程：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.integrate <span class="keyword">import</span> odeint</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">model</span>(<span class="params">x,t,r</span>):</span><br><span class="line">    dxdt=r*x</span><br><span class="line">    <span class="keyword">return</span> dxdt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    x0=<span class="number">100</span></span><br><span class="line">    t=np.linspace(<span class="number">0</span>,<span class="number">1000</span>,<span class="number">1000</span>)</span><br><span class="line">    r=<span class="number">0.001</span></span><br><span class="line">    X=odeint(model,x0,t,args=(r,))</span><br><span class="line">    plt.plot(t,X)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<p>可得：<br>$$<br>\begin{cases}<br>\frac{dx}{dt}&#x3D;rx  \<br>x(0)&#x3D;x_0<br>\end{cases}<br>$$<br>解得<br>$$ x(t)&#x3D;x_0e^{rt} $$</p>
+<h2 id="求解过程："><a href="#求解过程：" class="headerlink" title="求解过程："></a>求解过程：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.integrate <span class="keyword">import</span> odeint</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">model</span>(<span class="params">x,t,r</span>):</span><br><span class="line">    dxdt=r*x</span><br><span class="line">    <span class="keyword">return</span> dxdt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    x0=<span class="number">100</span></span><br><span class="line">    t=np.linspace(<span class="number">0</span>,<span class="number">1000</span>,<span class="number">1000</span>)</span><br><span class="line">    r=<span class="number">0.001</span></span><br><span class="line">    X=odeint(model,x0,t,args=(r,))</span><br><span class="line">    plt.plot(t,X)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
 <h2 id="模型评价"><a href="#模型评价" class="headerlink" title="模型评价"></a>模型评价</h2><p>从求解结果可以看出来，这是指数增长。自然界很多像这样的例子，比如最后一天长满一半水池的荷花，生长的竹子等。18-20世纪的数据确实也符合这个规律，这就是最理想情况下生物的生长，高中生物学中称之为“J型曲线”<br>但是，20世纪以后的人口数据就和该预测结果相差愈来愈大。由指数增长特点，地球人口会爆炸的增长，这不符合常理，因为地球的资源是有限的，由高中生物学，环境有最大环境容纳量，因此需要对模型进行修正。  </p>
 <h1 id="阻滞增长模型"><a href="#阻滞增长模型" class="headerlink" title="阻滞增长模型"></a>阻滞增长模型</h1><h2 id="模型优化"><a href="#模型优化" class="headerlink" title="模型优化"></a>模型优化</h2><p>需要对人口增长速度进行限制，由此我们可以得到一些很自然的假设：</p>
 <ol>
 <li>人口增长率不是一个常数，而是一个随 x 变化的减函数 $r(x)$ </li>
-<li>$r(x)=r-sx$ (优先采用线性假设) </li>
-<li>环境存在最大容量 $x_m$ ,即当 $x=x_m$ 时，x增长率为0<br>由2，3可得<script type="math/tex; mode=display">r(x)=r(1-\frac{x}{x_m})</script>则前面微分方程可优化为：<script type="math/tex; mode=display">
-\begin{cases}
-\frac{dx}{dt}=r(1-\frac{x}{x_m})x  \\
-x(0)=x_0 
-\end{cases}</script>可以解得：<script type="math/tex; mode=display">x(t)=\frac{x_m}{1+(\frac{x_m}{x_0}-1)e^{-r(t-t_0)}}</script><h2 id="模型解释"><a href="#模型解释" class="headerlink" title="模型解释"></a>模型解释</h2>对上面的结果求二阶导，由凹凸函数的知识可以知道：  </li>
+<li>$r(x)&#x3D;r-sx$ (优先采用线性假设) </li>
+<li>环境存在最大容量 $x_m$ ,即当 $x&#x3D;x_m$ 时，x增长率为0<br>由2，3可得<br>$$  r(x)&#x3D;r(1-\frac{x}{x_m})<br>$$<br>则前面微分方程可优化为：<br>$$<br>\begin{cases}<br>\frac{dx}{dt}&#x3D;r(1-\frac{x}{x_m})x  \<br>x(0)&#x3D;x_0<br>\end{cases}<br>$$<br>可以解得：<br>$$ x(t)&#x3D;\frac{x_m}{1+(\frac{x_m}{x_0}-1)e^{-r(t-t_0)}}<br>$$</li>
 </ol>
+<h2 id="模型解释"><a href="#模型解释" class="headerlink" title="模型解释"></a>模型解释</h2><p>对上面的结果求二阶导，由凹凸函数的知识可以知道：  </p>
 <ul>
 <li>首先当 $0&lt;x&lt;x_m$ 时，函数单调递增。</li>
 <li>当 $0&lt;x&lt; \frac{x_m}{2}$ 时，为凹函数</li>
-<li>当 $\frac{x_m}{2}&lt;x&lt;x_m$ 时，为凸函数  </li>
+<li>当 $\frac{x_m}{2}&lt;x&lt;x_m$ 时，为凸函数</li>
 </ul>
-<p>即在 $x= \frac{x_m}{2}$ 时，函数增长最快。<br>从高中生物学也可以知道，这就是“S型增长”，即有环境容纳量上限的增长。  </p>
-<h2 id="部分核心代码"><a href="#部分核心代码" class="headerlink" title="部分核心代码"></a>部分核心代码</h2><p>结合前面的原始代码，下面几个地方进行修正即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">model</span>(<span class="params">x,t,r,K</span>):</span><br><span class="line">    dxdt=x*r*(<span class="number">1</span>-x/K)</span><br><span class="line">    <span class="keyword">return</span> dxdt</span><br><span class="line"></span><br><span class="line">X=odeint(model,x0,t,args=(r,K))</span><br></pre></td></tr></table></figure></p>
+<p>即在 $x&#x3D; \frac{x_m}{2}$ 时，函数增长最快。<br>从高中生物学也可以知道，这就是“S型增长”，即有环境容纳量上限的增长。  </p>
+<h2 id="部分核心代码"><a href="#部分核心代码" class="headerlink" title="部分核心代码"></a>部分核心代码</h2><p>结合前面的原始代码，下面几个地方进行修正即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">model</span>(<span class="params">x,t,r,K</span>):</span><br><span class="line">    dxdt=x*r*(<span class="number">1</span>-x/K)</span><br><span class="line">    <span class="keyword">return</span> dxdt</span><br><span class="line"></span><br><span class="line">X=odeint(model,x0,t,args=(r,K))</span><br></pre></td></tr></table></figure>
 <h1 id="沃尔泰拉模型"><a href="#沃尔泰拉模型" class="headerlink" title="沃尔泰拉模型"></a>沃尔泰拉模型</h1><h2 id="模型引入"><a href="#模型引入" class="headerlink" title="模型引入"></a>模型引入</h2><p>沃尔泰拉模型（Volterra模型），即<strong>捕食者-猎物模型</strong>，是数学家沃尔泰拉在研究一战时期地中海鲨鱼比例异常变化是提出的模型。于此相关的就是经典的地中海鲨鱼问题：<br>意大利生物学家Ancona曾致力于鱼类种群相互制约关系的研究，他从第一次世界大战期间，地中海各港口捕获的几种鱼类捕获量百分比的资料中，发现鲨鱼等的比例有明显增加，而供其捕食的食用鱼的百分比却明显下降。显然战争使捕鱼量下降，食用鱼增加，鲨鱼等也随之增加，但为何鲨鱼的比例大幅增加呢？<br>他无法解释这个现象，于是求助于著名的意大利数学家V.Volterra，希望建立一个<strong>食饵—捕食</strong>系统的数学模型，定量地回答这个问题。</p>
 <h2 id="模型构建"><a href="#模型构建" class="headerlink" title="模型构建"></a>模型构建</h2><p>设t时刻猎物数量为 $x_1(t)$ ,捕食者数量为 $x_2(t)$  </p>
-<p>借用前面的模型，仅考虑被捕食者自由生长，有：</p>
-<script type="math/tex; mode=display">\frac{dx_1}{dt}=r_1x_1</script><p>由于捕食者出现，食饵数量下降，且捕食者数量越多，消耗食饵数量越大，设：</p>
-<script type="math/tex; mode=display">\frac{dx_1}{dt}=x_1(r_1- \lambda_ 1 x_2)</script><p>其中 $\lambda_ 1&gt;0$ 表示捕食者捕食食饵的能力。  </p>
-<p>对捕食者来说，若仅有捕食者存在，没有食饵，捕食者数量会不断减少至0，即：</p>
-<script type="math/tex; mode=display">\frac{dx_2}{dt}=-r_2x_2</script><p>由于食饵出现，对捕食者有供养作用，且食饵数量越多，对捕食者的供养能力越大，设：</p>
-<script type="math/tex; mode=display">\frac{dx_2}{dt}=x_2(-r_2+ \lambda_ 2 x_1)</script><p>其中 $\lambda_ 2&gt;0$ 表示食饵对捕食者的供养能力。  </p>
+<p>借用前面的模型，仅考虑被捕食者自由生长，有：<br>$$ \frac{dx_1}{dt}&#x3D;r_1x_1<br>$$<br>由于捕食者出现，食饵数量下降，且捕食者数量越多，消耗食饵数量越大，设：<br>$$ \frac{dx_1}{dt}&#x3D;x_1(r_1- \lambda_ 1 x_2)<br>$$<br>其中 $\lambda_ 1&gt;0$ 表示捕食者捕食食饵的能力。  </p>
+<p>对捕食者来说，若仅有捕食者存在，没有食饵，捕食者数量会不断减少至0，即：<br>$$ \frac{dx_2}{dt}&#x3D;-r_2x_2<br>$$<br>由于食饵出现，对捕食者有供养作用，且食饵数量越多，对捕食者的供养能力越大，设：<br>$$ \frac{dx_2}{dt}&#x3D;x_2(-r_2+ \lambda_ 2 x_1)<br>$$<br>其中 $\lambda_ 2&gt;0$ 表示食饵对捕食者的供养能力。  </p>
 <p>由上面就可以得到最简单的方程组。回到问题，我们考虑的是一战期间鲨鱼（捕食者）比例异常升高。一战期间，人类捕杀作用减少，因此该期间二者比例会改变，所以我们需要在前面的方程加上人类因素：  </p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\frac{dx_1}{dt}=x_1((r_1-e)- \lambda_ 1 x_2)  \\
-\frac{dx_2}{dt}=x_2(-(r_2+e)+ \lambda_ 2 x_1)
-\end{cases}</script><p>式中，e表示人类捕杀的影响。在人类影响下，食饵自然增长率降低e，捕食者死亡率增加e（这里也可以给二者赋权，表示人类捕杀的偏好）<br>用代码绘图可以清楚说明当e下降，$x_2$比例上升。<br>绘制 $x_1$ 与 $x_2$ 图像，发现是一个圈，也符合高中生物的捕食者——猎物模型。</p>
+<p>$$<br>\begin{cases}<br>\frac{dx_1}{dt}&#x3D;x_1((r_1-e)- \lambda_ 1 x_2)  \<br>\frac{dx_2}{dt}&#x3D;x_2(-(r_2+e)+ \lambda_ 2 x_1)<br>\end{cases}<br>$$<br>式中，e表示人类捕杀的影响。在人类影响下，食饵自然增长率降低e，捕食者死亡率增加e（这里也可以给二者赋权，表示人类捕杀的偏好）<br>用代码绘图可以清楚说明当e下降，$x_2$比例上升。<br>绘制 $x_1$ 与 $x_2$ 图像，发现是一个圈，也符合高中生物的捕食者——猎物模型。</p>
 <h2 id="求解代码"><a href="#求解代码" class="headerlink" title="求解代码"></a>求解代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.integrate <span class="keyword">import</span> odeint</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">model</span>(<span class="params">P,t,r1,r2,la1,la2,e</span>):</span><br><span class="line">    x1,x2=P</span><br><span class="line">    dx1dt=x1*((r1-e)-la1*x2)</span><br><span class="line">    dx2dt=x2*(-(r2+e)+la2*x1)</span><br><span class="line">    <span class="keyword">return</span> [dx1dt,dx2dt]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    x1=<span class="number">100</span></span><br><span class="line">    x2=<span class="number">20</span></span><br><span class="line">    P=[x1,x2]</span><br><span class="line">    t=np.linspace(<span class="number">0</span>,<span class="number">100</span>,<span class="number">1000</span>)</span><br><span class="line">    r1=<span class="number">1.0</span></span><br><span class="line">    r2=<span class="number">1.0</span></span><br><span class="line">    la1=<span class="number">0.1</span></span><br><span class="line">    la2=<span class="number">0.1</span></span><br><span class="line">    e=<span class="number">0.05</span></span><br><span class="line">    X=odeint(model,P,t,args=(r1,r2,la1,la2,e))</span><br><span class="line">    X1=X[:,<span class="number">0</span>]</span><br><span class="line">    X2=X[:,<span class="number">1</span>]</span><br><span class="line">    plt.plot(X1,X2)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
-<h1 id="种间竞争模型"><a href="#种间竞争模型" class="headerlink" title="种间竞争模型"></a>种间竞争模型</h1><p>考虑在有限资源中，单个物种有：  </p>
-<script type="math/tex; mode=display">\frac{dx_1}{dt}=r_1x_1(1-\frac{x_1}{N_1})</script><p>N表示环境最大容量。<br>加上种群2的影响，有：</p>
-<script type="math/tex; mode=display">\frac{dx_1}{dt}=r_1x_1(1-\frac{x_1}{N_1}-\sigma_ 1\frac{x_2}{N_2})</script><p>种群2数量越多，即 $\frac{x<em>2}{N_2}$ 越大，种群1增长数量越慢。<br>式中加入影响因子 $\sigma</em> 1$ 表示单位数量的2种群消耗1种群的食物的速度的单位数量1种群的倍数。<br>比如，$\sigma_ 1&lt;1$ 表示在供养1种群的食物的竞争中，种群2弱于1。<br>同理可得：</p>
-<script type="math/tex; mode=display">\frac{dx_2}{dt}=r_2x_2(1-\frac{x_2}{N_2}-\sigma_ 2\frac{x_1}{N_1})</script><p>若种群1和种群2选择食物的偏好完全相同，则上面的 $\sigma<em> 1$ 和 $\sigma</em> 2$ 有： $\sigma<em> 1 \sigma</em> 2=1$<br>通常情况下，$\sigma<em> 1 \sigma</em> 2 \neq 1$ 需要通过实际情况确定。<br>其中求解方程即绘图过程于上面类似，不在赘述。  </p>
-<h1 id="传染病模型（SIR-SIS）"><a href="#传染病模型（SIR-SIS）" class="headerlink" title="传染病模型（SIR/SIS）"></a>传染病模型（SIR/SIS）</h1><p>传染病模型通过微分方程刻画人群中“易感-感染-康复”的动态传播过程，核心是量化不同人群的数量变化关系。</p>
+<h1 id="种间竞争模型"><a href="#种间竞争模型" class="headerlink" title="种间竞争模型"></a>种间竞争模型</h1><p>考虑在有限资源中，单个物种有：<br>$$ \frac{dx_1}{dt}&#x3D;r_1x_1(1-\frac{x_1}{N_1})<br>$$<br>N表示环境最大容量。<br>加上种群2的影响，有：<br>$$ \frac{dx_1}{dt}&#x3D;r_1x_1(1-\frac{x_1}{N_1}-\sigma_ 1\frac{x_2}{N_2})<br>$$<br>种群2数量越多，即 $\frac{x_2}{N_2}$ 越大，种群1增长数量越慢。<br>式中加入影响因子 $\sigma_ 1$ 表示单位数量的2种群消耗1种群的食物的速度的单位数量1种群的倍数。<br>比如，$\sigma_ 1&lt;1$ 表示在供养1种群的食物的竞争中，种群2弱于1。<br>同理可得：<br>$$ \frac{dx_2}{dt}&#x3D;r_2x_2(1-\frac{x_2}{N_2}-\sigma_ 2\frac{x_1}{N_1})<br>$$<br>若种群1和种群2选择食物的偏好完全相同，则上面的 $\sigma_ 1$ 和 $\sigma_ 2$ 有： $\sigma_ 1 \sigma_ 2&#x3D;1$<br>通常情况下，$\sigma_ 1 \sigma_ 2 \neq 1$ 需要通过实际情况确定。<br>其中求解方程即绘图过程于上面类似，不在赘述。  </p>
+<h1 id="传染病模型（SIR-SIS）"><a href="#传染病模型（SIR-SIS）" class="headerlink" title="传染病模型（SIR&#x2F;SIS）"></a>传染病模型（SIR&#x2F;SIS）</h1><p>传染病模型通过微分方程刻画人群中“易感-感染-康复”的动态传播过程，核心是量化不同人群的数量变化关系。</p>
 <h2 id="1-SIR模型（易感-感染-康复）"><a href="#1-SIR模型（易感-感染-康复）" class="headerlink" title="1. SIR模型（易感-感染-康复）"></a>1. SIR模型（易感-感染-康复）</h2><h3 id="模型假设"><a href="#模型假设" class="headerlink" title="模型假设"></a>模型假设</h3><ul>
 <li>总人口固定为 $N$，分为三类人群：<ul>
 <li>$S(t)$ ：易感者（未感染但可被传染的人群）；</li>
 <li>$I(t)$ ：感染者（已感染且具传染性的人群）；</li>
-<li>$R(t)$ ：康复者（已康复且获持久免疫力的人群）；<br>满足 $N = S(t) + I(t) + R(t)$ 。</li>
+<li>$R(t)$ ：康复者（已康复且获持久免疫力的人群）；<br>满足 $N &#x3D; S(t) + I(t) + R(t)$ 。</li>
 </ul>
 </li>
 <li>易感者与感染者接触后，以速率 $\beta$ （单位时间内单个感染者接触的易感者数）被感染；</li>
 <li>感染者以速率 $\gamma$ （单位时间内康复的感染者比例）康复；</li>
 <li>无出生、死亡、人口迁移，康复者不再参与传播。</li>
 </ul>
-<h3 id="模型构建-1"><a href="#模型构建-1" class="headerlink" title="模型构建"></a>模型构建</h3><p>微分方程组为：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\frac{dS}{dt} = -\frac{\beta S I}{N} \\
-\frac{dI}{dt} = \frac{\beta S I}{N} - \gamma I \\
-\frac{dR}{dt} = \gamma I
-\end{cases}</script><ul>
+<h3 id="模型构建-1"><a href="#模型构建-1" class="headerlink" title="模型构建"></a>模型构建</h3><p>微分方程组为：<br>$$<br>\begin{cases}<br>\frac{dS}{dt} &#x3D; -\frac{\beta S I}{N} \<br>\frac{dI}{dt} &#x3D; \frac{\beta S I}{N} - \gamma I \<br>\frac{dR}{dt} &#x3D; \gamma I<br>\end{cases}<br>$$</p>
+<ul>
 <li>方程解释：<ul>
 <li>$\frac{dS}{dt}$ ：易感者数量因感染减少，速率与易感者、感染者的接触频率成正比；</li>
-<li>$\frac{dI}{dt}$ ：感染者数量变化 = 新感染人数 - 康复人数；</li>
+<li>$\frac{dI}{dt}$ ：感染者数量变化 &#x3D; 新感染人数 - 康复人数；</li>
 <li>$\frac{dR}{dt}$ ：康复者数量随感染者康复增加。</li>
 </ul>
 </li>
 </ul>
-<h3 id="核心参数：基本再生数-R-0"><a href="#核心参数：基本再生数-R-0" class="headerlink" title="核心参数：基本再生数 $R_0$"></a>核心参数：基本再生数 $R_0$</h3><p>定义 $R_0 = \frac{\beta}{\gamma}$ （单个感染者平均传染的人数）：</p>
+<h3 id="核心参数：基本再生数-R-0"><a href="#核心参数：基本再生数-R-0" class="headerlink" title="核心参数：基本再生数 $R_0$"></a>核心参数：基本再生数 $R_0$</h3><p>定义 $R_0 &#x3D; \frac{\beta}{\gamma}$ （单个感染者平均传染的人数）：</p>
 <ul>
 <li>$ R_0 &gt; 1$ ：传染病会扩散流行；</li>
 <li>$ R_0 &lt; 1$ ：传染病会逐渐消亡。</li>
 </ul>
-<h2 id="2-SIS模型（易感-感染-易感）"><a href="#2-SIS模型（易感-感染-易感）" class="headerlink" title="2. SIS模型（易感-感染-易感）"></a>2. SIS模型（易感-感染-易感）</h2><h3 id="模型假设-1"><a href="#模型假设-1" class="headerlink" title="模型假设"></a>模型假设</h3><p>适用于康复后无免疫力、会再次成为易感者的传染病（如普通流感），人群仅分 $ S(t) $ （易感者）和 $ I(t) $ （感染者），满足 $ N = S(t) + I(t) $ ，其余假设同SIR模型。</p>
-<h3 id="模型构建-2"><a href="#模型构建-2" class="headerlink" title="模型构建"></a>模型构建</h3><p>微分方程组为：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\frac{dS}{dt} = -\frac{\beta S I}{N} + \gamma I \\
-\frac{dI}{dt} = \frac{\beta S I}{N} - \gamma I
-\end{cases}</script><ul>
+<h2 id="2-SIS模型（易感-感染-易感）"><a href="#2-SIS模型（易感-感染-易感）" class="headerlink" title="2. SIS模型（易感-感染-易感）"></a>2. SIS模型（易感-感染-易感）</h2><h3 id="模型假设-1"><a href="#模型假设-1" class="headerlink" title="模型假设"></a>模型假设</h3><p>适用于康复后无免疫力、会再次成为易感者的传染病（如普通流感），人群仅分 $ S(t) $ （易感者）和 $ I(t) $ （感染者），满足 $ N &#x3D; S(t) + I(t) $ ，其余假设同SIR模型。</p>
+<h3 id="模型构建-2"><a href="#模型构建-2" class="headerlink" title="模型构建"></a>模型构建</h3><p>微分方程组为：<br>$$<br>\begin{cases}<br>\frac{dS}{dt} &#x3D; -\frac{\beta S I}{N} + \gamma I \<br>\frac{dI}{dt} &#x3D; \frac{\beta S I}{N} - \gamma I<br>\end{cases}<br>$$</p>
+<ul>
 <li>方程解释：康复者重新回到易感者群体（ $ \frac{dS}{dt} $ 增加 $ \gamma I $ 项），传染病可能呈现持续循环状态。</li>
 </ul>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文围绕<strong>微分方程的机理建模应用</strong>，通过“现实假设→变量关系提炼→方程构建”的思路，介绍了多个经典模型：</p>
@@ -403,7 +379,7 @@ x(0)=x_0
 <li><strong>阻滞增长（Logistic）模型</strong>：引入“环境最大容纳量”，修正为S型非线性增长，更贴合资源有限的种群变化规律；</li>
 <li><strong>沃尔泰拉模型</strong>：耦合捕食者-猎物的互动关系，刻画了种群数量的周期性振荡，解释了生态系统的此消彼长；</li>
 <li><strong>种间竞争模型</strong>：扩展Logistic模型，加入种群间资源竞争项，量化了不同种群的资源消耗效率差异；</li>
-<li><strong>传染病模型（SIR/SIS）</strong>：划分人群类型，刻画“感染-康复”传播过程，核心参数 $ R_0 $ 可指导疫情防控。</li>
+<li><strong>传染病模型（SIR&#x2F;SIS）</strong>：划分人群类型，刻画“感染-康复”传播过程，核心参数 $ R_0 $ 可指导疫情防控。</li>
 </ol>
 <p>这些模型的共性是从“机理假设”出发，用微分方程描述变量的瞬时变化率，通过求解方程得到动态趋势；模型的优化过程，本质是逐步加入现实约束（资源限制、种间互动、免疫特性等），让预测更贴合实际。</p>
 <p>微分方程建模的价值在于：不仅能拟合现有数据，更能通过参数调整预测系统长期趋势，为生态调控、人口规划、疫情防控等问题提供量化依据。</p>

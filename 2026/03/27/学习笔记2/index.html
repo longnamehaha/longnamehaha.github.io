@@ -189,7 +189,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -200,7 +200,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -296,10 +296,12 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>物理实验相关软件开发2<br><span id="more"></span><br>    python分析图谱，json数据校验，XRR等了解</p>
+    <div class="post-body" itemprop="articleBody"><p>物理实验相关软件开发2</p>
+<span id="more"></span>
+<pre><code>python分析图谱，json数据校验，XRR等了解
+</code></pre>
 <h1 id="图像读取"><a href="#图像读取" class="headerlink" title="图像读取"></a>图像读取</h1><p>整体流程：<strong>读取XRD图片 → OpenCV图像处理提取峰位 → 物理公式反推晶体数据</strong><br>其中<strong>OpenCV是核心</strong>，负责把「图片里的峰」变成「计算机能识别的数字（角度）」。</p>
-<h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><div class="table-container">
-<table>
+<h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><table>
 <thead>
 <tr>
 <th>API 函数</th>
@@ -307,8 +309,7 @@
 <th>对应XRD处理目标</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><code>cv2.imread()</code></td>
 <td>读取图片为数字矩阵</td>
 <td>加载XRD图谱</td>
@@ -328,16 +329,16 @@
 <td>计算峰的外接矩形，获取中心坐标</td>
 <td>找到峰的精确位置</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h2 id="模拟计算原理"><a href="#模拟计算原理" class="headerlink" title="模拟计算原理"></a>模拟计算原理</h2><p>拿到2θ角度后，用XRD物理公式反推：</p>
-<h3 id="1-two-theta-to-d-：布拉格方程逆运算"><a href="#1-two-theta-to-d-：布拉格方程逆运算" class="headerlink" title="1. two_theta_to_d()：布拉格方程逆运算"></a>1. <code>two_theta_to_d()</code>：布拉格方程逆运算</h3><script type="math/tex; mode=display">d = \frac{\lambda}{2\sin\theta}</script><p>角度→晶面间距</p>
-<h3 id="2-analyze-cubic-crystal-：立方晶系规律"><a href="#2-analyze-cubic-crystal-：立方晶系规律" class="headerlink" title="2. analyze_cubic_crystal()：立方晶系规律"></a>2. <code>analyze_cubic_crystal()</code>：立方晶系规律</h3><script type="math/tex; mode=display">\frac{1}{d^2} \propto h^2+k^2+l^2</script><p>匹配面心立方(FCC)晶面指数<code>(111)(200)(220)</code></p>
-<h3 id="3-calc-lattice-constant-：晶格常数"><a href="#3-calc-lattice-constant-：晶格常数" class="headerlink" title="3. calc_lattice_constant()：晶格常数"></a>3. <code>calc_lattice_constant()</code>：晶格常数</h3><script type="math/tex; mode=display">a = d·\sqrt{h^2+k^2+l^2}</script><p>计算晶体晶格常数</p>
+<h3 id="1-two-theta-to-d-：布拉格方程逆运算"><a href="#1-two-theta-to-d-：布拉格方程逆运算" class="headerlink" title="1. two_theta_to_d()：布拉格方程逆运算"></a>1. <code>two_theta_to_d()</code>：布拉格方程逆运算</h3><p>$$d &#x3D; \frac{\lambda}{2\sin\theta}$$<br>角度→晶面间距</p>
+<h3 id="2-analyze-cubic-crystal-：立方晶系规律"><a href="#2-analyze-cubic-crystal-：立方晶系规律" class="headerlink" title="2. analyze_cubic_crystal()：立方晶系规律"></a>2. <code>analyze_cubic_crystal()</code>：立方晶系规律</h3><p>$$\frac{1}{d^2} \propto h^2+k^2+l^2$$<br>匹配面心立方(FCC)晶面指数<code>(111)(200)(220)</code></p>
+<h3 id="3-calc-lattice-constant-：晶格常数"><a href="#3-calc-lattice-constant-：晶格常数" class="headerlink" title="3. calc_lattice_constant()：晶格常数"></a>3. <code>calc_lattice_constant()</code>：晶格常数</h3><p>$$a &#x3D; d·\sqrt{h^2+k^2+l^2}$$<br>计算晶体晶格常数</p>
 <hr>
 <h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_peaks_from_image</span>(<span class="params">image_path, scan_range=(<span class="params"><span class="number">5</span>, <span class="number">80</span></span>)</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    从XRD图片中提取衍射峰的2θ角度</span></span><br><span class="line"><span class="string">    :param image_path: 图片路径</span></span><br><span class="line"><span class="string">    :param scan_range: 图片横坐标角度范围 (起始角, 终止角)</span></span><br><span class="line"><span class="string">    :return: 衍射峰位列表 2θ (°)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 灰度模式读取图片</span></span><br><span class="line">    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)</span><br><span class="line">    <span class="keyword">if</span> img <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">raise</span> FileNotFoundError(<span class="string">f&quot;❌ 无法读取图片：<span class="subst">&#123;image_path&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 二值化处理：分离峰信号和背景</span></span><br><span class="line">    _, binary = cv2.threshold(img, <span class="number">30</span>, <span class="number">255</span>, cv2.THRESH_BINARY)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 寻找峰轮廓</span></span><br><span class="line">    contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line"></span><br><span class="line">    peak_positions = []</span><br><span class="line">    img_height, img_width = img.shape</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 峰中心坐标转换为2θ角度</span></span><br><span class="line">    <span class="keyword">for</span> cnt <span class="keyword">in</span> contours:</span><br><span class="line">        x, y, w, h = cv2.boundingRect(cnt)</span><br><span class="line">        center_x = x + w // <span class="number">2</span></span><br><span class="line">        theta = scan_range[<span class="number">0</span>] + (center_x / img_width) * (scan_range[<span class="number">1</span>] - scan_range[<span class="number">0</span>])</span><br><span class="line">        peak_positions.append(<span class="built_in">round</span>(theta, <span class="number">1</span>))</span><br><span class="line">    </span><br><span class="line">    peak_positions = <span class="built_in">sorted</span>(<span class="built_in">list</span>(<span class="built_in">set</span>(peak_positions)))</span><br><span class="line">    <span class="keyword">return</span> peak_positions</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">two_theta_to_d</span>(<span class="params">peak_list, lambda_x=<span class="number">0.154</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    布拉格方程逆运算：2θ峰位 → 晶面间距d</span></span><br><span class="line"><span class="string">    :param peak_list: 2θ峰位列表</span></span><br><span class="line"><span class="string">    :param lambda_x: X射线波长(Cu靶默认0.154nm)</span></span><br><span class="line"><span class="string">    :return: 晶面间距d列表 (nm)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    d_list = []</span><br><span class="line">    <span class="keyword">for</span> two_theta <span class="keyword">in</span> peak_list:</span><br><span class="line">        theta_rad = np.deg2rad(two_theta / <span class="number">2</span>)</span><br><span class="line">        d = lambda_x / (<span class="number">2</span> * np.sin(theta_rad))</span><br><span class="line">        d_list.append(<span class="built_in">round</span>(d, <span class="number">4</span>))</span><br><span class="line">    <span class="keyword">return</span> d_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">analyze_cubic_crystal</span>(<span class="params">d_list</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    由d值反推：晶面指数 + 晶体结构</span></span><br><span class="line"><span class="string">    :param d_list: 晶面间距列表</span></span><br><span class="line"><span class="string">    :return: 晶面指数列表, 晶体结构名称</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 计算 1/d² 比值（立方晶系核心规律）</span></span><br><span class="line">    inv_d_sq = [<span class="number">1</span>/(d**<span class="number">2</span>) <span class="keyword">for</span> d <span class="keyword">in</span> d_list]</span><br><span class="line">    norm_ratio = [<span class="built_in">round</span>(x / <span class="built_in">min</span>(inv_d_sq), <span class="number">2</span>) <span class="keyword">for</span> x <span class="keyword">in</span> inv_d_sq]</span><br><span class="line">    fcc_sequence = [<span class="built_in">round</span>(x * <span class="number">3</span>) <span class="keyword">for</span> x <span class="keyword">in</span> norm_ratio]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 面心立方(FCC)晶面指数匹配表</span></span><br><span class="line">    fcc_hkl_map = &#123;<span class="number">3</span>: <span class="string">&quot;(111)&quot;</span>, <span class="number">4</span>: <span class="string">&quot;(200)&quot;</span>, <span class="number">8</span>: <span class="string">&quot;(220)&quot;</span>, <span class="number">11</span>: <span class="string">&quot;(311)&quot;</span>, <span class="number">12</span>: <span class="string">&quot;(222)&quot;</span>&#125;</span><br><span class="line">    hkl_list = [fcc_hkl_map[num] <span class="keyword">for</span> num <span class="keyword">in</span> fcc_sequence <span class="keyword">if</span> num <span class="keyword">in</span> fcc_hkl_map]</span><br><span class="line">    crystal_system = <span class="string">&quot;面心立方晶系 (FCC)&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> hkl_list, crystal_system</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calc_lattice_constant</span>(<span class="params">d_list, hkl_list</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    计算晶格常数a</span></span><br><span class="line"><span class="string">    :param d_list: 晶面间距</span></span><br><span class="line"><span class="string">    :param hkl_list: 晶面指数</span></span><br><span class="line"><span class="string">    :return: 平均晶格常数 (nm)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    a_list = []</span><br><span class="line">    <span class="keyword">for</span> d, hkl <span class="keyword">in</span> <span class="built_in">zip</span>(d_list, hkl_list):</span><br><span class="line">        h = <span class="built_in">int</span>(hkl[<span class="number">1</span>])</span><br><span class="line">        k = <span class="built_in">int</span>(hkl[<span class="number">2</span>])</span><br><span class="line">        l = <span class="built_in">int</span>(hkl[<span class="number">3</span>])</span><br><span class="line">        sum_sq = h ** <span class="number">2</span> + k ** <span class="number">2</span> + l ** <span class="number">2</span></span><br><span class="line">        a = d * np.sqrt(sum_sq)</span><br><span class="line">        a_list.append(<span class="built_in">round</span>(a, <span class="number">4</span>))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">round</span>(np.mean(a_list), <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    IMAGE_PATH = <span class="string">&quot;xrd_saved.png&quot;</span>  </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 提取衍射峰位2θ</span></span><br><span class="line">        peak_2theta = read_peaks_from_image(IMAGE_PATH)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;✅ 从图片识别峰位 2θ：<span class="subst">&#123;peak_2theta&#125;</span> °&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 峰位 → 晶面间距d</span></span><br><span class="line">        d_list = two_theta_to_d(peak_2theta)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;✅ 计算晶面间距 d：<span class="subst">&#123;d_list&#125;</span> nm&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 晶面间距 → 晶面指数 + 判定晶系</span></span><br><span class="line">        hkl_list, crystal_sys = analyze_cubic_crystal(d_list)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;✅ 匹配晶面指数 (hkl)：<span class="subst">&#123;hkl_list&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;✅ 判定晶体结构：<span class="subst">&#123;crystal_sys&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算晶格常数a</span></span><br><span class="line">        avg_a = calc_lattice_constant(d_list, hkl_list)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;✅ 平均晶格常数 a：<span class="subst">&#123;avg_a&#125;</span> nm&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;❌ 解析失败：<span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br></pre></td></tr></table></figure>
-<p>输出结果示例：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">✅ 从图片识别峰位 2θ：[42.5] °</span><br><span class="line">✅ 计算晶面间距 d：[0.2125] nm</span><br><span class="line">✅ 匹配晶面指数 (hkl)：[&#x27;(111)&#x27;]</span><br><span class="line">✅ 判定晶体结构：面心立方晶系 (FCC)</span><br><span class="line">✅ 平均晶格常数 a：0.3681 nm</span><br></pre></td></tr></table></figure></p>
+<p>输出结果示例：  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">✅ 从图片识别峰位 2θ：[42.5] °</span><br><span class="line">✅ 计算晶面间距 d：[0.2125] nm</span><br><span class="line">✅ 匹配晶面指数 (hkl)：[&#x27;(111)&#x27;]</span><br><span class="line">✅ 判定晶体结构：面心立方晶系 (FCC)</span><br><span class="line">✅ 平均晶格常数 a：0.3681 nm</span><br></pre></td></tr></table></figure>
+
 <h1 id="json格式"><a href="#json格式" class="headerlink" title="json格式"></a>json格式</h1><p>JSON 是轻量级、跨语言、纯文本的数据交换格式，用来存数据、传数据</p>
 <h2 id="基本特点"><a href="#基本特点" class="headerlink" title="基本特点"></a>基本特点</h2><ul>
 <li>纯文本，人类可读</li>
@@ -350,7 +351,7 @@
 <li><strong>对象</strong> <code>{ }</code></li>
 <li><strong>数组</strong> <code>[ ]</code></li>
 <li><strong>字符串</strong>（必须双引号）</li>
-<li><strong>数字</strong>（整数/浮点数）</li>
+<li><strong>数字</strong>（整数&#x2F;浮点数）</li>
 <li><strong>布尔</strong> <code>true / false</code></li>
 <li><strong>空值</strong> <code>null</code></li>
 </ol>
@@ -360,11 +361,12 @@
 <li>只允许：<code>{ } [ ] , : &quot; &quot;</code> 这些符号</li>
 </ul>
 <h2 id="4-合法示例"><a href="#4-合法示例" class="headerlink" title="4. 合法示例"></a>4. 合法示例</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;小明&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">20</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;isStudent&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;hobbies&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;篮球&quot;</span><span class="punctuation">,</span> <span class="string">&quot;游戏&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;address&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;score&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<h1 id="XRR了解"><a href="#XRR了解" class="headerlink" title="XRR了解"></a>XRR了解</h1><p>XRR是一种<strong>非破坏性</strong>的表面与界面分析技术，核心基于<strong>X射线在材料表面及界面的反射、折射与干涉现象</strong>，与XRD的衍射原理不同，可分析结晶与非结晶薄膜的<strong>厚度、密度、表面/界面粗糙度</strong>等纳米级参数。</p>
+
+<h1 id="XRR了解"><a href="#XRR了解" class="headerlink" title="XRR了解"></a>XRR了解</h1><p>XRR是一种<strong>非破坏性</strong>的表面与界面分析技术，核心基于<strong>X射线在材料表面及界面的反射、折射与干涉现象</strong>，与XRD的衍射原理不同，可分析结晶与非结晶薄膜的<strong>厚度、密度、表面&#x2F;界面粗糙度</strong>等纳米级参数。</p>
 <hr>
 <h2 id="特殊折射率"><a href="#特殊折射率" class="headerlink" title="特殊折射率"></a>特殊折射率</h2><ul>
 <li>X射线是波长极短（约0.1-10 nm）的电磁波，与物质相互作用主要通过<strong>电子散射</strong></li>
-<li>关键特性：对X射线而言，<strong>绝大多数材料的折射率n略小于1</strong>（n=1-δ-iβ，δ、β为小正数），与可见光相反</li>
+<li>关键特性：对X射线而言，<strong>绝大多数材料的折射率n略小于1</strong>（n&#x3D;1-δ-iβ，δ、β为小正数），与可见光相反</li>
 <li>这一特性导致X射线在材料表面可能发生<strong>全外反射</strong>（类似光从光密到光疏介质的全反射）</li>
 </ul>
 <h2 id="临界角与全反射"><a href="#临界角与全反射" class="headerlink" title="临界角与全反射"></a>临界角与全反射</h2><ul>
@@ -373,8 +375,8 @@
 <li>入射角θ &gt; θc：部分X射线反射，部分透射进入材料并在内部界面反射</li>
 </ul>
 </li>
-<li>临界角公式（近似）：θc ≈ √(2δ) ≈ √(λ²·re·ρ·NA·Z/A·π)，与材料电子密度ρ直接相关<ul>
-<li>λ：X射线波长，re：经典电子半径，NA：阿伏伽德罗常数，Z/A：原子序数/原子量比</li>
+<li>临界角公式（近似）：θc ≈ √(2δ) ≈ √(λ²·re·ρ·NA·Z&#x2F;A·π)，与材料电子密度ρ直接相关<ul>
+<li>λ：X射线波长，re：经典电子半径，NA：阿伏伽德罗常数，Z&#x2F;A：原子序数&#x2F;原子量比</li>
 </ul>
 </li>
 </ul>
@@ -383,10 +385,10 @@
 <li><strong>相长干涉</strong>：反射波叠加增强，反射率升高</li>
 <li><strong>相消干涉</strong>：反射波相互抵消，反射率降低</li>
 <li>形成<strong>周期性振荡曲线</strong>，称为<strong>Kiessig条纹</strong></li>
-<li>条纹的<strong>周期</strong>与薄膜厚度d相关（d ∝ λ/(2Δθ·sinθ)），<strong>振幅衰减</strong>反映界面粗糙度</li>
+<li>条纹的<strong>周期</strong>与薄膜厚度d相关（d ∝ λ&#x2F;(2Δθ·sinθ)），<strong>振幅衰减</strong>反映界面粗糙度</li>
 </ul>
 <h2 id="测量原理与数据分析"><a href="#测量原理与数据分析" class="headerlink" title="测量原理与数据分析"></a>测量原理与数据分析</h2><ol>
-<li><strong>实验方法</strong>：以θ/2θ模式测量，保持反射角=入射角，扫描θ角同时记录反射强度</li>
+<li><strong>实验方法</strong>：以θ&#x2F;2θ模式测量，保持反射角&#x3D;入射角，扫描θ角同时记录反射强度</li>
 <li><strong>数据解析</strong>：将实验曲线与理论模型（如Parratt递归法）拟合，提取关键参数<ul>
 <li>厚度：由Kiessig条纹周期计算</li>
 <li>密度：由临界角位置推导</li>
@@ -394,8 +396,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="XRR与XRD"><a href="#XRR与XRD" class="headerlink" title="XRR与XRD"></a>XRR与XRD</h2><div class="table-container">
-<table>
+<h2 id="XRR与XRD"><a href="#XRR与XRD" class="headerlink" title="XRR与XRD"></a>XRR与XRD</h2><table>
 <thead>
 <tr>
 <th>特性</th>
@@ -403,25 +404,22 @@
 <th>XRD</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>原理</td>
-<td>表面/界面的反射与干涉</td>
+<td>表面&#x2F;界面的反射与干涉</td>
 <td>晶体内部原子面的布拉格衍射</td>
 </tr>
 <tr>
 <td>适用样品</td>
-<td>薄膜（厚度1-1000 nm），结晶/非结晶均可</td>
-<td>晶体材料，块体/厚膜为主</td>
+<td>薄膜（厚度1-1000 nm），结晶&#x2F;非结晶均可</td>
+<td>晶体材料，块体&#x2F;厚膜为主</td>
 </tr>
 <tr>
 <td>信息来源</td>
 <td>电子密度分布（界面、密度）</td>
 <td>晶体结构（晶格参数、对称性）</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <hr>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>XRR利用X射线折射率小于1的特性，通过测量反射率随掠入射角的变化，结合全反射与干涉现象，实现对薄膜纳米级结构的高精度表征。其物理本质是<strong>经典电磁理论在X射线波段的特殊表现</strong>，通过现代拟合算法可定量获取薄膜的关键参数，广泛应用于材料科学、半导体、光学涂层等领域。</p>
 <h1 id="接下来的工作"><a href="#接下来的工作" class="headerlink" title="接下来的工作"></a>接下来的工作</h1><ul>

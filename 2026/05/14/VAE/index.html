@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous" defer></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"longnamehaha.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":-1,"unescape":true,"preload":true}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="VAE简介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VAE">
+<meta property="og:url" content="https://longnamehaha.github.io/2026/05/14/VAE/index.html">
+<meta property="og:site_name" content="欢迎到访(*´∀&#96;)~♥">
+<meta property="og:description" content="VAE简介">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-14T15:12:59.000Z">
+<meta property="article:modified_time" content="2026-06-17T11:23:05.091Z">
+<meta property="article:author" content="longnamehaha">
+<meta property="article:tag" content="DDPM">
+<meta property="article:tag" content="VAE">
+<meta property="article:tag" content="生成模型">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://longnamehaha.github.io/2026/05/14/VAE/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://longnamehaha.github.io/2026/05/14/VAE/","path":"2026/05/14/VAE/","title":"VAE"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>VAE | 欢迎到访(*´∀`)~♥</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+  <script src="/js/third-party/pace.js" defer></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">欢迎到访(*´∀`)~♥</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">longnamehaha的自学笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VAE"><span class="nav-number">1.</span> <span class="nav-text">VAE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E4%B8%8E%E6%A0%B8%E5%BF%83%E9%80%BB%E8%BE%91"><span class="nav-number">2.</span> <span class="nav-text">一、模型结构与核心逻辑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%85%B3%E9%94%AE%E6%8A%80%E5%B7%A7%EF%BC%9A%E9%87%8D%E5%8F%82%E6%95%B0%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-number">3.</span> <span class="nav-text">二、关键技巧：重参数化技巧</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%AE%AD%E7%BB%83%E4%B8%8E%E9%87%87%E6%A0%B7%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">三、训练与采样流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%EF%BC%88%E7%AE%80%E6%B4%81%E7%89%88%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 训练流程（简洁版）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E9%87%87%E6%A0%B7%E6%B5%81%E7%A8%8B%EF%BC%88%E6%9E%81%E7%AE%80%E9%AB%98%E6%95%88%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 采样流程（极简高效）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">四、损失函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81VAE-%E4%B8%8E-%E6%99%AE%E9%80%9AAE%EF%BC%88%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8%EF%BC%89%E5%AF%B9%E6%AF%94"><span class="nav-number">6.</span> <span class="nav-text">五、VAE 与 普通AE（自编码器）对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81VAE-%E4%B8%8E-DDPM-%E6%A0%B8%E5%BF%83%E5%AF%B9%E6%AF%94"><span class="nav-number">7.</span> <span class="nav-text">六、VAE 与 DDPM 核心对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E8%8A%82"><span class="nav-number">8.</span> <span class="nav-text">小节</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">longnamehaha</p>
+  <div class="site-description" itemprop="description">欢迎各位大佬指点</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/longnamehaha" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;longnamehaha" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://longnamehaha.github.io/2026/05/14/VAE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="longnamehaha">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢迎到访(*´∀`)~♥">
+      <meta itemprop="description" content="欢迎各位大佬指点">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="VAE | 欢迎到访(*´∀`)~♥">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VAE
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-14 23:12:59" itemprop="dateCreated datePublished" datetime="2026-05-14T23:12:59+08:00">2026-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-17 19:23:05" itemprop="dateModified" datetime="2026-06-17T19:23:05+08:00">2026-06-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">生成模型</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>VAE简介<br><span id="more"></span><br>    前置：深度学习、神经网络、概率论、ELBO（变分下界）、KL散度</p>
+<h1 id="VAE"><a href="#VAE" class="headerlink" title="VAE"></a>VAE</h1><p>引言<br>变分自编码器（Variational AutoEncoder, VAE）是经典的概率化生成模型，也是扩散模型（DDPM）的重要理论基础，本质是普通自编码器（AE）的概率化改进版本。VAE基于单步隐空间建模实现数据生成，训练轻量化、稳定性极强，完美弥补了早期生成对抗网络（GAN）训练不稳定的缺陷；但受限于建模方式，生成图像存在模糊、细节缺失的问题，是入门概率生成模型、理解隐空间建模思想的核心框架，与DDPM同属概率生成体系，理论一脉相承。</p>
+<h1 id="一、模型结构与核心逻辑"><a href="#一、模型结构与核心逻辑" class="headerlink" title="一、模型结构与核心逻辑"></a>一、模型结构与核心逻辑</h1><p>VAE摒弃了DDPM的多步马尔可夫链扩散机制，采用“编码器-解码器”双模块结构，全程仅通过单步映射实现数据的编码与生成，结构简洁、易于实现。</p>
+<ul>
+<li>编码器（推理网络）：接收原始数据（如图像），通过神经网络映射到低维隐空间，输出隐变量$z$的概率分布参数——均值$\mu$和方差$\sigma^2$，而非直接输出固定的隐向量（区别于普通AE）。</li>
+<li>解码器（生成网络）：从标准高斯分布中采样隐变量$z$，通过神经网络反向映射，重构并生成与原始数据分布一致的样本，无需多步迭代去噪，生成过程直接高效。<br>核心目标：通过变分推断，迫使隐变量$z$服从标准高斯分布，从而实现从隐空间到原始数据空间的精准映射，完成数据生成。</li>
+</ul>
+<h1 id="二、关键技巧：重参数化技巧"><a href="#二、关键技巧：重参数化技巧" class="headerlink" title="二、关键技巧：重参数化技巧"></a>二、关键技巧：重参数化技巧</h1><p>这是VAE可训练的核心，也是DDPM噪声采样的理论原型。由于隐变量$z$是从高斯分布中随机采样得到的，直接采样操作无法反向传播梯度，因此引入重参数化技巧，将随机采样转化为可微分的线性变换：<br>$z = \mu + \sigma \odot \epsilon$，其中$\epsilon \sim \mathcal{N}(0,I)$（标准高斯噪声）<br>通过固定噪声$\epsilon$，将采样过程转化为均值$\mu$和方差$\sigma$的线性运算，确保梯度能够正常回传，从而实现编码器与解码器的联合训练。</p>
+<h1 id="三、训练与采样流程"><a href="#三、训练与采样流程" class="headerlink" title="三、训练与采样流程"></a>三、训练与采样流程</h1><h2 id="3-1-训练流程（简洁版）"><a href="#3-1-训练流程（简洁版）" class="headerlink" title="3.1 训练流程（简洁版）"></a>3.1 训练流程（简洁版）</h2><ol>
+<li>输入原始数据（如图像$x$），通过编码器输出隐变量$z$的均值$\mu$和方差$\sigma^2$；</li>
+<li>利用重参数化技巧，从隐分布中采样得到隐变量$z$；</li>
+<li>将$z$输入解码器，重构生成与原始数据维度一致的样本$\hat{x}$；</li>
+<li>计算损失函数，通过反向传播更新编码器与解码器的网络参数，重复迭代直至收敛。<h2 id="3-2-采样流程（极简高效）"><a href="#3-2-采样流程（极简高效）" class="headerlink" title="3.2 采样流程（极简高效）"></a>3.2 采样流程（极简高效）</h2></li>
+<li>直接从标准高斯分布$\mathcal{N}(0,I)$中随机采样隐变量$z$；</li>
+<li>将$z$输入训练好的解码器，单步直接生成目标样本；</li>
+<li>无需像DDPM那样进行多步逆序去噪迭代，采样速度极快，可瞬时生成结果。</li>
+</ol>
+<h1 id="四、损失函数"><a href="#四、损失函数" class="headerlink" title="四、损失函数"></a>四、损失函数</h1><p>VAE的损失函数基于DDPM中已详细推导的ELBO（变分下界）优化得到，核心分为两项，无需额外复杂推导：</p>
+<ol>
+<li>重构损失：衡量解码器生成样本$\hat{x}$与原始样本$x$的误差（常用MSE、交叉熵），确保生成样本的“形似”；</li>
+<li>KL散度损失：衡量编码器输出的隐分布与标准高斯分布的差异，约束隐空间规整，确保隐变量具备良好的生成能力（与DDPM中KL散度的作用本质一致）。<br>总损失：$L<em>{VAE} = L</em>{重构} + L_{KL}$，通过最小化总损失，实现模型的稳定训练。<br>核心对比</li>
+</ol>
+<h1 id="五、VAE-与-普通AE（自编码器）对比"><a href="#五、VAE-与-普通AE（自编码器）对比" class="headerlink" title="五、VAE 与 普通AE（自编码器）对比"></a>五、VAE 与 普通AE（自编码器）对比</h1><p>普通AE是VAE的基础，二者结构相似，但核心差异在于“隐空间建模方式”，具体对比如下：</p>
+<ol>
+<li>隐空间性质：普通AE的编码器直接输出固定隐向量，隐空间无明确分布约束，杂乱无章，不具备生成能力；VAE将隐空间建模为高斯分布，隐空间规整，可通过采样实现数据生成。</li>
+<li>训练方式：普通AE仅优化重构损失，目标是“精准重构”；VAE同时优化重构损失和KL散度损失，目标是“重构+隐空间分布拟合”。</li>
+<li>核心能力：普通AE仅能实现数据重构（如图像去噪、压缩），无法生成新样本；VAE具备生成能力，可从隐空间采样生成全新的、符合原始数据分布的样本。</li>
+<li>泛化能力：普通AE泛化性较差，隐空间插值效果差；VAE隐空间规整，泛化能力更强，可实现样本的平滑插值生成。</li>
+</ol>
+<h1 id="六、VAE-与-DDPM-核心对比"><a href="#六、VAE-与-DDPM-核心对比" class="headerlink" title="六、VAE 与 DDPM 核心对比"></a>六、VAE 与 DDPM 核心对比</h1><p>二者同属概率生成模型，共享ELBO、KL散度等核心理论，但运行机制差异显著，具体对比如下：</p>
+<ol>
+<li>运行机制：VAE是单步隐空间映射，无迭代过程；DDPM是多步双向马尔可夫扩散迭代（前向加噪、反向去噪）。</li>
+<li>训练效率：VAE轻量化、参数少，训练速度极快，对算力要求低；DDPM迭代步骤多、参数量大，训练缓慢，算力开销大。</li>
+<li>生成效果：VAE生成样本模糊、细节缺失，保真度低；DDPM生成样本高保真、细节丰富，贴合原始数据分布。</li>
+<li>采样速度：VAE单步采样，瞬时生成；DDPM需多步逆序去噪，采样速度极慢。</li>
+<li>理论关联：VAE是DDPM的理论基础，二者均基于概率建模、ELBO优化，DDPM通过多步扩散机制，解决了VAE生成质量差的核心短板。</li>
+</ol>
+<h1 id="小节"><a href="#小节" class="headerlink" title="小节"></a>小节</h1><p>VAE是概率生成模型的入门基石，是普通AE的概率化升级，结构简单、训练稳定，其隐空间建模、重参数化技巧、ELBO优化等核心思想，为后续DDPM等更先进的生成模型提供了重要理论支撑。VAE的核心短板是生成质量有限，而DDPM通过多步扩散迭代完美弥补了这一缺陷，二者优势互补，共同构成了生成模型的核心技术体系，是学习生成模型不可或缺的两个关键框架。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+              <a href="/tags/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/" rel="tag"># 生成模型</a>
+              <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"># 神经网络</a>
+              <a href="/tags/DDPM/" rel="tag"># DDPM</a>
+              <a href="/tags/VAE/" rel="tag"># VAE</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/04/29/DDPM%E4%B8%93%E4%B8%9A%E5%BA%94%E7%94%A8/" rel="prev" title="DDPM专业应用">
+                  <i class="fa fa-angle-left"></i> DDPM专业应用
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">longnamehaha</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<!-- 强制注入 MathJax 3 脚本，确保 100% 加载 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],  // 支持两种行内分隔符
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],  // 支持两种块级分隔符
+      processEscapes: true,  // 允许用 \$ 表示普通美元符号
+      processEnvironments: true  // 支持 align/equation 等复杂环境
+    },
+    startup: {
+      typeset: true,  // 页面加载后自动渲染公式
+      pageReady: function () {
+        return MathJax.startup.defaultPageReady().then(function () {
+          MathJax.typeset();  // 强制触发渲染，避免漏渲染
+        });
+      }
+    },
+    svg: {
+      fontCache: 'global'  // 优化渲染性能
+    }
+  };
+</script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"longnamehaha/longnamehaha.github.io","issue_term":"pathname","label":"这是评论","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+  <!-- 手动加载粒子特效脚本 -->
+  <script src="/js/particle.js"></script>
+</body>
+</html>

@@ -186,7 +186,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -197,7 +197,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -293,28 +293,28 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>水一篇<br><span id="more"></span><br>    前置知识：最好会层次分析法</p>
+    <div class="post-body" itemprop="articleBody"><p>水一篇</p>
+<span id="more"></span>  
+<pre><code>前置知识：最好会层次分析法
+</code></pre>
 <h1 id="模型引出"><a href="#模型引出" class="headerlink" title="模型引出"></a>模型引出</h1><p>熵权法和前面的层次分析法一样，是一种赋权方法。但不一样的是，熵权法是完全客观的方法，仅依赖数据本身的分布。<br>先来看个例子：<br>两个人比较身材，他们的身高只差一厘米，但体重差10千克，那么我们重点需要比较两人的体重而不是身高。在这个例子中，身高的权重就比较低，体重的权重比较高，并且根据数据是可以具体算出二者权重的。</p>
 <h1 id="模型原理"><a href="#模型原理" class="headerlink" title="模型原理"></a>模型原理</h1><p>由信息论基本原理：</p>
 <ul>
 <li>信息是系统有序程度的度量</li>
-<li>熵是系统无序程度的度量  </li>
+<li>熵是系统无序程度的度量</li>
 </ul>
-<p>信息熵是衡量随机变量不确定性的量化指标——不确定性越高，熵值越大；确定性越高，熵值越小。  </p>
+<p>信息熵是衡量随机变量不确定性的量化指标—-不确定性越高，熵值越大；确定性越高，熵值越小。  </p>
 <p>简单的例子：</p>
 <ul>
 <li>太阳从东边升起。这是必然时间，没有不确定性，信息熵为0</li>
 <li>掷一枚均匀硬币，结果是正面。有不确定性，熵不为0</li>
-<li>掷一次六面骰子，结果是 3 点。不确定性比掷硬币更高，熵更大  </li>
+<li>掷一次六面骰子，结果是 3 点。不确定性比掷硬币更高，熵更大</li>
 </ul>
 <p>在熵权法中，使用信息熵值来判断某个指标的离散程度。离散程度越大，权重越高，反之权重小。  </p>
-<h1 id="主要过程"><a href="#主要过程" class="headerlink" title="主要过程"></a>主要过程</h1><h2 id="1-数据标准化"><a href="#1-数据标准化" class="headerlink" title="1.数据标准化"></a>1.数据标准化</h2><script type="math/tex; mode=display">
- \widetilde{x_{ij}}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{n}{x_{ij}^2}}}</script><p>如果 $x_{ij}$ 中有负数，也可以用：</p>
-<script type="math/tex; mode=display">
- \widetilde{x_{ij}}=\frac{x_{ij}-min(x_{1j},x_{2j},...,x_{nj})}{max(x_{1j},x_{2j},...,x_{nj})-min(x_{1j},x_{2j},...,x_{nj})}</script><h2 id="2-归一化"><a href="#2-归一化" class="headerlink" title="2.归一化"></a>2.归一化</h2><script type="math/tex; mode=display">
- p_{ij}=\frac{\widetilde{x_{ij}}}{\sum_{i=1}^{n}{\widetilde {x_{ij}}}}</script><h2 id="3-计算熵权"><a href="#3-计算熵权" class="headerlink" title="3.计算熵权"></a>3.计算熵权</h2><script type="math/tex; mode=display">e_j=-\frac{1}{ln(n)}\sum_{i=1}^{n}{p_{ij}}ln(p_{ij})</script><p>注意，此处定义 $ln(0)=0$   </p>
-<script type="math/tex; mode=display">d_j=1-e_j</script><p>然后再归一化：</p>
-<script type="math/tex; mode=display">W_j=\frac{d_j}{\sum_{j=1}^{m}{d_j}}</script><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>熵权法是一种基于数据客观分布的评价类模型赋权方法。但是，绝对的客观有时也是不行的，比如上面评价身材的例子，如果身高都一样，那么权重为0，说明比较中身材完全与身高无关，但实际上身材和身高是密切相关的。我们在评价类问题中，往往需要综合多种方法，比如使用层次分析法的主观方法和客观的熵权法的组合来更精确的评价目标。</p>
+<h1 id="主要过程"><a href="#主要过程" class="headerlink" title="主要过程"></a>主要过程</h1><h2 id="1-数据标准化"><a href="#1-数据标准化" class="headerlink" title="1.数据标准化"></a>1.数据标准化</h2><p>$$<br> \widetilde{x_{ij}}&#x3D;\frac{x_{ij}}{\sqrt{\sum_{i&#x3D;1}^{n}{x_{ij}^2}}}<br> $$<br>如果 $x_{ij}$ 中有负数，也可以用：<br>$$<br> \widetilde{x_{ij}}&#x3D;\frac{x_{ij}-min(x_{1j},x_{2j},…,x_{nj})}{max(x_{1j},x_{2j},…,x_{nj})-min(x_{1j},x_{2j},…,x_{nj})}<br> $$</p>
+<h2 id="2-归一化"><a href="#2-归一化" class="headerlink" title="2.归一化"></a>2.归一化</h2><p>$$<br> p_{ij}&#x3D;\frac{\widetilde{x_{ij}}}{\sum_{i&#x3D;1}^{n}{\widetilde {x_{ij}}}}<br> $$</p>
+<h2 id="3-计算熵权"><a href="#3-计算熵权" class="headerlink" title="3.计算熵权"></a>3.计算熵权</h2><p>$$ e_j&#x3D;-\frac{1}{ln(n)}\sum_{i&#x3D;1}^{n}{p_{ij}}ln(p_{ij})$$<br>注意，此处定义 $ln(0)&#x3D;0$<br>$$ d_j&#x3D;1-e_j $$<br>然后再归一化：<br>$$ W_j&#x3D;\frac{d_j}{\sum_{j&#x3D;1}^{m}{d_j}}$$</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>熵权法是一种基于数据客观分布的评价类模型赋权方法。但是，绝对的客观有时也是不行的，比如上面评价身材的例子，如果身高都一样，那么权重为0，说明比较中身材完全与身高无关，但实际上身材和身高是密切相关的。我们在评价类问题中，往往需要综合多种方法，比如使用层次分析法的主观方法和客观的熵权法的组合来更精确的评价目标。</p>
 
     </div>
 

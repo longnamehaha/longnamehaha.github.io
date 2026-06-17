@@ -187,7 +187,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -198,7 +198,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -294,7 +294,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>循环神经网络<br><span id="more"></span></p>
+    <div class="post-body" itemprop="articleBody"><p>循环神经网络</p>
+<span id="more"></span>
+
 <h1 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h1><h2 id="时序"><a href="#时序" class="headerlink" title="时序"></a>时序</h2><p>循环神经网络（Recurrent Neural Network, RNN）是一种专门处理序列数据的神经网络。与传统的前馈神经网络不同，RNN具有“<strong>循环</strong>”结构，能够处理和记住前面时间步的信息，使其特别适用于时间序列数据或有时序依赖的任务。</p>
 <blockquote>
 <p>序列数据：时间序列数据是指在不同时间点上收集到的数据，这类数据反映了某一事物、现象等随时间的变化状态或程度。这是时间序列数据的定义，当然这里也可以不是时间，比如文字序列，但总归序列数据有一个特点——<strong>后面的数据跟前面的数据有关系</strong>。</p>
@@ -327,6 +329,7 @@
 </li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nn.Embedding(num_embeddings=<span class="number">10</span>, embedding_dim=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
 <p>词转换为词向量步骤:</p>
 <ol>
 <li>先将语料进行分词，构建词与索引的映射，我们可以把这个映射叫做词表，词表中每个词都对应了一个唯一的索引；</li>
@@ -341,9 +344,9 @@
 
     <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
               <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"># 神经网络</a>
               <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
               <a href="/tags/RNN/" rel="tag"># RNN</a>
           </div>
 
